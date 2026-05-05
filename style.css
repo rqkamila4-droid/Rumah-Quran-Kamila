@@ -225,3 +225,140 @@ body {
 .btn-login:active {
     transform: scale(0.98);
 }
+/* =========================================
+   GAYA UNTUK DASHBOARD USTADZ
+   ========================================= */
+
+.dashboard-body {
+    background-color: var(--color-white);
+    display: block; /* Override flex dari body default */
+    height: auto;
+    overflow-y: auto;
+    padding-bottom: 2rem;
+}
+
+/* --- Header Dashboard --- */
+.dashboard-header {
+    background: linear-gradient(135deg, var(--color-mint-dark) 0%, #7ab8a6 100%);
+    padding: 2.5rem 1.5rem 2rem 1.5rem;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    box-shadow: 0 4px 15px rgba(153, 221, 204, 0.4);
+    margin-bottom: 1.5rem;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.header-text .greeting {
+    font-size: 0.9rem;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+.header-text .ustadz-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0.2rem 0;
+}
+
+.header-text .date-today {
+    font-size: 0.8rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+.header-logo img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: white;
+    padding: 5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* --- Main Content & Grid --- */
+.dashboard-main {
+    padding: 0 1.5rem;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+    opacity: 0;
+}
+
+.section-title {
+    color: var(--color-text-dark);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.menu-grid {
+    display: grid;
+    /* Grid dinamis: 2 kolom di HP, bisa 3/4 di iPad */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1.2rem;
+}
+
+.menu-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(225, 236, 233, 0.5);
+}
+
+.menu-card:hover, .menu-card:active {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(153, 221, 204, 0.3);
+    border-color: var(--color-mint-dark);
+}
+
+.icon-wrapper {
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-mint-light);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.8rem;
+    color: var(--color-mint-dark);
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.menu-card:hover .icon-wrapper {
+    background-color: var(--color-mint-dark);
+    color: white;
+}
+
+.menu-card span {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-dark);
+}
+
+/* Khusus Tombol Logout */
+.logout-card .icon-wrapper {
+    background-color: var(--color-pink);
+    color: #d9534f;
+}
+.logout-card:hover .icon-wrapper {
+    background-color: #d9534f;
+    color: white;
+}
+.logout-card:hover {
+    border-color: var(--color-pink);
+    box-shadow: 0 8px 25px rgba(255, 226, 226, 0.8);
+}
