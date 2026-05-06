@@ -72,46 +72,66 @@
         <!-- Dashboard Widgets -->
         <div class="dashboard-wrapper">
             
-            <!-- 4 Kartu Ringkasan -->
+            <!-- 4 Kartu Ringkasan (Sudah Direvisi) -->
             <div class="summary-cards">
+                <!-- Kotak 1: Total Santri -->
                 <div class="card summary-card">
                     <div class="card-info">
-                        <p>Total Santri Binaan</p>
-                        <h3>24 <span>Santri</span></h3>
+                        <p>Total Santri Diampu</p>
+                        <h3>24 <span>Anak</span></h3>
                     </div>
                     <div class="card-icon blue-bg"><i class="fas fa-users"></i></div>
                 </div>
+                <!-- Kotak 2: Mencapai Target -->
                 <div class="card summary-card">
                     <div class="card-info">
-                        <p>Hadir Hari Ini</p>
-                        <h3>20 <span>Santri</span></h3>
+                        <p>Mencapai Target</p>
+                        <h3>8 <span>Anak</span></h3>
                     </div>
-                    <div class="card-icon mint-bg"><i class="fas fa-user-check"></i></div>
+                    <div class="card-icon mint-bg"><i class="fas fa-star"></i></div>
                 </div>
+                <!-- Kotak 3: Belum Setor -->
                 <div class="card summary-card">
                     <div class="card-info">
-                        <p>Setoran Selesai</p>
-                        <h3>15 <span>Setoran</span></h3>
+                        <p>Belum Setor / Absen</p>
+                        <h3>3 <span>Anak</span></h3>
                     </div>
-                    <div class="card-icon pink-bg"><i class="fas fa-book-open"></i></div>
+                    <div class="card-icon orange-bg"><i class="fas fa-user-clock"></i></div>
                 </div>
+                <!-- Kotak 4: Status Ulang -->
                 <div class="card summary-card">
                     <div class="card-info">
-                        <p>Menunggu Evaluasi</p>
-                        <h3>4 <span>Tugas</span></h3>
+                        <p>Status Ulang / Murojaah</p>
+                        <h3>5 <span>Anak</span></h3>
                     </div>
-                    <div class="card-icon orange-bg"><i class="fas fa-clipboard-list"></i></div>
+                    <div class="card-icon pink-bg"><i class="fas fa-rotate-left"></i></div>
                 </div>
             </div>
 
             <!-- Grid Konten Tengah -->
             <div class="content-grid">
                 
-                <!-- Grafik Utama (Kiri) -->
+                <!-- Grafik Utama Baru (Sebaran Level) -->
                 <div class="card chart-card">
-                    <div class="card-header">
-                        <h4>Statistik Kehadiran & Setoran (Bulan Ini)</h4>
+                    <div class="card-header chart-header-custom">
+                        <h4>Sebaran Kemampuan Santri</h4>
+                        
+                        <!-- Filter & Toggle -->
+                        <div class="chart-controls">
+                            <select id="classFilter" class="filter-select">
+                                <option value="semua">Semua Kelas</option>
+                                <option value="kelas1">Kelas 1</option>
+                                <option value="kelas2">Kelas 2</option>
+                                <option value="kelas3">Kelas 3</option>
+                            </select>
+                            
+                            <div class="toggle-group">
+                                <button class="toggle-btn active" id="btnTahsin">Tahsin</button>
+                                <button class="toggle-btn" id="btnTahfidz">Tahfidz</button>
+                            </div>
+                        </div>
                     </div>
+                    
                     <div class="chart-container">
                         <canvas id="mainChart"></canvas>
                     </div>
@@ -127,16 +147,16 @@
                         <div class="schedule-item">
                             <div class="time">15:30</div>
                             <div class="details">
-                                <h5>Halaqoh Tahfidz Sore</h5>
-                                <p>Kelas Abu Bakar (12 Santri)</p>
+                                <h5>Halaqoh Kelas 1 & 2</h5>
+                                <p>Fokus: Tahsin Iqro</p>
                             </div>
                             <button class="btn-action">Mulai</button>
                         </div>
                         <div class="schedule-item">
                             <div class="time">16:45</div>
                             <div class="details">
-                                <h5>Evaluasi Tahsin</h5>
-                                <p>Kelompok B (8 Santri)</p>
+                                <h5>Halaqoh Kelas 3</h5>
+                                <p>Fokus: Tilawah & Tahfidz</p>
                             </div>
                             <button class="btn-action">Mulai</button>
                         </div>
