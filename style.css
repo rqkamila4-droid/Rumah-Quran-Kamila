@@ -215,10 +215,10 @@
    ========================================= */
 .admin-layout {
     display: flex;
-    height: 100dvh; /* dvh membuat tinggi layar dinamis merespon browser HP */
+    height: 100dvh;
     width: 100vw;
     background-color: var(--bg-app);
-    overflow: hidden; /* Mencegah body luar bisa digeser */
+    overflow: hidden;
     margin: 0;
     font-family: 'Poppins', sans-serif;
 }
@@ -315,15 +315,15 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Mengizinkan scroll atas-bawah */
-    overflow-x: hidden; /* Mencegah scroll ke samping */
+    overflow-y: auto;
+    overflow-x: hidden;
     height: 100%;
 }
 
 /* --- TOPBAR --- */
 .topbar {
     height: 80px;
-    min-height: 80px; /* Mencegah topbar mengecil */
+    min-height: 80px;
     background-color: var(--card-bg);
     display: flex;
     justify-content: space-between;
@@ -429,7 +429,7 @@
     color: var(--text-main);
 }
 
-/* 4 Kartu Atas */
+/* 4 Kartu Atas (Standar Desktop/Tablet) */
 .summary-cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -549,7 +549,7 @@
 .info p { color: var(--text-muted); font-size: 0.8rem; }
 .score { font-size: 0.85rem; font-weight: 600; color: #16a085; }
 
-/* ANIMASI KEYFRAMES (Dari index.html & login.html) */
+/* ANIMASI KEYFRAMES */
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -575,55 +575,72 @@
 }
 
 @media (max-width: 1024px) {
-    /* Tampilan iPad: Kartu jadi 2 baris */
+    /* Tampilan iPad: Kartu jadi 2 baris (besar) */
     .summary-cards { grid-template-columns: repeat(2, 1fr); }
     .content-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
-    /* (Biarkan kode sidebar yang ada di atasnya tetap sama) */
-
-    /* --- UBAH BAGIAN INI AGAR JADI 2 KOTAK 2 BARIS --- */
+    /* Memperbaiki Sidebar HP agar muncul dari kiri */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -280px;
+        height: 100%;
+        width: 260px;
+        z-index: 999;
+    }
+    
+    .sidebar.show { left: 0; }
+    .sidebar-overlay.show { display: block; }
+    
+    .menu-toggle { display: block; }
+    .sidebar-brand { justify-content: space-between; }
+    .close-sidebar { display: block; padding-right: 10px; }
+    
+    /* --- UBAHAN UNTUK 4 KOTAK MENJADI 2x2 DI HP --- */
     .summary-cards { 
-        grid-template-columns: repeat(2, 1fr); /* Membagi menjadi 2 kolom */
-        gap: 10px; /* Merapatkan jarak antar kotak di HP */
+        grid-template-columns: repeat(2, 1fr); /* 2 Kolom */
+        gap: 12px; 
     } 
 
-    /* Menyesuaikan isi kotak agar muat di layar sempit */
     .summary-card {
-        padding: 12px;
-        flex-direction: column-reverse; /* Memindah ikon ke atas, angka ke bawah */
+        padding: 15px;
+        flex-direction: column-reverse; /* Ikon di atas, teks di bawah */
         align-items: flex-start;
+        justify-content: center;
     }
 
     .summary-card .card-icon {
-        width: 35px;
-        height: 35px;
-        font-size: 1rem;
-        margin-bottom: 10px;
-        border-radius: 8px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+        border-radius: 10px;
     }
 
     .summary-card .card-info p {
-        font-size: 0.75rem; /* Mengecilkan teks judul */
-        margin-bottom: 2px;
+        font-size: 0.75rem; 
+        margin-bottom: 4px;
         line-height: 1.2;
     }
 
     .summary-card .card-info h3 {
-        font-size: 1.3rem; /* Mengecilkan ukuran angka */
+        font-size: 1.4rem; 
     }
     .summary-card .card-info h3 span {
         font-size: 0.75rem;
     }
-
-    /* (Biarkan sisa kode di bawahnya tetap sama) */
+    
+    /* Merapikan Header & Konten HP */
     .topbar-right .search-box { display: none; }
     .topbar { padding: 0 15px; }
     .dashboard-wrapper { padding: 15px; }
+    
+    /* Memastikan grafik tidak melebar ke samping */
     .chart-container, .pie-container {
         width: 100%;
         max-width: 100vw;
     }
     .content-grid { gap: 15px; }
-             }
+}
