@@ -1,24 +1,37 @@
-/* --- Variabel Warna dari Palet Anda --- */
+/* =========================================
+   VARIABEL WARNA GLOBAL
+   ========================================= */
 :root {
     --color-blue: #BAD7DF;
     --color-pink: #FFE2E2;
     --color-white: #F6F6F6;
     --color-mint-light: #E1ECE9;
     --color-mint-dark: #99DDCC;
-    --color-text-dark: #2C3E50; /* Warna teks gelap agar kontras & terbaca */
+    --color-text-dark: #2C3E50;
+    
+    /* Variabel Khusus Dashboard Admin */
+    --bg-app: #F4F7F6;
+    --sidebar-bg: #2b394a;
+    --sidebar-hover: #3a4a5e;
+    --card-bg: #ffffff;
+    --text-main: #2C3E50;
+    --text-muted: #7f8c8d;
+    --border-color: #ecf0f1;
+    --color-orange: #fce4cf;
 }
 
-/* --- Reset & Base Styles --- */
+/* =========================================
+   RESET UMUM & SPLASH SCREEN (index.html)
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
+.splash-body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--color-white);
-    /* Latar belakang dengan gradient super halus dari palet */
     background: linear-gradient(135deg, var(--color-white) 0%, var(--color-mint-light) 100%);
     height: 100vh;
     display: flex;
@@ -28,7 +41,6 @@ body {
     text-align: center;
 }
 
-/* --- Container Utama --- */
 .splash-container {
     padding: 2rem;
     max-width: 400px;
@@ -37,7 +49,6 @@ body {
     align-items: center;
 }
 
-/* --- Elemen Animasi --- */
 .splash-logo {
     width: 120px;
     height: auto;
@@ -74,7 +85,6 @@ body {
     animation: fadeIn 1.5s ease-out 1s forwards;
 }
 
-/* --- Loading Dots Minimalis --- */
 .loading-dots {
     margin-top: 3rem;
     opacity: 0;
@@ -90,32 +100,19 @@ body {
     border-radius: 50%;
     animation: bounce 1.4s infinite ease-in-out both;
 }
-
 .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
 .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
 
-/* --- Keyframes Animations --- */
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes bounce {
-    0%, 80%, 100% { transform: scale(0); }
-    40% { transform: scale(1); }
-}
-
 /* =========================================
-   GAYA UNTUK HALAMAN LOGIN
+   GAYA UNTUK HALAMAN LOGIN (login.html)
    ========================================= */
-
 .login-body {
+    font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, var(--color-mint-light) 0%, var(--color-blue) 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .login-container {
@@ -126,7 +123,6 @@ body {
     width: 90%;
     max-width: 400px;
     text-align: center;
-    /* Animasi muncul yang elegan */
     animation: fadeIn 0.8s ease-out forwards;
 }
 
@@ -156,9 +152,7 @@ body {
     text-align: left;
 }
 
-.input-group {
-    margin-bottom: 1.2rem;
-}
+.input-group { margin-bottom: 1.2rem; }
 
 .input-group label {
     display: block;
@@ -198,11 +192,6 @@ body {
     color: var(--color-mint-dark);
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.forgot-password:hover {
-    color: #7ab8a6;
 }
 
 .btn-login {
@@ -218,39 +207,18 @@ body {
     transition: background-color 0.3s, transform 0.1s;
 }
 
-.btn-login:hover {
-    background-color: #85cbb8;
-}
+.btn-login:hover { background-color: #85cbb8; }
+.btn-login:active { transform: scale(0.98); }
 
-.btn-login:active {
-    transform: scale(0.98);
-}
 /* =========================================
-   GAYA UNTUK DASHBOARD ADMIN / SAAS
+   GAYA DASHBOARD ADMIN SAAS (dashboard.html)
    ========================================= */
-
-:root {
-    --bg-app: #F4F7F6;
-    --sidebar-bg: #2b394a;
-    --sidebar-hover: #3a4a5e;
-    --card-bg: #ffffff;
-    --text-main: #2C3E50;
-    --text-muted: #7f8c8d;
-    --border-color: #ecf0f1;
-    
-    /* Warna Aksen Pastel dari Pilihan Anda */
-    --color-mint-dark: #99DDCC;
-    --color-mint-light: #E1ECE9;
-    --color-blue: #BAD7DF;
-    --color-pink: #FFE2E2;
-    --color-orange: #fce4cf;
-}
-
 .admin-layout {
     display: flex;
-    height: 100vh;
+    height: 100dvh; /* dvh membuat tinggi layar dinamis merespon browser HP */
+    width: 100vw;
     background-color: var(--bg-app);
-    overflow: hidden;
+    overflow: hidden; /* Mencegah body luar bisa digeser */
     margin: 0;
     font-family: 'Poppins', sans-serif;
 }
@@ -262,7 +230,7 @@ body {
     color: white;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease;
+    transition: left 0.3s ease-in-out;
     z-index: 1000;
 }
 
@@ -342,17 +310,20 @@ body {
 }
 .logout-btn i { margin-right: 10px; }
 
-/* --- MAIN CONTENT --- */
+/* --- MAIN CONTENT & SCROLL FIX --- */
 .main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: auto; /* Mengizinkan scroll atas-bawah */
+    overflow-x: hidden; /* Mencegah scroll ke samping */
+    height: 100%;
 }
 
 /* --- TOPBAR --- */
 .topbar {
     height: 80px;
+    min-height: 80px; /* Mencegah topbar mengecil */
     background-color: var(--card-bg);
     display: flex;
     justify-content: space-between;
@@ -443,6 +414,7 @@ body {
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.03);
     padding: 20px;
+    margin-bottom: 20px;
 }
 
 .card-header {
@@ -469,6 +441,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 0;
 }
 
 .card-info p {
@@ -560,6 +533,7 @@ body {
     padding: 12px 0;
     border-bottom: 1px solid var(--border-color);
 }
+.performer-item:last-child { border-bottom: none; }
 
 .avatar {
     width: 45px; height: 45px;
@@ -575,32 +549,67 @@ body {
 .info p { color: var(--text-muted); font-size: 0.8rem; }
 .score { font-size: 0.85rem; font-weight: 600; color: #16a085; }
 
-/* --- RESPONSIVE DESIGN UNTUK iPAD & HP --- */
+/* ANIMASI KEYFRAMES (Dari index.html & login.html) */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* =========================================
+   RESPONSIVE DESIGN UNTUK iPAD & HP
+   ========================================= */
 .sidebar-overlay {
     display: none;
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5); z-index: 999;
+    background: rgba(0,0,0,0.6); z-index: 998;
 }
 
 @media (max-width: 1024px) {
+    /* Tampilan iPad: Kartu jadi 2 baris */
     .summary-cards { grid-template-columns: repeat(2, 1fr); }
     .content-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
+    /* Memperbaiki Sidebar HP agar tidak melayang di tengah */
     .sidebar {
         position: fixed;
-        height: 100vh;
-        transform: translateX(-100%);
+        top: 0;
+        left: -280px; /* Sembunyikan di luar layar kiri */
+        height: 100%;
+        width: 260px;
+        z-index: 999;
     }
-    .sidebar.show { transform: translateX(0); }
+    
+    .sidebar.show { left: 0; /* Munculkan ke layar saat toggle diklik */ }
     .sidebar-overlay.show { display: block; }
     
     .menu-toggle { display: block; }
-    .close-sidebar { display: block; }
     
-    .topbar-right .search-box { display: none; } /* Sembunyikan pencarian di HP agar rapi */
-    .summary-cards { grid-template-columns: 1fr; }
-    .topbar { padding: 0 20px; }
-    .dashboard-wrapper { padding: 20px; }
+    /* Memperbaiki tombol Close (X) di sidebar agar sejajar */
+    .sidebar-brand { justify-content: space-between; }
+    .close-sidebar { display: block; padding-right: 10px; }
+    
+    /* Merapikan Header & Konten HP */
+    .topbar-right .search-box { display: none; }
+    .summary-cards { grid-template-columns: 1fr; gap: 15px; } /* Kartu jadi 1 baris ke bawah */
+    .topbar { padding: 0 15px; }
+    .dashboard-wrapper { padding: 15px; }
+    
+    /* Memastikan grafik tidak melebar ke samping */
+    .chart-container, .pie-container {
+        width: 100%;
+        max-width: 100vw;
+    }
+    .content-grid { gap: 15px; }
 }
