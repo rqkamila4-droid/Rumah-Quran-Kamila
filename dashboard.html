@@ -6,88 +6,103 @@
     <meta name="theme-color" content="#99DDCC">
     <title>Dashboard Ustadz - RQ Kamila</title>
     
-    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    
-    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- CSS Link -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dashboard-body">
 
-    <!-- Bagian Header / Profil Ustadz -->
-    <header class="dashboard-header">
-        <div class="header-text">
-            <p class="greeting">Ahlan wa Sahlan,</p>
-            <h1 class="ustadz-name">Ustadz Fulan</h1> <!-- Nanti nama ini dinamis dari Supabase -->
-            <p class="date-today" id="dateToday">Senin, 1 Muharram 1445 H</p>
+    <!-- Header Profil -->
+    <header class="dash-header-modern">
+        <div class="user-info">
+            <p>Ahlan wa Sahlan,</p>
+            <h2>Ustadz Fulan</h2>
+            <span class="badge-status">Pengajar Aktif</span>
         </div>
-        <div class="header-logo">
-            <img src="logorqkamila.png" alt="Logo">
-        </div>
+        <img src="logorqkamila.png" alt="Profile" class="profile-pic">
     </header>
 
-    <!-- Bagian Menu Utama -->
-    <main class="dashboard-main">
-        <h3 class="section-title">Menu Utama</h3>
-        
-        <div class="menu-grid">
-            <!-- Menu 1: Data Santri -->
-            <div class="menu-card" id="menu-santri">
-                <div class="icon-wrapper"><i class="fas fa-users"></i></div>
-                <span>Data Santri</span>
-            </div>
+    <!-- Ringkasan Info (Widget) -->
+    <div class="info-widget">
+        <div class="widget-icon"><i class="fas fa-calendar-day"></i></div>
+        <div class="widget-text">
+            <p id="dateToday">Senin, 1 Muharram 1445 H</p>
+            <strong>Hari ini Anda memiliki 3 jadwal kelas.</strong>
+        </div>
+    </div>
 
-            <!-- Menu 2: Input Presensi -->
-            <div class="menu-card" id="menu-presensi">
-                <div class="icon-wrapper"><i class="fas fa-user-check"></i></div>
-                <span>Presensi</span>
-            </div>
+    <!-- Main Content: Daftar Aktivitas / Kelas -->
+    <main class="dashboard-content">
+        <h3 class="section-title">Jadwal Mengajar Hari Ini</h3>
 
-            <!-- Menu 3: Input Tahfidz -->
-            <div class="menu-card" id="menu-tahfidz">
-                <div class="icon-wrapper"><i class="fas fa-book-quran"></i></div>
-                <span>Tahfidz</span>
+        <!-- Kartu Kelas 1 -->
+        <div class="class-card">
+            <div class="class-header">
+                <div class="time-badge"><i class="far fa-clock"></i> 13:30 - 14:30</div>
+                <span class="gender-badge ikhwan">Ikhwan</span>
             </div>
-
-            <!-- Menu 4: Input Tahsin -->
-            <div class="menu-card" id="menu-tahsin">
-                <div class="icon-wrapper"><i class="fas fa-microphone-lines"></i></div>
-                <span>Tahsin</span>
-            </div>
-
-            <!-- Menu 5: Input Darsah -->
-            <div class="menu-card" id="menu-darsah">
-                <div class="icon-wrapper"><i class="fas fa-chalkboard-teacher"></i></div>
-                <span>Darsah</span>
-            </div>
-
-            <!-- Menu 6: Riwayat Aktifitas -->
-            <div class="menu-card" id="menu-riwayat">
-                <div class="icon-wrapper"><i class="fas fa-history"></i></div>
-                <span>Riwayat</span>
-            </div>
-
-            <!-- Menu 7: Laporan/Evaluasi -->
-            <div class="menu-card" id="menu-laporan">
-                <div class="icon-wrapper"><i class="fas fa-chart-pie"></i></div>
-                <span>Laporan</span>
-            </div>
-            
-            <!-- Tombol Keluar (Logout) -->
-            <div class="menu-card logout-card" id="btn-logout">
-                <div class="icon-wrapper"><i class="fas fa-sign-out-alt"></i></div>
-                <span>Keluar</span>
+            <h4 class="class-title">Kelas Siang A</h4>
+            <p class="class-desc">Materi: Iqro (Jilid 2-6), Tilawah, & Tahfidz (Juz 29-30)</p>
+            <div class="class-actions">
+                <button class="btn-action btn-outline" onclick="alert('Buka Form Presensi')"><i class="fas fa-user-check"></i> Presensi</button>
+                <button class="btn-action btn-solid" onclick="alert('Buka Jurnal Penilaian')"><i class="fas fa-edit"></i> Input Jurnal</button>
             </div>
         </div>
+
+        <!-- Kartu Kelas 2 -->
+        <div class="class-card">
+            <div class="class-header">
+                <div class="time-badge"><i class="far fa-clock"></i> 14:30 - 15:30</div>
+                <span class="gender-badge akhwat">Akhwat</span>
+            </div>
+            <h4 class="class-title">Kelas Sore B</h4>
+            <p class="class-desc">Materi: Iqro (Jilid 1-5) & Tahfidz (Juz 30)</p>
+            <div class="class-actions">
+                <button class="btn-action btn-outline"><i class="fas fa-user-check"></i> Presensi</button>
+                <button class="btn-action btn-solid"><i class="fas fa-edit"></i> Input Jurnal</button>
+            </div>
+        </div>
+
+        <!-- Kartu Kelas 3 -->
+        <div class="class-card">
+            <div class="class-header">
+                <div class="time-badge"><i class="far fa-clock"></i> 16:00 - 16:55</div>
+                <span class="gender-badge akhwat">Akhwat</span>
+            </div>
+            <h4 class="class-title">Kelas Sore C</h4>
+            <p class="class-desc">Materi: Iqro, Metode Ummi, Tilawah, & Tahfidz (Juz 29-30)</p>
+            <div class="class-actions">
+                <button class="btn-action btn-outline"><i class="fas fa-user-check"></i> Presensi</button>
+                <button class="btn-action btn-solid"><i class="fas fa-edit"></i> Input Jurnal</button>
+            </div>
+        </div>
+        
+        <!-- Ruang kosong agar kartu terakhir tidak tertutup navigasi bawah -->
+        <div style="height: 80px;"></div>
     </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-users"></i>
+            <span>Santri</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-history"></i>
+            <span>Riwayat</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </a>
+    </nav>
 
     <script src="dashboard.js"></script>
 </body>
