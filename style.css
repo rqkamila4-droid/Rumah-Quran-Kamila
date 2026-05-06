@@ -226,139 +226,243 @@ body {
     transform: scale(0.98);
 }
 /* =========================================
-   GAYA UNTUK DASHBOARD USTADZ
+   GAYA BARU DASHBOARD (ACTIVITY ORIENTED)
    ========================================= */
 
 .dashboard-body {
     background-color: var(--color-white);
-    display: block; /* Override flex dari body default */
+    display: block;
     height: auto;
     overflow-y: auto;
-    padding-bottom: 2rem;
+    /* Memberi ruang di bawah agar konten tidak tertutup bottom nav */
+    padding-bottom: 90px; 
 }
 
-/* --- Header Dashboard --- */
-.dashboard-header {
-    background: linear-gradient(135deg, var(--color-mint-dark) 0%, #7ab8a6 100%);
-    padding: 2.5rem 1.5rem 2rem 1.5rem;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
+/* --- Header Modern --- */
+.dash-header-modern {
+    background-color: var(--color-white);
+    padding: 2rem 1.5rem 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
-    box-shadow: 0 4px 15px rgba(153, 221, 204, 0.4);
-    margin-bottom: 1.5rem;
-    animation: fadeIn 0.8s ease-out;
+    animation: fadeIn 0.5s ease-out;
 }
 
-.header-text .greeting {
-    font-size: 0.9rem;
-    font-weight: 300;
-    opacity: 0.9;
+.user-info p {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    margin-bottom: 0.2rem;
 }
 
-.header-text .ustadz-name {
+.user-info h2 {
     font-size: 1.4rem;
-    font-weight: 600;
-    margin: 0.2rem 0;
+    color: var(--color-text-dark);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
 }
 
-.header-text .date-today {
-    font-size: 0.8rem;
-    background-color: rgba(255, 255, 255, 0.2);
+.badge-status {
+    background-color: var(--color-mint-light);
+    color: #27ae60;
+    font-size: 0.7rem;
     padding: 4px 10px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-top: 0.5rem;
+    border-radius: 12px;
+    font-weight: 600;
 }
 
-.header-logo img {
-    width: 60px;
-    height: 60px;
+.profile-pic {
+    width: 55px;
+    height: 55px;
     border-radius: 50%;
-    background-color: white;
-    padding: 5px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    object-fit: cover;
+    border: 2px solid var(--color-mint-dark);
+    padding: 2px;
 }
 
-/* --- Main Content & Grid --- */
-.dashboard-main {
+/* --- Info Widget --- */
+.info-widget {
+    margin: 0 1.5rem 1.5rem 1.5rem;
+    background: linear-gradient(135deg, var(--color-mint-dark) 0%, #7ab8a6 100%);
+    border-radius: 16px;
+    padding: 1.2rem;
+    display: flex;
+    align-items: center;
+    color: white;
+    box-shadow: 0 8px 20px rgba(153, 221, 204, 0.4);
+    animation: fadeUp 0.6s ease-out 0.2s forwards;
+    opacity: 0;
+}
+
+.widget-icon {
+    font-size: 2rem;
+    margin-right: 1rem;
+    background-color: rgba(255,255,255,0.2);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+}
+
+.widget-text p {
+    font-size: 0.8rem;
+    opacity: 0.9;
+    margin-bottom: 0.2rem;
+}
+
+.widget-text strong {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/* --- Main Content & Class Cards --- */
+.dashboard-content {
     padding: 0 1.5rem;
-    animation: fadeUp 0.8s ease-out 0.2s forwards;
+    animation: fadeUp 0.6s ease-out 0.4s forwards;
     opacity: 0;
 }
 
 .section-title {
-    color: var(--color-text-dark);
     font-size: 1.1rem;
-    font-weight: 600;
+    color: var(--color-text-dark);
     margin-bottom: 1rem;
+    font-weight: 600;
 }
 
-.menu-grid {
-    display: grid;
-    /* Grid dinamis: 2 kolom di HP, bisa 3/4 di iPad */
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1.2rem;
-}
-
-.menu-card {
+.class-card {
     background-color: white;
-    border-radius: 20px;
-    padding: 1.5rem 1rem;
+    border: 1px solid #edf2f7;
+    border-radius: 16px;
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+.class-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.time-badge {
+    font-size: 0.85rem;
+    color: #e67e22;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.gender-badge {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.gender-badge.ikhwan {
+    background-color: var(--color-blue);
+    color: #2c3e50;
+}
+
+.gender-badge.akhwat {
+    background-color: var(--color-pink);
+    color: #c0392b;
+}
+
+.class-title {
+    font-size: 1.2rem;
+    color: var(--color-text-dark);
+    margin-bottom: 0.3rem;
+}
+
+.class-desc {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+}
+
+.class-actions {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.btn-action {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--color-mint-dark);
+    color: var(--color-mint-dark);
+}
+
+.btn-outline:active {
+    background-color: var(--color-mint-light);
+}
+
+.btn-solid {
+    background-color: var(--color-mint-dark);
+    border: 1px solid var(--color-mint-dark);
+    color: white;
+}
+
+.btn-solid:active {
+    background-color: #7ab8a6;
+}
+
+/* --- Bottom Navigation Bar --- */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px); /* Efek kaca ala iOS */
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-around;
+    padding: 0.8rem 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    z-index: 1000;
+}
+
+.nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 1px solid rgba(225, 236, 233, 0.5);
-}
-
-.menu-card:hover, .menu-card:active {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(153, 221, 204, 0.3);
-    border-color: var(--color-mint-dark);
-}
-
-.icon-wrapper {
-    width: 50px;
-    height: 50px;
-    background-color: var(--color-mint-light);
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.8rem;
-    color: var(--color-mint-dark);
-    font-size: 1.5rem;
-    transition: all 0.3s ease;
-}
-
-.menu-card:hover .icon-wrapper {
-    background-color: var(--color-mint-dark);
-    color: white;
-}
-
-.menu-card span {
-    font-size: 0.85rem;
+    text-decoration: none;
+    color: #a0aec0;
+    font-size: 0.7rem;
     font-weight: 500;
-    color: var(--color-text-dark);
+    transition: color 0.3s;
 }
 
-/* Khusus Tombol Logout */
-.logout-card .icon-wrapper {
-    background-color: var(--color-pink);
-    color: #d9534f;
+.nav-item i {
+    font-size: 1.3rem;
+    margin-bottom: 4px;
 }
-.logout-card:hover .icon-wrapper {
-    background-color: #d9534f;
-    color: white;
+
+.nav-item.active {
+    color: var(--color-mint-dark);
 }
-.logout-card:hover {
-    border-color: var(--color-pink);
-    box-shadow: 0 8px 25px rgba(255, 226, 226, 0.8);
+
+.nav-item:hover {
+    color: var(--color-mint-dark);
 }
