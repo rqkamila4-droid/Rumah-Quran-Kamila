@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Menampilkan Tanggal Hari Ini (Masehi)
+    // Menampilkan Tanggal Hari Ini
     const dateElement = document.getElementById('dateToday');
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const today = new Date().toLocaleDateString('id-ID', options);
     dateElement.textContent = today;
-    
+});
     // (Catatan: Untuk tanggal Hijriah dinamis nanti bisa ditambahkan menggunakan API khusus jika diperlukan)
 
     // 2. Fungsi Klik Menu
