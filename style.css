@@ -581,35 +581,49 @@
 }
 
 @media (max-width: 768px) {
-    /* Memperbaiki Sidebar HP agar tidak melayang di tengah */
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: -280px; /* Sembunyikan di luar layar kiri */
-        height: 100%;
-        width: 260px;
-        z-index: 999;
+    /* (Biarkan kode sidebar yang ada di atasnya tetap sama) */
+
+    /* --- UBAH BAGIAN INI AGAR JADI 2 KOTAK 2 BARIS --- */
+    .summary-cards { 
+        grid-template-columns: repeat(2, 1fr); /* Membagi menjadi 2 kolom */
+        gap: 10px; /* Merapatkan jarak antar kotak di HP */
+    } 
+
+    /* Menyesuaikan isi kotak agar muat di layar sempit */
+    .summary-card {
+        padding: 12px;
+        flex-direction: column-reverse; /* Memindah ikon ke atas, angka ke bawah */
+        align-items: flex-start;
     }
-    
-    .sidebar.show { left: 0; /* Munculkan ke layar saat toggle diklik */ }
-    .sidebar-overlay.show { display: block; }
-    
-    .menu-toggle { display: block; }
-    
-    /* Memperbaiki tombol Close (X) di sidebar agar sejajar */
-    .sidebar-brand { justify-content: space-between; }
-    .close-sidebar { display: block; padding-right: 10px; }
-    
-    /* Merapikan Header & Konten HP */
+
+    .summary-card .card-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+
+    .summary-card .card-info p {
+        font-size: 0.75rem; /* Mengecilkan teks judul */
+        margin-bottom: 2px;
+        line-height: 1.2;
+    }
+
+    .summary-card .card-info h3 {
+        font-size: 1.3rem; /* Mengecilkan ukuran angka */
+    }
+    .summary-card .card-info h3 span {
+        font-size: 0.75rem;
+    }
+
+    /* (Biarkan sisa kode di bawahnya tetap sama) */
     .topbar-right .search-box { display: none; }
-    .summary-cards { grid-template-columns: 1fr; gap: 15px; } /* Kartu jadi 1 baris ke bawah */
     .topbar { padding: 0 15px; }
     .dashboard-wrapper { padding: 15px; }
-    
-    /* Memastikan grafik tidak melebar ke samping */
     .chart-container, .pie-container {
         width: 100%;
         max-width: 100vw;
     }
     .content-grid { gap: 15px; }
-}
+             }
