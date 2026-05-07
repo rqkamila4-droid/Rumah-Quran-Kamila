@@ -21,10 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.addEventListener('click', toggleSidebar);
 
     // ==========================================
-    // 3. LOGIKA GRAFIK SEBARAN KEMAMPUAN (UPDATE BARU)
+    // 3. LOGIKA GRAFIK SEBARAN KEMAMPUAN 
     // ==========================================
     
-    // Menggunakan Array di dalam label agar teksnya tersusun ke bawah (tidak miring)
     const chartData = {
         tahsin: {
             labels: [['Dasar', '(Jilid 1-3)'], ['Menengah', '(Jilid 4-6)'], ['Lanjutan', '(Tilawah)']],
@@ -46,60 +45,59 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Data Simulasi Daftar Nama Santri untuk Pop-up (Tooltip)
+    // Data Simulasi Lengkap Tanpa Singkatan (Sesuai Request)
     const mockStudentData = {
         tahfidz: {
             semua: [
-                ['• Ahmad - Al-Falaq ayat 3', '• Budi - Al-Lahab ayat 5', '• Citra - Al-Fajr ayat 10', '• Dina - Al-Adiyat ayat 2', '• Eko - Al-Qariah ayat 4', '(+ 7 anak lainnya)'],
-                ['• Faisal - Al-Ghosyiah ayat 12', '• Gita - Al-A\'la ayat 5', '• Hadi - At-Tariq ayat 3', '(+ 4 anak lainnya)'],
-                ['• Iqbal - Al-Mulk ayat 15', '• Jihan - Al-Jin ayat 5', '• Kiki - Nuh ayat 2', '(+ 2 anak lainnya)']
+                ['• Ahmad - Al-Falaq ayat 3', '• Budi - Al-Lahab ayat 5', '• Citra - Al-Fajr ayat 10', '• Dina - Al-Adiyat ayat 2', '• Eko - Al-Qariah ayat 4', '• Farhan - At-Takasur ayat 1', '• Gilang - Al-Asr ayat 3', '• Hana - Al-Humazah ayat 5', '• Irfan - Al-Fil ayat 2', '• Jamil - Quraisy ayat 4', '• Kania - Al-Maun ayat 1', '• Luthfi - Al-Kausar ayat 3'],
+                ['• Faisal - Al-Ghosyiah ayat 12', '• Gita - Al-A\'la ayat 5', '• Hadi - At-Tariq ayat 3', '• Indah - Al-Buruj ayat 10', '• Jamal - Al-Insyiqaq ayat 5', '• Kiki - Al-Mutaffifin ayat 15', '• Laila - Al-Infitar ayat 8'],
+                ['• Iqbal - Al-Mulk ayat 15', '• Jihan - Al-Jin ayat 5', '• Kiki - Nuh ayat 2', '• Maman - Al-Ma\'arij ayat 10', '• Nisa - Al-Haqqah ayat 12']
             ],
             kelas1: [
-                ['• Ahmad - Al-Falaq ayat 3', '• Budi - Al-Lahab ayat 5', '(+ 8 anak lainnya)'],
+                ['• Ahmad - Al-Falaq ayat 3', '• Budi - Al-Lahab ayat 5', '• Citra - Al-Fajr ayat 10', '• Farhan - At-Takasur ayat 1', '• Gilang - Al-Asr ayat 3', '• Hana - Al-Humazah ayat 5', '• Irfan - Al-Fil ayat 2', '• Jamil - Quraisy ayat 4', '• Kania - Al-Maun ayat 1', '• Luthfi - Al-Kausar ayat 3'],
                 ['Tidak ada anak di tahap ini'],
                 ['Tidak ada anak di tahap ini']
             ],
             kelas2: [
                 ['• Dina - Al-Adiyat ayat 2', '• Eko - Al-Qariah ayat 4'],
-                ['• Faisal - Al-Ghosyiah ayat 12', '• Gita - Al-A\'la ayat 5', '(+ 3 anak lainnya)'],
+                ['• Faisal - Al-Ghosyiah ayat 12', '• Gita - Al-A\'la ayat 5', '• Indah - Al-Buruj ayat 10', '• Jamal - Al-Insyiqaq ayat 5', '• Kiki - Al-Mutaffifin ayat 15'],
                 ['• Iqbal - Al-Mulk ayat 15']
             ],
             kelas3: [
                 ['Tidak ada anak di tahap ini'],
-                ['• Hadi - At-Tariq ayat 3', '• Rio - Abasa ayat 10'],
-                ['• Jihan - Al-Jin ayat 5', '• Kiki - Nuh ayat 2', '(+ 2 anak lainnya)']
+                ['• Hadi - At-Tariq ayat 3', '• Laila - Al-Infitar ayat 8'],
+                ['• Jihan - Al-Jin ayat 5', '• Kiki - Nuh ayat 2', '• Maman - Al-Ma\'arij ayat 10', '• Nisa - Al-Haqqah ayat 12']
             ]
         },
         tahsin: {
             semua: [
-                ['• Ahmad - Jilid 2', '• Budi - Jilid 1', '• Citra - Jilid 3', '(+ 7 anak lainnya)'],
-                ['• Faisal - Jilid 5', '• Gita - Jilid 4', '(+ 6 anak lainnya)'],
-                ['• Iqbal - Al-Baqarah', '• Jihan - Ali Imran', '(+ 4 anak lainnya)']
+                ['• Budi - Jilid 1 - Hal 5', '• Citra - Jilid 1 - Hal 12', '• Doni - Jilid 2 - Hal 8', '• Eka - Jilid 2 - Hal 20', '• Fina - Jilid 2 - Hal 25', '• Gilang - Jilid 3 - Hal 4', '• Hana - Jilid 3 - Hal 15', '• Irfan - Jilid 3 - Hal 30', '• Jamil - Jilid 3 - Hal 35', '• Kania - Jilid 3 - Hal 40'],
+                ['• Ahmad - Jilid 6 - Hal 21', '• Laila - Jilid 4 - Hal 10', '• Maman - Jilid 4 - Hal 22', '• Nisa - Jilid 5 - Hal 5', '• Oki - Jilid 5 - Hal 18', '• Putri - Jilid 5 - Hal 30', '• Qori - Jilid 6 - Hal 8', '• Rina - Jilid 6 - Hal 15'],
+                ['• Syifa - Al-Baqarah: 15', '• Tariq - Ali Imran: 5', '• Umar - An-Nisa: 10', '• Vina - Al-Maidah: 2', '• Wawan - Al-An\'am: 8', '• Yudi - Al-A\'raf: 12']
             ],
             kelas1: [
-                ['• Ahmad - Jilid 2', '(+ 7 anak lainnya)'],
-                ['• Gita - Jilid 4', '• Hasan - Jilid 4'],
+                ['• Budi - Jilid 1 - Hal 5', '• Citra - Jilid 1 - Hal 12', '• Doni - Jilid 2 - Hal 8', '• Eka - Jilid 2 - Hal 20', '• Fina - Jilid 2 - Hal 25', '• Gilang - Jilid 3 - Hal 4', '• Hana - Jilid 3 - Hal 15', '• Irfan - Jilid 3 - Hal 30'],
+                ['• Laila - Jilid 4 - Hal 10', '• Maman - Jilid 4 - Hal 22'],
                 ['Tidak ada anak di tahap ini']
             ],
             kelas2: [
-                ['• Citra - Jilid 3', '• Dina - Jilid 3'],
-                ['• Faisal - Jilid 5', '(+ 4 anak lainnya)'],
-                ['• Iqbal - Al-Baqarah']
+                ['• Jamil - Jilid 3 - Hal 35', '• Kania - Jilid 3 - Hal 40'],
+                ['• Ahmad - Jilid 6 - Hal 21', '• Nisa - Jilid 5 - Hal 5', '• Oki - Jilid 5 - Hal 18', '• Putri - Jilid 5 - Hal 30', '• Qori - Jilid 6 - Hal 8'],
+                ['• Syifa - Al-Baqarah: 15']
             ],
             kelas3: [
                 ['Tidak ada anak di tahap ini'],
-                ['• Rina - Jilid 6'],
-                ['• Jihan - Ali Imran', '• Kiki - An-Nisa', '(+ 3 anak lainnya)']
+                ['• Rina - Jilid 6 - Hal 15'],
+                ['• Tariq - Ali Imran: 5', '• Umar - An-Nisa: 10', '• Vina - Al-Maidah: 2', '• Wawan - Al-An\'am: 8', '• Yudi - Al-A\'raf: 12']
             ]
         }
     };
 
-    let currentMode = 'tahfidz'; // Diubah defaultnya ke tahfidz agar langsung kelihatan
+    let currentMode = 'tahfidz'; 
     let currentClass = 'semua'; 
 
     const ctxMain = document.getElementById('mainChart').getContext('2d');
     
-    // Settingan Global Font Chart.js agar elegan
     Chart.defaults.font.family = 'Poppins';
     Chart.defaults.color = '#7f8c8d';
 
@@ -112,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 data: chartData[currentMode].datasets[currentClass],
                 backgroundColor: '#99DDCC', 
                 borderRadius: 8,
-                barPercentage: 0.5 // Membuat batang lebih ramping
+                barPercentage: 0.5 
             }]
         },
         options: {
@@ -126,22 +124,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 x: { 
                     grid: { display: false },
-                    ticks: {
-                        maxRotation: 0, // MENCEGAH TEKS MIRING
-                        minRotation: 0
-                    }
+                    ticks: { maxRotation: 0, minRotation: 0 }
                 }
             },
             plugins: {
                 legend: { display: false }, 
                 tooltip: {
-                    backgroundColor: 'rgba(44, 62, 80, 0.95)', // Warna hitam elegan
+                    backgroundColor: 'rgba(44, 62, 80, 0.95)', 
                     titleFont: { size: 13, weight: '600' },
                     bodyFont: { size: 12 },
                     padding: 12,
-                    displayColors: false, // Menghilangkan kotak warna kecil di pop-up
+                    displayColors: false, 
                     callbacks: {
-                        // 1. Mengubah Judul Pop-up (Tooltip Title)
                         title: function(context) {
                             let idx = context[0].dataIndex;
                             if (currentMode === 'tahfidz') {
@@ -160,16 +154,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                 return fullTitles[idx];
                             }
                         },
-                        // 2. Teks Total Anak
                         label: function(context) {
                             return 'Total: ' + context.raw + ' Anak';
                         },
-                        // 3. Memunculkan Daftar Nama Anak di bawahnya
                         afterLabel: function(context) {
                             let idx = context.dataIndex;
                             let santriList = mockStudentData[currentMode][currentClass][idx];
-                            
-                            // Membuat garis pembatas putus-putus, lalu menggabungkan dengan daftar nama
                             let separator = ['--------------------------------'];
                             return separator.concat(santriList);
                         }
@@ -179,7 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Fungsi Update Grafik
     function updateChart() {
         mainChart.data.labels = chartData[currentMode].labels;
         mainChart.data.datasets[0].data = chartData[currentMode].datasets[currentClass];
@@ -187,7 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
         mainChart.update();
     }
 
-    // Event Listeners untuk Filter & Toggle
     document.getElementById('classFilter').addEventListener('change', function(e) {
         currentClass = e.target.value;
         updateChart();
@@ -196,7 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnTahsin = document.getElementById('btnTahsin');
     const btnTahfidz = document.getElementById('btnTahfidz');
 
-    // Karena default saya set ke Tahfidz, sesuaikan tombol aktifnya
     btnTahfidz.classList.add('active');
     btnTahsin.classList.remove('active');
 
