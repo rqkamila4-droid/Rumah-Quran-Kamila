@@ -21,13 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.addEventListener('click', toggleSidebar);
 
     // ==========================================
-    // 3. LOGIKA GRAFIK BARU (SEBARAN KEMAMPUAN)
+    // 3. LOGIKA GRAFIK SEBARAN KEMAMPUAN (UPDATE BARU)
     // ==========================================
     
-    // Data Simulasi (Nanti bisa diganti dari database Supabase)
+    // Menggunakan Array di dalam label agar teksnya tersusun ke bawah (tidak miring)
     const chartData = {
         tahsin: {
-            labels: ['Dasar (Jilid 1-3)', 'Menengah (Jilid 4-6)', 'Lanjutan (Tilawah)'],
+            labels: [['Dasar', '(Jilid 1-3)'], ['Menengah', '(Jilid 4-6)'], ['Lanjutan', '(Tilawah)']],
             datasets: {
                 semua: [10, 8, 6],
                 kelas1: [8, 2, 0],
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         },
         tahfidz: {
-            labels: ['Juz 30 Awal (An-Nas - Al-A\'la)', 'Juz 30 Akhir (At-Tariq - An-Naba)', 'Juz 29'],
+            labels: [['½ 1', 'Juz 30'], ['½ 2', 'Juz 30'], ['Juz 29']],
             datasets: {
                 semua: [12, 7, 5],
                 kelas1: [10, 0, 0],
@@ -46,21 +46,73 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Konfigurasi Awal Grafik
-    let currentMode = 'tahsin'; // Default mode
-    let currentClass = 'semua'; // Default class
+    // Data Simulasi Daftar Nama Santri untuk Pop-up (Tooltip)
+    const mockStudentData = {
+        tahfidz: {
+            semua: [
+                ['• Ahmad - Al-Falaq ayat 3', '• Budi - Al-Lahab ayat 5', '• Citra - Al-Fajr ayat 10', '• Dina - Al-Adiyat ayat 2', '• Eko - Al-Qariah ayat 4', '(+ 7 anak lainnya)'],
+                ['• Faisal - Al-Ghosyiah ayat 12', '• Gita - Al-A\'la ayat 5', '• Hadi - At-Tariq ayat 3', '(+ 4 anak lainnya)'],
+                ['• Iqbal - Al-Mulk ayat 15', '• Jihan - Al-Jin ayat 5', '• Kiki - Nuh ayat 2', '(+ 2 anak lainnya)']
+            ],
+            kelas1: [
+                ['• Ahmad - Al-Falaq ayat 3', '• Budi - Al-Lahab ayat 5', '(+ 8 anak lainnya)'],
+                ['Tidak ada anak di tahap ini'],
+                ['Tidak ada anak di tahap ini']
+            ],
+            kelas2: [
+                ['• Dina - Al-Adiyat ayat 2', '• Eko - Al-Qariah ayat 4'],
+                ['• Faisal - Al-Ghosyiah ayat 12', '• Gita - Al-A\'la ayat 5', '(+ 3 anak lainnya)'],
+                ['• Iqbal - Al-Mulk ayat 15']
+            ],
+            kelas3: [
+                ['Tidak ada anak di tahap ini'],
+                ['• Hadi - At-Tariq ayat 3', '• Rio - Abasa ayat 10'],
+                ['• Jihan - Al-Jin ayat 5', '• Kiki - Nuh ayat 2', '(+ 2 anak lainnya)']
+            ]
+        },
+        tahsin: {
+            semua: [
+                ['• Ahmad - Jilid 2', '• Budi - Jilid 1', '• Citra - Jilid 3', '(+ 7 anak lainnya)'],
+                ['• Faisal - Jilid 5', '• Gita - Jilid 4', '(+ 6 anak lainnya)'],
+                ['• Iqbal - Al-Baqarah', '• Jihan - Ali Imran', '(+ 4 anak lainnya)']
+            ],
+            kelas1: [
+                ['• Ahmad - Jilid 2', '(+ 7 anak lainnya)'],
+                ['• Gita - Jilid 4', '• Hasan - Jilid 4'],
+                ['Tidak ada anak di tahap ini']
+            ],
+            kelas2: [
+                ['• Citra - Jilid 3', '• Dina - Jilid 3'],
+                ['• Faisal - Jilid 5', '(+ 4 anak lainnya)'],
+                ['• Iqbal - Al-Baqarah']
+            ],
+            kelas3: [
+                ['Tidak ada anak di tahap ini'],
+                ['• Rina - Jilid 6'],
+                ['• Jihan - Ali Imran', '• Kiki - An-Nisa', '(+ 3 anak lainnya)']
+            ]
+        }
+    };
+
+    let currentMode = 'tahfidz'; // Diubah defaultnya ke tahfidz agar langsung kelihatan
+    let currentClass = 'semua'; 
 
     const ctxMain = document.getElementById('mainChart').getContext('2d');
+    
+    // Settingan Global Font Chart.js agar elegan
+    Chart.defaults.font.family = 'Poppins';
+    Chart.defaults.color = '#7f8c8d';
+
     let mainChart = new Chart(ctxMain, {
         type: 'bar',
         data: {
             labels: chartData[currentMode].labels,
             datasets: [{
-                label: 'Jumlah Santri',
+                label: 'Jumlah Anak',
                 data: chartData[currentMode].datasets[currentClass],
-                backgroundColor: '#99DDCC', // Warna mint
-                borderRadius: 6,
-                barPercentage: 0.6
+                backgroundColor: '#99DDCC', 
+                borderRadius: 8,
+                barPercentage: 0.5 // Membuat batang lebih ramping
             }]
         },
         options: {
@@ -69,17 +121,57 @@ document.addEventListener("DOMContentLoaded", () => {
             scales: {
                 y: { 
                     beginAtZero: true, 
-                    ticks: { precision: 0 }, // Memaksa angka bulat (1,2,3) bukan desimal
+                    ticks: { precision: 0 }, 
                     grid: { color: '#ecf0f1' } 
                 },
-                x: { grid: { display: false } }
+                x: { 
+                    grid: { display: false },
+                    ticks: {
+                        maxRotation: 0, // MENCEGAH TEKS MIRING
+                        minRotation: 0
+                    }
+                }
             },
             plugins: {
-                legend: { display: false }, // Sembunyikan legenda karena sudah jelas
+                legend: { display: false }, 
                 tooltip: {
+                    backgroundColor: 'rgba(44, 62, 80, 0.95)', // Warna hitam elegan
+                    titleFont: { size: 13, weight: '600' },
+                    bodyFont: { size: 12 },
+                    padding: 12,
+                    displayColors: false, // Menghilangkan kotak warna kecil di pop-up
                     callbacks: {
+                        // 1. Mengubah Judul Pop-up (Tooltip Title)
+                        title: function(context) {
+                            let idx = context[0].dataIndex;
+                            if (currentMode === 'tahfidz') {
+                                const fullTitles = [
+                                    '½ 1 Juz 30 (An-Nas - Al-Fajr)',
+                                    '½ 2 Juz 30 (Al-Ghosyiah - An-Naba\')',
+                                    'Juz 29'
+                                ];
+                                return fullTitles[idx];
+                            } else {
+                                const fullTitles = [
+                                    'Tahsin Dasar (Jilid 1-3)',
+                                    'Tahsin Menengah (Jilid 4-6)',
+                                    'Tahsin Lanjutan (Tilawah)'
+                                ];
+                                return fullTitles[idx];
+                            }
+                        },
+                        // 2. Teks Total Anak
                         label: function(context) {
-                            return context.raw + ' Santri';
+                            return 'Total: ' + context.raw + ' Anak';
+                        },
+                        // 3. Memunculkan Daftar Nama Anak di bawahnya
+                        afterLabel: function(context) {
+                            let idx = context.dataIndex;
+                            let santriList = mockStudentData[currentMode][currentClass][idx];
+                            
+                            // Membuat garis pembatas putus-putus, lalu menggabungkan dengan daftar nama
+                            let separator = ['--------------------------------'];
+                            return separator.concat(santriList);
                         }
                     }
                 }
@@ -87,26 +179,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Fungsi Update Grafik Saat Tombol Diklik
+    // Fungsi Update Grafik
     function updateChart() {
         mainChart.data.labels = chartData[currentMode].labels;
         mainChart.data.datasets[0].data = chartData[currentMode].datasets[currentClass];
-        
-        // Ubah warna agar ustadz tahu mode mana yang aktif
         mainChart.data.datasets[0].backgroundColor = (currentMode === 'tahsin') ? '#99DDCC' : '#BAD7DF'; 
-        
         mainChart.update();
     }
 
-    // Event Listener Filter Kelas
+    // Event Listeners untuk Filter & Toggle
     document.getElementById('classFilter').addEventListener('change', function(e) {
         currentClass = e.target.value;
         updateChart();
     });
 
-    // Event Listener Toggle Tahsin/Tahfidz
     const btnTahsin = document.getElementById('btnTahsin');
     const btnTahfidz = document.getElementById('btnTahfidz');
+
+    // Karena default saya set ke Tahfidz, sesuaikan tombol aktifnya
+    btnTahfidz.classList.add('active');
+    btnTahsin.classList.remove('active');
 
     btnTahsin.addEventListener('click', function() {
         currentMode = 'tahsin';
@@ -123,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ==========================================
-    // 4. Menggambar Donut Chart (Persentase Kehadiran)
+    // 4. Menggambar Donut Chart
     // ==========================================
     const ctxDonut = document.getElementById('donutChart').getContext('2d');
     new Chart(ctxDonut, {
