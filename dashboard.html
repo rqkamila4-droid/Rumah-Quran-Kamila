@@ -7,18 +7,23 @@
     <title>Dashboard Ustadz - RQ Kamila</title>
     
     <link rel="manifest" href="manifest.json">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-layout">
+
+    <div id="murojaahModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeMurojaahModal">&times;</span>
+            <h3 class="modal-title">Daftar Santri Mengulang (Tahsin)</h3>
+            <ul class="modal-list" id="murojaahList">
+                </ul>
+        </div>
+    </div>
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
@@ -48,7 +53,6 @@
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
                 <h2 class="page-title">Dashboard</h2>
             </div>
-            
             <div class="topbar-right">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
@@ -64,6 +68,19 @@
         <div class="dashboard-wrapper">
             
             <div class="summary-cards">
+                <div class="card summary-card schedule-highlight-card">
+                    <div class="card-info">
+                        <p class="highlight-title">JADWAL HARI INI</p>
+                        <h3 id="nextClassName">Abu Bakar</h3>
+                        <p class="highlight-time" id="nextClassTime">13:30 - 14:30</p>
+                        <span class="status-badge" id="nextClassStatus">Mengecek...</span>
+                    </div>
+                    <div class="card-icon schedule-icon">
+                        <div class="student-count" id="nextClassCount">11</div>
+                        <span class="student-label">Santri</span>
+                    </div>
+                </div>
+
                 <div class="card summary-card">
                     <div class="card-info">
                         <p>Total Santri Diampu</p>
@@ -71,26 +88,22 @@
                     </div>
                     <div class="card-icon blue-bg"><i class="fas fa-users"></i></div>
                 </div>
+
                 <div class="card summary-card">
                     <div class="card-info">
-                        <p>Mencapai Target</p>
-                        <h3>8 <span>Anak</span></h3>
+                        <p>Hadir Hari Ini</p>
+                        <h3>20 <span>Anak</span></h3>
                     </div>
-                    <div class="card-icon mint-bg"><i class="fas fa-star"></i></div>
+                    <div class="card-icon mint-bg"><i class="fas fa-user-check"></i></div>
                 </div>
-                <div class="card summary-card">
+
+                <div class="card summary-card interactive-card" id="btnMurojaah">
                     <div class="card-info">
-                        <p>Belum Setor / Absen</p>
-                        <h3>3 <span>Anak</span></h3>
-                    </div>
-                    <div class="card-icon orange-bg"><i class="fas fa-user-clock"></i></div>
-                </div>
-                <div class="card summary-card">
-                    <div class="card-info">
-                        <p>Status Ulang / Murojaah</p>
+                        <p>Status Mengulang</p>
                         <h3>5 <span>Anak</span></h3>
                     </div>
                     <div class="card-icon pink-bg"><i class="fas fa-rotate-left"></i></div>
+                    <div class="click-hint">Klik untuk melihat</div>
                 </div>
             </div>
 
@@ -99,7 +112,6 @@
                 <div class="card chart-card">
                     <div class="card-header chart-header-custom">
                         <h4>Sebaran Kemampuan Santri</h4>
-                        
                         <div class="chart-controls">
                             <select id="classFilter" class="filter-select">
                                 <option value="semua">Semua Kelas</option>
@@ -107,79 +119,61 @@
                                 <option value="kelas2">Kelas 2</option>
                                 <option value="kelas3">Kelas 3</option>
                             </select>
-                            
                             <div class="toggle-group">
-                                <button class="toggle-btn active" id="btnTahsin">Tahsin</button>
-                                <button class="toggle-btn" id="btnTahfidz">Tahfidz</button>
+                                <button class="toggle-btn" id="btnTahsin">Tahsin</button>
+                                <button class="toggle-btn active" id="btnTahfidz">Tahfidz</button>
                             </div>
                         </div>
                     </div>
-                    
                     <div class="chart-container">
                         <canvas id="mainChart"></canvas>
                     </div>
                 </div>
 
-                <div class="card schedule-card">
-                    <div class="card-header">
-                        <h4>Jadwal Hari Ini</h4>
-                        <span class="date-badge" id="todayBadge">...</span>
-                    </div>
-                    <div class="schedule-list">
-                        <div class="schedule-item">
-                            <div class="time">15:30</div>
-                            <div class="details">
-                                <h5>Halaqoh Kelas 1 & 2</h5>
-                                <p>Fokus: Tahsin Iqro</p>
-                            </div>
-                            <button class="btn-action">Mulai</button>
-                        </div>
-                        <div class="schedule-item">
-                            <div class="time">16:45</div>
-                            <div class="details">
-                                <h5>Halaqoh Kelas 3</h5>
-                                <p>Fokus: Tilawah & Tahfidz</p>
-                            </div>
-                            <button class="btn-action">Mulai</button>
+                <div class="card active-students-card">
+                    <div class="card-header chart-header-custom">
+                        <h4>Santri Teraktif</h4>
+                        <div class="toggle-group small-toggle">
+                            <button class="toggle-btn active" id="btnActiveWeek">Pekan</button>
+                            <button class="toggle-btn" id="btnActiveMonth">Bulan</button>
                         </div>
                     </div>
+                    <div class="active-list" id="activeStudentsList">
+                        </div>
                 </div>
 
-                <div class="card list-card">
+                <div class="card timeline-card">
                     <div class="card-header">
-                        <h4>Santri Teraktif Minggu Ini</h4>
+                        <h4>Riwayat Aktivitas Hari Ini</h4>
                     </div>
-                    <div class="performer-list">
-                        <div class="performer-item">
-                            <div class="avatar">A</div>
-                            <div class="info">
-                                <h5>Ahmad Hanif</h5>
-                                <p>Tahfidz: Surah Al-Mulk</p>
+                    <div class="timeline-container">
+                        <div class="timeline-item">
+                            <div class="timeline-time">15:35</div>
+                            <div class="timeline-content">
+                                <h5>Input Presensi</h5>
+                                <p>Kelas Abu Bakar (11 Santri)</p>
                             </div>
-                            <div class="score">Mumtaz</div>
                         </div>
-                        <div class="performer-item">
-                            <div class="avatar">Z</div>
-                            <div class="info">
-                                <h5>Zaidan Ali</h5>
-                                <p>Tahfidz: Surah Al-Waqi'ah</p>
+                        <div class="timeline-item">
+                            <div class="timeline-time">16:00</div>
+                            <div class="timeline-content">
+                                <h5>Evaluasi Tahfidz</h5>
+                                <p>Ahmad Hanif (Al-Mulk: 15)</p>
                             </div>
-                            <div class="score">Mumtaz</div>
                         </div>
-                        <div class="performer-item">
-                            <div class="avatar">F</div>
-                            <div class="info">
-                                <h5>Fatimah Azzahra</h5>
-                                <p>Tahsin: Jilid 4</p>
+                        <div class="timeline-item">
+                            <div class="timeline-time">16:15</div>
+                            <div class="timeline-content">
+                                <h5>Evaluasi Tahsin</h5>
+                                <p>Fatimah (Jilid 4 - Hal 21)</p>
                             </div>
-                            <div class="score">Jayyid Jiddan</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="card pie-card">
                     <div class="card-header">
-                        <h4>Persentase Kehadiran</h4>
+                        <h4>Persentase Kehadiran Harian</h4>
                     </div>
                     <div class="pie-container">
                         <canvas id="donutChart"></canvas>
@@ -191,7 +185,6 @@
     </main>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
     <script src="dashboard.js"></script>
 </body>
 </html>
