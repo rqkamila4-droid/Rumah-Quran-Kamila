@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // 1. Toggles Sidebar
     const sidebar = document.getElementById('sidebar');
     const menuToggle = document.getElementById('menuToggle');
     const closeSidebar = document.getElementById('closeSidebar');
@@ -11,10 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.addEventListener('click', toggleSidebar);
 
     // ==========================================
-    // 2. LOGIKA JADWAL HARI INI (REAL-TIME STATUS)
+    // LOGIKA JADWAL HARI INI 
     // ==========================================
-    // Format displayTime menggunakan " - "
-    // startTime digunakan untuk logika hitung mundur (wajib HH:MM)
     const todaySchedule = [
         { name: "SAID BIN ZAID", displayTime: "13:30 - 14:30", startTime: "13:30", count: 11 },
         { name: "UMAR BIN KHATTAB", displayTime: "15:00 - 16:00", startTime: "15:00", count: 15 },
@@ -23,32 +20,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function checkScheduleStatus() {
         const now = new Date();
-        const currentHours = now.getHours();
-        const currentMinutes = now.getMinutes();
-        const currentTimeInMinutes = (currentHours * 60) + currentMinutes;
+        const currentTimeInMinutes = (now.getHours() * 60) + now.getMinutes();
 
         let nextClass = null;
         let statusText = "Selesai";
-        let statusClass = "done"; // Default class untuk yang sudah selesai
+        let statusClass = "done"; 
 
         for (let cls of todaySchedule) {
             let [h, m] = cls.startTime.split(':').map(Number);
             let classTimeInMinutes = (h * 60) + m;
             let diff = classTimeInMinutes - currentTimeInMinutes;
 
-            // Jika kelas belum lewat 60 menit dari jam mulainya
             if (diff > -60) {
                 nextClass = cls;
-                if (diff > 10) {
-                    statusText = "Akan Datang";
-                    statusClass = "waiting";
-                } else if (diff > 0 && diff <= 10) {
-                    statusText = "Segera Dimulai";
-                    statusClass = "starting";
-                } else {
-                    statusText = "Sedang Berjalan";
-                    statusClass = "active";
-                }
+                if (diff > 10) { statusText = "Akan Datang"; statusClass = "waiting"; } 
+                else if (diff > 0 && diff <= 10) { statusText = "Segera Dimulai"; statusClass = "starting"; } 
+                else { statusText = "Sedang Berjalan"; statusClass = "active"; }
                 break; 
             }
         }
@@ -58,23 +45,19 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('nextClassTime').textContent = nextClass.displayTime;
             document.getElementById('nextClassCount').textContent = nextClass.count;
             const badge = document.getElementById('nextClassStatus');
-            badge.textContent = statusText;
-            badge.className = "status-badge " + statusClass;
+            badge.textContent = statusText; badge.className = "status-badge " + statusClass;
         } else {
             document.getElementById('nextClassName').textContent = "Tidak Ada";
             document.getElementById('nextClassTime').textContent = "-";
             document.getElementById('nextClassCount').textContent = "0";
             const badge = document.getElementById('nextClassStatus');
-            badge.textContent = "Semua Selesai";
-            badge.className = "status-badge done";
+            badge.textContent = "Semua Selesai"; badge.className = "status-badge done";
         }
     }
-
-    checkScheduleStatus();
-    setInterval(checkScheduleStatus, 60000);
+    checkScheduleStatus(); setInterval(checkScheduleStatus, 60000);
 
     // ==========================================
-    // 3. MODAL BOX STATUS MENGULANG
+    // MODAL BOX STATUS MENGULANG
     // ==========================================
     const modal = document.getElementById('murojaahModal');
     const btnMurojaah = document.getElementById('btnMurojaah');
@@ -98,12 +81,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         modal.style.display = "block";
     });
-
     closeModal.addEventListener('click', () => { modal.style.display = "none"; });
     window.addEventListener('click', (event) => { if (event.target == modal) { modal.style.display = "none"; }});
 
     // ==========================================
-    // 4. LOGIKA SANTRI TERAKTIF 
+    // LOGIKA SANTRI TERAKTIF 
     // ==========================================
     const activeData = {
         pekan: [
@@ -142,45 +124,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     renderActiveStudents('pekan');
-
-    btnWeek.addEventListener('click', () => {
-        btnWeek.classList.add('active'); btnMonth.classList.remove('active');
-        renderActiveStudents('pekan');
-    });
-    btnMonth.addEventListener('click', () => {
-        btnMonth.classList.add('active'); btnWeek.classList.remove('active');
-        renderActiveStudents('bulan');
-    });
+    btnWeek.addEventListener('click', () => { btnWeek.classList.add('active'); btnMonth.classList.remove('active'); renderActiveStudents('pekan'); });
+    btnMonth.addEventListener('click', () => { btnMonth.classList.add('active'); btnWeek.classList.remove('active'); renderActiveStudents('bulan'); });
 
     // ==========================================
-    // 5. GRAFIK SEBARAN KEMAMPUAN
+    // GRAFIK SEBARAN KEMAMPUAN
     // ==========================================
     const chartData = {
-        tahsin: {
-            labels: [['Dasar', '(Jilid 1-3)'], ['Menengah', '(Jilid 4-6)'], ['Lanjutan', '(Tilawah)']],
-            datasets: { semua: [10, 8, 6], kelas1: [8, 2, 0], kelas2: [2, 5, 1], kelas3: [0, 1, 5] }
-        },
-        tahfidz: {
-            labels: [['½ 1', 'Juz 30'], ['½ 2', 'Juz 30'], ['Juz 29']],
-            datasets: { semua: [12, 7, 5], kelas1: [10, 0, 0], kelas2: [2, 5, 1], kelas3: [0, 2, 4] }
-        }
+        tahsin: { labels: [['Dasar', '(Jilid 1-3)'], ['Menengah', '(Jilid 4-6)'], ['Lanjutan', '(Tilawah)']], datasets: { semua: [10, 8, 6], kelas1: [8, 2, 0], kelas2: [2, 5, 1], kelas3: [0, 1, 5] } },
+        tahfidz: { labels: [['½ 1', 'Juz 30'], ['½ 2', 'Juz 30'], ['Juz 29']], datasets: { semua: [12, 7, 5], kelas1: [10, 0, 0], kelas2: [2, 5, 1], kelas3: [0, 2, 4] } }
     };
 
     const mockStudentData = {
         tahfidz: {
-            semua: [
-                ['• Ahmad - Al-Falaq ayat 3', '• Budi - Al-Lahab ayat 5'],
-                ['• Faisal - Al-Ghosyiah ayat 12', '• Gita - Al-A\'la ayat 5'],
-                ['• Iqbal - Al-Mulk ayat 15', '• Jihan - Al-Jin ayat 5']
-            ],
+            semua: [['• Ahmad - Al-Falaq ayat 3', '• Budi - Al-Lahab ayat 5'], ['• Faisal - Al-Ghosyiah ayat 12', '• Gita - Al-A\'la ayat 5'], ['• Iqbal - Al-Mulk ayat 15', '• Jihan - Al-Jin ayat 5']],
             kelas1: [['• Ahmad - Al-Falaq'], ['Kosong'], ['Kosong']],
             kelas2: [['Kosong'], ['• Faisal - Al-Ghosyiah'], ['Kosong']],
             kelas3: [['Kosong'], ['Kosong'], ['• Iqbal - Al-Mulk']]
         },
         tahsin: {
-            semua: [
-                ['• Budi - Jilid 1 - Hal 5'], ['• Ahmad - Jilid 6 - Hal 21'], ['• Syifa - Al-Baqarah: 15']
-            ],
+            semua: [['• Budi - Jilid 1 - Hal 5'], ['• Ahmad - Jilid 6 - Hal 21'], ['• Syifa - Al-Baqarah: 15']],
             kelas1: [['• Budi - Jilid 1'], ['Kosong'], ['Kosong']],
             kelas2: [['Kosong'], ['• Ahmad - Jilid 6'], ['Kosong']],
             kelas3: [['Kosong'], ['Kosong'], ['• Syifa - Al-Baqarah']]
@@ -195,10 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
         type: 'bar',
         data: {
             labels: chartData[currentMode].labels,
-            datasets: [{
-                label: 'Jumlah Anak', data: chartData[currentMode].datasets[currentClass],
-                backgroundColor: '#99DDCC', borderRadius: 8, barPercentage: 0.5 
-            }]
+            datasets: [{ label: 'Jumlah Anak', data: chartData[currentMode].datasets[currentClass], backgroundColor: '#99DDCC', borderRadius: 8, barPercentage: 0.5 }]
         },
         options: {
             responsive: true, maintainAspectRatio: false,
@@ -213,9 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             return (currentMode === 'tahfidz') ? ['½ 1 Juz 30', '½ 2 Juz 30', 'Juz 29'][idx] : ['Tahsin Dasar', 'Tahsin Menengah', 'Tahsin Lanjutan'][idx];
                         },
                         label: function(context) { return 'Total: ' + context.raw + ' Anak'; },
-                        afterLabel: function(context) {
-                            return ['--------------------------------'].concat(mockStudentData[currentMode][currentClass][context.dataIndex]);
-                        }
+                        afterLabel: function(context) { return ['--------------------------------'].concat(mockStudentData[currentMode][currentClass][context.dataIndex]); }
                     }
                 }
             }
@@ -233,21 +191,22 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('btnTahfidz').addEventListener('click', function() { currentMode = 'tahfidz'; this.classList.add('active'); document.getElementById('btnTahsin').classList.remove('active'); updateChart(); });
 
     // ==========================================
-    // 6. DONUT CHART (INTERAKTIF NAMA ANAK)
+    // 6. DONUT CHART (UPDATE IZIN/SAKIT & ALPHA)
     // ==========================================
     const attendanceData = {
-        Hadir: ['• Ahmad', '• Budi', '• Citra', '(+17 lainnya)'],
-        Izin: ['• Dika', '• Evi'],
-        Sakit: ['• Farhan']
+        'Hadir': ['• Ahmad', '• Budi', '• Citra', '(+17 lainnya)'],
+        'Izin/Sakit': ['• Dika (Izin)', '• Evi (Sakit)', '• Farhan (Sakit)'],
+        'Alpha': ['• Gilang (Tanpa Keterangan)']
     };
 
     const ctxDonut = document.getElementById('donutChart').getContext('2d');
     new Chart(ctxDonut, {
         type: 'doughnut',
         data: {
-            labels: ['Hadir', 'Izin', 'Sakit/Alpha'],
+            // Label Diganti Menjadi Izin/Sakit dan Alpha
+            labels: ['Hadir', 'Izin/Sakit', 'Alpha'],
             datasets: [{
-                data: [20, 2, 1], 
+                data: [20, 3, 1], // Data disesuaikan 20 Hadir, 3 Izin/Sakit, 1 Alpha
                 backgroundColor: ['#99DDCC', '#BAD7DF', '#FFE2E2'],
                 borderWidth: 0,
                 hoverOffset: 4
@@ -267,8 +226,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             return context.label + ': ' + context.raw + ' Anak';
                         },
                         afterLabel: function(context) {
-                            let statusName = context.label.split('/')[0]; 
-                            return ['--------------------------------'].concat(attendanceData[statusName]);
+                            // Menarik data nama anak sesuai label persis
+                            return ['--------------------------------'].concat(attendanceData[context.label]);
                         }
                     }
                 }
