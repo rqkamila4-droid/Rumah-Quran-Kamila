@@ -275,3 +275,49 @@ body { font-family: 'Poppins', sans-serif; }
     .chart-container, .pie-container { width: 100%; max-width: 100vw; }
     .content-grid { gap: 15px; }
 }
+/* =========================================
+   HALAMAN INPUT PRESENSI & SETORAN
+   ========================================= */
+.filter-card { display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; }
+.filter-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 200px; }
+.filter-group label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+.date-input { padding: 8px 12px; }
+
+.presensi-list { display: flex; flex-direction: column; gap: 15px; }
+.presensi-item { border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; background: #fafdfc; transition: all 0.2s ease; }
+.presensi-item:hover { border-color: var(--color-mint-dark); box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+
+.presensi-header { display: flex; align-items: center; margin-bottom: 12px; }
+.santri-name { font-weight: 600; color: var(--text-main); font-size: 1rem; }
+
+/* Desain Tombol Radio (Hadir/Izin/Sakit/Alpha) */
+.presensi-status { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+.status-radio { display: none; }
+.status-label { 
+    padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; cursor: pointer; 
+    border: 1px solid var(--border-color); background: white; color: var(--text-muted); transition: all 0.2s; 
+}
+
+/* Warna saat tombol ditekan */
+input[value="hadir"]:checked + .status-label { background-color: var(--color-mint-light); border-color: #16a085; color: #16a085; }
+input[value="izin"]:checked + .status-label { background-color: var(--color-blue); border-color: #2980b9; color: #2980b9; }
+input[value="sakit"]:checked + .status-label { background-color: var(--color-pink); border-color: #c0392b; color: #c0392b; }
+input[value="alpha"]:checked + .status-label { background-color: #eee; border-color: #999; color: #555; }
+
+/* Input Setoran */
+.setoran-input-group { position: relative; }
+.setoran-input-group i { position: absolute; left: 15px; top: 12px; color: var(--color-mint-dark); }
+.setoran-input { 
+    width: 100%; padding: 10px 15px 10px 40px; border: 1px solid var(--border-color); 
+    border-radius: 8px; font-family: inherit; font-size: 0.85rem; outline: none; background: white;
+}
+.setoran-input:focus { border-color: var(--color-mint-dark); box-shadow: 0 0 0 3px rgba(153, 221, 204, 0.2); }
+
+/* Tombol Simpan Melayang */
+.save-btn-container { position: sticky; bottom: 20px; text-align: center; margin-top: 30px; z-index: 100; }
+.btn-save-all { 
+    background-color: var(--color-mint-dark); color: white; padding: 15px 40px; 
+    border-radius: 30px; border: none; font-size: 1rem; font-weight: 600; 
+    box-shadow: 0 5px 15px rgba(22, 160, 133, 0.3); cursor: pointer; transition: transform 0.2s;
+}
+.btn-save-all:active { transform: scale(0.95); }
