@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#2b394a">
-    <title>Input Presensi - RQ Kamila</title>
+    <title>Input Harian - RQ Kamila</title>
     
     <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,11 +25,9 @@
         <ul class="sidebar-menu">
             <li><a href="dashboard.html"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
             <li><a href="#"><i class="fas fa-user-graduate"></i> <span>Data Santri</span></a></li>
-            <li class="active"><a href="presensi.html"><i class="fas fa-clipboard-user"></i> <span>Presensi & Setoran</span></a></li>
-            <li><a href="#"><i class="fas fa-book-quran"></i> <span>Tahfidz</span></a></li>
-            <li><a href="#"><i class="fas fa-microphone-lines"></i> <span>Tahsin</span></a></li>
-            <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> <span>Darsah</span></a></li>
+            <li class="active"><a href="presensi.html"><i class="fas fa-clipboard-list"></i> <span>Input Harian</span></a></li>
             <li><a href="#"><i class="fas fa-chart-pie"></i> <span>Laporan</span></a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
         </ul>
         
         <div class="sidebar-bottom">
@@ -41,7 +39,7 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-                <h2 class="page-title">Input Presensi</h2>
+                <h2 class="page-title">Input Harian Kelas</h2>
             </div>
             <div class="topbar-right">
                 <div class="profile-info">
@@ -68,10 +66,24 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card darsah-card">
                 <div class="card-header">
-                    <h4 id="namaKelasTitle">Daftar Santri: Said Bin Zaid</h4>
-                    <span class="student-count-pill" id="totalSantriPill">0 Santri</span>
+                    <h4><i class="fas fa-chalkboard-teacher"></i> Materi Darsah Hari Ini</h4>
+                    <span class="class-badge" id="darsahBadge">Said Bin Zaid</span>
+                </div>
+                <div class="darsah-input-group">
+                    <input type="text" id="darsahTema" placeholder="Tema Darsah (Contoh: Adab Makan / Kisah Nabi)" class="darsah-tema">
+                    <textarea id="darsahInput" placeholder="Ketik detail materi atau hadits yang diajarkan..." rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header header-with-action">
+                    <div>
+                        <h4 id="namaKelasTitle">Daftar Santri</h4>
+                        <span class="student-count-pill" id="totalSantriPill">0 Santri</span>
+                    </div>
+                    <button class="btn-save-sm" id="btnSimpanAtas"><i class="fas fa-save"></i> Simpan Kelas</button>
                 </div>
                 
                 <div class="presensi-list" id="presensiContainer">
@@ -79,7 +91,7 @@
             </div>
 
             <div class="save-btn-container">
-                <button class="btn-save-all" id="btnSimpan"><i class="fas fa-save"></i> Simpan Data Hari Ini</button>
+                <button class="btn-save-all" id="btnSimpanBawah"><i class="fas fa-check-double"></i> Selesai & Simpan Semua</button>
             </div>
 
         </div>
