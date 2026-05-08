@@ -4,26 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#2b394a">
-    <title>Dashboard Ustadz - RQ Kamila</title>
+    <title>Input Harian - RQ Kamila</title>
     
     <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-layout">
-
-    <div id="murojaahModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeMurojaahModal">&times;</span>
-            <h3 class="modal-title">Daftar Santri Mengulang (Tahsin)</h3>
-            <ul class="modal-list" id="murojaahList">
-                </ul>
-        </div>
-    </div>
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
@@ -33,13 +23,11 @@
         </div>
         
         <ul class="sidebar-menu">
-            <li class="active"><a href="#"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+            <li><a href="dashboard.html"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
             <li><a href="#"><i class="fas fa-user-graduate"></i> <span>Data Santri</span></a></li>
-            <li><a href="#"><i class="fas fa-clipboard-user"></i> <span>Presensi</span></a></li>
-            <li><a href="#"><i class="fas fa-book-quran"></i> <span>Tahfidz</span></a></li>
-            <li><a href="#"><i class="fas fa-microphone-lines"></i> <span>Tahsin</span></a></li>
-            <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> <span>Darsah</span></a></li>
+            <li class="active"><a href="presensi.html"><i class="fas fa-clipboard-list"></i> <span>Input Harian</span></a></li>
             <li><a href="#"><i class="fas fa-chart-pie"></i> <span>Laporan</span></a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
         </ul>
         
         <div class="sidebar-bottom">
@@ -51,13 +39,9 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-                <h2 class="page-title">Dashboard</h2>
+                <h2 class="page-title">Input Harian Kelas</h2>
             </div>
             <div class="topbar-right">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Cari santri...">
-                </div>
                 <div class="profile-info">
                     <span class="profile-name">Ustadz Fulan</span>
                     <div class="profile-pic">UF</div>
@@ -67,121 +51,49 @@
 
         <div class="dashboard-wrapper">
             
-            <div class="summary-cards">
-                <div class="card summary-card schedule-highlight-card">
-                    <p class="highlight-title">JADWAL HARI INI</p>
-                    <div class="status-badge" id="nextClassStatus">AKAN DATANG</div>
-                    <h2 class="highlight-time" id="nextClassTime">13:30 - 14:30</h2>
-                    <h3 class="highlight-class" id="nextClassName">SAID BIN ZAID</h3>
-                    <div class="student-count-pill">
-                        <i class="fas fa-user-graduate"></i> <span id="nextClassCount">11</span> Santri
-                    </div>
+            <div class="card filter-card">
+                <div class="filter-group">
+                    <label>Pilih Kelas:</label>
+                    <select id="kelasSelect" class="filter-select">
+                        <option value="said">Said Bin Zaid</option>
+                        <option value="umar">Umar Bin Khattab</option>
+                        <option value="utsman">Utsman Bin Affan</option>
+                    </select>
                 </div>
-
-                <div class="card summary-card">
-                    <div class="card-info">
-                        <p>Total Santri Diampu</p>
-                        <h3>24 <span>Anak</span></h3>
-                    </div>
-                    <div class="card-icon blue-bg"><i class="fas fa-users"></i></div>
-                </div>
-
-                <div class="card summary-card">
-                    <div class="card-info">
-                        <p>Hadir Hari Ini</p>
-                        <h3>20 <span>Anak</span></h3>
-                    </div>
-                    <div class="card-icon mint-bg"><i class="fas fa-user-check"></i></div>
-                </div>
-
-                <div class="card summary-card interactive-card" id="btnMurojaah">
-                    <div class="card-info">
-                        <p>Status Mengulang</p>
-                        <h3>5 <span>Anak</span></h3>
-                    </div>
-                    <div class="card-icon pink-bg"><i class="fas fa-rotate-left"></i></div>
-                    <div class="click-hint">Klik untuk melihat</div>
+                <div class="filter-group">
+                    <label>Tanggal:</label>
+                    <input type="date" id="tanggalInput" class="filter-select date-input">
                 </div>
             </div>
 
-            <div class="content-grid">
+            <div class="card darsah-card">
+                <div class="card-header">
+                    <h4><i class="fas fa-chalkboard-teacher"></i> Materi Darsah Hari Ini</h4>
+                    <span class="class-badge" id="darsahBadge">Said Bin Zaid</span>
+                </div>
+                <div class="darsah-input-group">
+                    <textarea id="darsahInput" placeholder="Ketik materi darsah (adab/doa/hadits) yang diajarkan ke seluruh kelas hari ini..." rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 id="namaKelasTitle">Daftar Santri</h4>
+                    <span class="student-count-pill" id="totalSantriPill">0 Santri</span>
+                </div>
                 
-                <div class="card chart-card">
-                    <div class="card-header chart-header-custom">
-                        <h4>Sebaran Kemampuan Santri</h4>
-                        <div class="chart-controls">
-                            <select id="classFilter" class="filter-select">
-                                <option value="semua">Semua Kelas</option>
-                                <option value="kelas1">Kelas 1</option>
-                                <option value="kelas2">Kelas 2</option>
-                                <option value="kelas3">Kelas 3</option>
-                            </select>
-                            <div class="toggle-group">
-                                <button class="toggle-btn" id="btnTahsin">Tahsin</button>
-                                <button class="toggle-btn active" id="btnTahfidz">Tahfidz</button>
-                            </div>
-                        </div>
+                <div class="presensi-list" id="presensiContainer">
                     </div>
-                    <div class="chart-container">
-                        <canvas id="mainChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="card active-students-card">
-                    <div class="card-header chart-header-custom">
-                        <h4>Santri Teraktif</h4>
-                        <div class="toggle-group small-toggle">
-                            <button class="toggle-btn active" id="btnActiveWeek">Pekan</button>
-                            <button class="toggle-btn" id="btnActiveMonth">Bulan</button>
-                        </div>
-                    </div>
-                    <div class="active-list" id="activeStudentsList">
-                        </div>
-                </div>
-
-                <div class="card timeline-card">
-                    <div class="card-header">
-                        <h4>Riwayat Aktivitas Hari Ini</h4>
-                    </div>
-                    <div class="timeline-container">
-                        <div class="timeline-item">
-                            <div class="timeline-time">15:35</div>
-                            <div class="timeline-content">
-                                <h5>Input Presensi</h5>
-                                <p>Kelas Said Bin Zaid (11 Santri)</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-time">16:00</div>
-                            <div class="timeline-content">
-                                <h5>Evaluasi Tahfidz</h5>
-                                <p>Ahmad Hanif (Al-Mulk: 15)</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-time">16:15</div>
-                            <div class="timeline-content">
-                                <h5>Evaluasi Tahsin</h5>
-                                <p>Fatimah (Jilid 4 - Hal 21)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card pie-card">
-                    <div class="card-header">
-                        <h4>Persentase Kehadiran Harian</h4>
-                    </div>
-                    <div class="pie-container">
-                        <canvas id="donutChart"></canvas>
-                    </div>
-                </div>
-
             </div>
+
+            <div class="save-btn-container">
+                <button class="btn-save-all" id="btnSimpan"><i class="fas fa-save"></i> Simpan Data Hari Ini</button>
+            </div>
+
         </div>
     </main>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    <script src="dashboard.js"></script>
+    <script src="presensi.js"></script>
 </body>
 </html>
