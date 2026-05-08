@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2b394a">
+    <title>Input Presensi - RQ Kamila</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-layout">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="logorqkamila.png" alt="Logo" class="brand-logo">
+            <span class="brand-text">RQ Kamila</span>
+            <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li><a href="dashboard.html"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+            <li><a href="#"><i class="fas fa-user-graduate"></i> <span>Data Santri</span></a></li>
+            <li class="active"><a href="presensi.html"><i class="fas fa-clipboard-user"></i> <span>Presensi & Setoran</span></a></li>
+            <li><a href="#"><i class="fas fa-book-quran"></i> <span>Tahfidz</span></a></li>
+            <li><a href="#"><i class="fas fa-microphone-lines"></i> <span>Tahsin</span></a></li>
+            <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> <span>Darsah</span></a></li>
+            <li><a href="#"><i class="fas fa-chart-pie"></i> <span>Laporan</span></a></li>
+        </ul>
+        
+        <div class="sidebar-bottom">
+            <a href="login.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <h2 class="page-title">Input Presensi</h2>
+            </div>
+            <div class="topbar-right">
+                <div class="profile-info">
+                    <span class="profile-name">Ustadz Fulan</span>
+                    <div class="profile-pic">UF</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-wrapper">
+            
+            <div class="card filter-card">
+                <div class="filter-group">
+                    <label>Pilih Kelas:</label>
+                    <select id="kelasSelect" class="filter-select">
+                        <option value="said">Said Bin Zaid</option>
+                        <option value="umar">Umar Bin Khattab</option>
+                        <option value="utsman">Utsman Bin Affan</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Tanggal:</label>
+                    <input type="date" id="tanggalInput" class="filter-select date-input">
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 id="namaKelasTitle">Daftar Santri: Said Bin Zaid</h4>
+                    <span class="student-count-pill" id="totalSantriPill">0 Santri</span>
+                </div>
+                
+                <div class="presensi-list" id="presensiContainer">
+                    </div>
+            </div>
+
+            <div class="save-btn-container">
+                <button class="btn-save-all" id="btnSimpan"><i class="fas fa-save"></i> Simpan Data Hari Ini</button>
+            </div>
+
+        </div>
+    </main>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <script src="presensi.js"></script>
+</body>
+</html>
