@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2b394a">
+    <title>Data Santri - RQ Kamila</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-layout">
+
+    <div id="santriModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeSantriModal">&times;</span>
+            <h3 class="modal-title" id="modalTitle">Tambah Santri Baru</h3>
+            <form id="santriForm">
+                <input type="hidden" id="santriId">
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="font-size: 0.8rem; font-weight: 600;">Nama Lengkap</label>
+                    <input type="text" id="inputNama" placeholder="Nama Santri..." required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                </div>
+                <div class="input-group" style="margin-bottom: 20px;">
+                    <label style="font-size: 0.8rem; font-weight: 600;">Pilih Kelas</label>
+                    <select id="inputKelas" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <option value="Said Bin Zaid">Said Bin Zaid</option>
+                        <option value="Umar Bin Khattab">Umar Bin Khattab</option>
+                        <option value="Utsman Bin Affan">Utsman Bin Affan</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-save-all" style="width: 100%; margin-top: 0;">Simpan Data</button>
+            </form>
+        </div>
+    </div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="logorqkamila.png" alt="Logo" class="brand-logo">
+            <span class="brand-text">RQ Kamila</span>
+            <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="dashboard.html"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+            <li class="active"><a href="data-santri.html"><i class="fas fa-user-graduate"></i> <span>Data Santri</span></a></li>
+            <li><a href="presensi.html"><i class="fas fa-clipboard-list"></i> <span>Input Harian</span></a></li>
+            <li><a href="#"><i class="fas fa-chart-pie"></i> <span>Laporan</span></a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
+        </ul>
+        <div class="sidebar-bottom">
+            <a href="login.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <h2 class="page-title">Manajemen Santri</h2>
+            </div>
+            <div class="topbar-right">
+                <button class="btn-save-sm" id="btnTambahSantri" style="background-color: var(--color-mint-dark); color: white;">
+                    <i class="fas fa-plus"></i> Tambah Santri
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-wrapper">
+            <div class="card filter-card">
+                <div class="search-box" style="flex: 2; min-width: 250px;">
+                    <i class="fas fa-search" style="left: 15px;"></i>
+                    <input type="text" id="searchSantri" placeholder="Cari nama santri..." style="width: 100%; background: white;">
+                </div>
+                <div class="filter-group" style="flex: 1;">
+                    <select id="filterKelasTable" class="filter-select" style="background: white;">
+                        <option value="semua">Semua Kelas</option>
+                        <option value="Said Bin Zaid">Said Bin Zaid</option>
+                        <option value="Umar Bin Khattab">Umar Bin Khattab</option>
+                        <option value="Utsman Bin Affan">Utsman Bin Affan</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <div style="overflow-x: auto;">
+                    <table class="santri-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Santri</th>
+                                <th>Kelas</th>
+                                <th style="text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="santriTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <script src="data-santri.js"></script>
+</body>
+</html>
