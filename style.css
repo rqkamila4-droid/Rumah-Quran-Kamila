@@ -115,62 +115,61 @@ body { font-family: 'Poppins', sans-serif; }
 .pink-bg { background-color: var(--color-pink); color: #c0392b; }
 .orange-bg { background-color: var(--color-orange); color: #d35400; }
 
-/* === KOTAK JADWAL (TEMA TERANG/UMUM) === */
+/* === KOTAK JADWAL (REVISI UKURAN DIPERKECIL AGAR SEIMBANG) === */
 .schedule-highlight-card { 
-    background-color: var(--card-bg); /* Putih seperti kartu lain */
-    border: 2px solid var(--color-mint-dark); /* Garis tepi mint agar sedikit menonjol */
+    background-color: var(--card-bg); 
+    border: 2px solid var(--color-mint-dark); 
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    padding: 20px;
+    padding: 12px 18px; /* Padding dikurangi agar tidak terlalu tinggi */
     box-shadow: 0 8px 15px rgba(0,0,0,0.05);
 }
 .highlight-title { 
     color: var(--text-muted) !important; 
     font-weight: 600; 
-    font-size: 0.75rem !important; 
+    font-size: 0.7rem !important; 
     letter-spacing: 1px;
-    margin-bottom: 8px !important;
+    margin-bottom: 5px !important;
 }
 .schedule-highlight-card .status-badge { 
     display: inline-block; 
-    padding: 6px 15px; 
+    padding: 3px 10px; 
     border-radius: 6px; 
-    font-size: 0.75rem; 
+    font-size: 0.65rem; 
     font-weight: 600; 
-    margin-bottom: 12px;
+    margin-bottom: 5px;
     text-transform: uppercase;
 }
-/* Warna Label Status */
 .schedule-highlight-card .status-badge.waiting { background-color: var(--color-mint-light); color: #16a085; }
 .schedule-highlight-card .status-badge.starting { background-color: var(--color-orange); color: #d35400; animation: pulse 1.5s infinite; }
 .schedule-highlight-card .status-badge.active { background-color: var(--color-pink); color: #c0392b; }
 .schedule-highlight-card .status-badge.done { background-color: var(--border-color); color: var(--text-muted); }
 
 .highlight-time { 
-    font-size: 2.2rem !important; 
-    color: var(--color-mint-dark) !important; /* Warna Waktu */
+    font-size: 1.6rem !important; /* Font jam diperkecil */
+    color: var(--color-mint-dark) !important; 
     font-weight: 700;
-    margin-bottom: 5px;
+    margin-bottom: 0px;
     line-height: 1.1;
 }
 .highlight-class { 
-    font-size: 1.3rem; 
+    font-size: 1rem; /* Nama kelas diperkecil */
     color: var(--text-main); 
     font-weight: 600; 
     text-transform: uppercase;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     line-height: 1.2;
 }
 .student-count-pill {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 15px;
+    gap: 6px;
+    padding: 4px 12px;
     border-radius: 20px;
     background-color: var(--color-blue);
     color: #2980b9;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 600;
 }
 
@@ -184,26 +183,61 @@ body { font-family: 'Poppins', sans-serif; }
 .chart-container, .pie-container { position: relative; height: 300px; width: 100%; }
 .pie-container { height: 250px; }
 
-/* SANTRI TERAKTIF */
+/* === SANTRI TERAKTIF (REVISI JARAK KELAS) === */
 .active-item { display: flex; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
 .active-item:last-child { border-bottom: none; }
 .active-avatar { width: 40px; height: 40px; border-radius: 50%; background-color: var(--color-blue); color: #2c3e50; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px; flex-shrink: 0;}
 .active-details { flex: 1; }
-.active-details h5 { color: var(--text-main); font-size: 0.95rem; margin-bottom: 3px; display: flex; justify-content: space-between;}
+/* Revisi: Menyatukan nama dan badge kelas ke kiri, menjauhi skor di kanan */
+.active-details h5 { 
+    color: var(--text-main); 
+    font-size: 0.95rem; 
+    margin-bottom: 3px; 
+    display: flex; 
+    align-items: center;
+    justify-content: flex-start; /* Dirapatkan ke kiri */
+    gap: 10px; /* Jarak antara Nama dan Label Kelas */
+}
 .class-tag { font-size: 0.65rem; background-color: var(--color-mint-light); color: #16a085; padding: 2px 6px; border-radius: 8px; font-weight: 500;}
 .active-details p { color: var(--text-muted); font-size: 0.75rem; margin-bottom: 2px;}
 .active-details p i { width: 15px; color: var(--color-mint-dark);}
 .score { font-size: 0.85rem; font-weight: 600; color: #16a085; }
 
-/* TIMELINE RIWAYAT */
-.timeline-container { position: relative; padding-left: 20px; }
-.timeline-container::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 2px; background-color: var(--border-color); }
-.timeline-item { position: relative; padding-bottom: 20px; padding-left: 20px; }
-.timeline-item::before { content: ''; position: absolute; left: -25px; top: 3px; width: 12px; height: 12px; border-radius: 50%; background-color: var(--color-mint-dark); border: 3px solid white; box-shadow: 0 0 0 1px var(--color-mint-dark); }
+/* === TIMELINE RIWAYAT (REVISI KERAPIAN GARIS & TITIK) === */
+.timeline-container { 
+    position: relative; 
+    padding-left: 15px; /* Ruang untuk teks menjauhi garis */
+    border-left: 2px solid var(--border-color); /* Garis lurus utama */
+    margin-left: 10px; /* Geser seluruh block ke kanan sedikit */
+    margin-top: 10px;
+}
+.timeline-item { position: relative; padding-bottom: 25px; }
 .timeline-item:last-child { padding-bottom: 0; }
-.timeline-time { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; margin-bottom: 3px; }
-.timeline-content h5 { font-size: 0.9rem; color: var(--text-main); }
-.timeline-content p { font-size: 0.8rem; color: var(--text-muted); }
+/* Pengaturan Titik Bulat agar pas di tengah garis */
+.timeline-item::before { 
+    content: ''; 
+    position: absolute; 
+    left: -22px; /* Posisi Titik menarik ke kiri tepat di atas garis */
+    top: 4px; 
+    width: 12px; 
+    height: 12px; 
+    border-radius: 50%; 
+    background-color: var(--color-mint-dark); 
+    box-shadow: 0 0 0 3px var(--card-bg); /* Garis putih semu mengelilingi titik */
+}
+/* Mempercantik tampilan jam */
+.timeline-time { 
+    font-size: 0.75rem; 
+    color: var(--text-main); 
+    font-weight: 700; 
+    margin-bottom: 5px; 
+    display: inline-block; 
+    background-color: var(--color-mint-light); 
+    padding: 2px 8px; 
+    border-radius: 12px;
+}
+.timeline-content h5 { font-size: 0.95rem; color: var(--text-main); margin-bottom: 2px; font-weight: 600;}
+.timeline-content p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
 
 /* ANIMASI & RESPONSIVE */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
