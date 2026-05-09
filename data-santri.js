@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     
     // === KONFIGURASI SUPABASE ===
-    const SUPABASE_URL = 'https://iofgzryyarqaxihemlez.supabase.co/rest/v1/'; // Ganti dengan URL Anda
+    const SUPABASE_URL = 'https://iofgzryyarqaxihemlez.supabase.co'; // Ganti dengan URL Anda
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvZmd6cnl5YXJxYXhpaGVtbGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzOTcwNzgsImV4cCI6MjA4NDk3MzA3OH0.RrkJCQaQ8KjV1SjhAGZXqXgGvqtIVdiIU20UUm5dEYs'; // Ganti dengan Anon Key Anda
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
