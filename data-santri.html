@@ -18,40 +18,31 @@
 <body class="admin-layout">
 
     <div id="santriModal" class="modal">
-        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto; width: 95%; max-width: 500px;">
             <span class="close-modal" id="closeSantriModal">&times;</span>
-            <h3 class="modal-title" id="modalTitle">Tambah Santri Baru</h3>
-            <form id="santriForm">
-                <input type="hidden" id="formMode" value="add">
-                
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label style="font-size: 0.8rem; font-weight: 600;">NIS (Nomor Induk)</label>
-                    <input type="text" id="inputNis" placeholder="Contoh: 2026001" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                </div>
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label style="font-size: 0.8rem; font-weight: 600;">Nama Lengkap</label>
-                    <input type="text" id="inputNama" placeholder="Nama Santri..." required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                </div>
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label style="font-size: 0.8rem; font-weight: 600;">Pilih Kelas</label>
-                    <select id="inputKelas" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                        <option value="">Memuat kelas...</option>
+            <h3 class="modal-title" id="modalTitle">Tarik Santri ke Kelas Anda</h3>
+            
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Masukkan ke Kelas:</label>
+                <select id="selectKelasTarget" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
                     </select>
-                </div>
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label style="font-size: 0.8rem; font-weight: 600;">Jenis Kelamin</label>
-                    <select id="inputGender" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                        <option value="L">Laki-laki (L)</option>
-                        <option value="P">Perempuan (P)</option>
-                    </select>
-                </div>
-                <div class="input-group" style="margin-bottom: 20px;">
-                    <label style="font-size: 0.8rem; font-weight: 600;">No HP Ortu</label>
-                    <input type="text" id="inputNoHp" placeholder="0812xxxx" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            </div>
+
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Pilih Santri dari Dapodik (Belum ada kelas):</label>
+                <div class="search-box" style="margin-bottom: 10px;">
+                    <i class="fas fa-search" style="left: 15px; top: 50%; transform: translateY(-50%); position: absolute; color: var(--text-muted);"></i>
+                    <input type="text" id="searchDapodik" placeholder="Cari NIS/Nama..." style="width: 100%; padding: 8px 10px 8px 35px; border: 1px solid #ddd; border-radius: 8px;">
                 </div>
                 
-                <button type="submit" class="btn-save-all" id="btnSubmitForm" style="width: 100%; margin-top: 0;">Simpan Data</button>
-            </form>
+                <div id="dapodikListContainer" style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; padding: 10px; background: #fafafa;">
+                    <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem;">Memuat data Dapodik...</div>
+                </div>
+            </div>
+            
+            <button class="btn-save-all" id="btnSimpanTarikSantri" style="width: 100%; margin-top: 10px;">
+                <i class="fas fa-save"></i> Simpan ke Kelas Saya
+            </button>
         </div>
     </div>
 
@@ -69,7 +60,7 @@
             <li><a href="#"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
         </ul>
         <div class="sidebar-bottom">
-            <a href="login.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
+            <a href="login.html" class="logout-btn" id="btnLogout"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
         </div>
     </aside>
 
@@ -77,11 +68,11 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-                <h2 class="page-title">Manajemen Santri</h2>
+                <h2 class="page-title">Santri Binaan Saya</h2>
             </div>
             <div class="topbar-right">
-                <button class="btn-save-sm" id="btnTambahSantri" style="background-color: var(--color-mint-dark); color: white;">
-                    <i class="fas fa-plus"></i> Tambah Santri
+                <button class="btn-save-sm" id="btnTarikSantri" style="background-color: var(--color-mint-dark); color: white;">
+                    <i class="fas fa-download"></i> Tarik Santri Baru
                 </button>
             </div>
         </header>
@@ -90,11 +81,11 @@
             <div class="card filter-card">
                 <div class="search-box" style="flex: 2; min-width: 250px;">
                     <i class="fas fa-search" style="left: 15px;"></i>
-                    <input type="text" id="searchSantri" placeholder="Cari nama santri..." style="width: 100%; background: white;">
+                    <input type="text" id="searchSantri" placeholder="Cari nama santri binaan..." style="width: 100%; background: white;">
                 </div>
                 <div class="filter-group" style="flex: 1;">
                     <select id="filterKelasTable" class="filter-select" style="background: white;">
-                        <option value="semua">Semua Kelas</option>
+                        <option value="semua">Semua Kelas Binaan</option>
                     </select>
                 </div>
             </div>
@@ -112,7 +103,7 @@
                             </tr>
                         </thead>
                         <tbody id="santriTableBody">
-                            <tr><td colspan="5" style="text-align: center;">Memuat data dari Supabase...</td></tr>
+                            <tr><td colspan="5" style="text-align: center;">Memuat data santri binaan Anda...</td></tr>
                         </tbody>
                     </table>
                 </div>
