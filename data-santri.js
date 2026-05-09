@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     
     // === KONFIGURASI SUPABASE ===
-    const SUPABASE_URL = 'https://iofgzryyarqaxihemlez.supabase.co'; // Ganti dengan URL Anda
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvZmd6cnl5YXJxYXhpaGVtbGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzOTcwNzgsImV4cCI6MjA4NDk3MzA3OH0.RrkJCQaQ8KjV1SjhAGZXqXgGvqtIVdiIU20UUm5dEYs'; // Ganti dengan Anon Key Anda
+    // Perbaikan: URL diakhiri dengan .co saja, tanpa /rest/v1/
+    const SUPABASE_URL = 'https://iofgzryyarqaxihemlez.supabase.co'; 
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvZmd6cnl5YXJxYXhpaGVtbGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzOTcwNzgsImV4cCI6MjA4NDk3MzA3OH0.RrkJCQaQ8KjV1SjhAGZXqXgGvqtIVdiIU20UUm5dEYs'; 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // Sidebar Toggle
@@ -10,10 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const menuToggle = document.getElementById('menuToggle');
     const closeSidebar = document.getElementById('closeSidebar');
     const overlay = document.getElementById('sidebarOverlay');
-    function toggleSidebar() { sidebar.classList.toggle('show'); overlay.classList.toggle('show'); }
-    menuToggle.addEventListener('click', toggleSidebar);
-    closeSidebar.addEventListener('click', toggleSidebar);
-    overlay.addEventListener('click', toggleSidebar);
+    function toggleSidebar() { 
+        sidebar.classList.toggle('show'); 
+        overlay.classList.toggle('show'); 
+    }
+    if(menuToggle) menuToggle.addEventListener('click', toggleSidebar);
+    if(closeSidebar) closeSidebar.addEventListener('click', toggleSidebar);
+    if(overlay) overlay.addEventListener('click', toggleSidebar);
 
     // Variabel Global
     let daftarSantri = [];
@@ -22,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputKelas = document.getElementById('inputKelas');
     const filterKelasTable = document.getElementById('filterKelasTable');
 
-    // 1. FUNGSI AMBIL DATA KELAS (Dari Tabel Kelas)
+    // 1. FUNGSI AMBIL DATA KELAS
     async function fetchKelas() {
         try {
             const { data, error } = await supabase.from('kelas').select('*');
@@ -30,27 +34,25 @@ document.addEventListener("DOMContentLoaded", () => {
             
             daftarKelas = data;
             
-            // Masukkan ke dropdown Form dan Filter
             let optsForm = '<option value="">Pilih Kelas...</option>';
             let optsFilter = '<option value="semua">Semua Kelas</option>';
             
             data.forEach(k => {
-                // Asumsi ID kelas berupa angka, dan namanya di nama_kelas
                 optsForm += `<option value="${k.id}">${k.nama_kelas}</option>`;
                 optsFilter += `<option value="${k.id}">${k.nama_kelas}</option>`;
             });
             
-            inputKelas.innerHTML = optsForm;
-            filterKelasTable.innerHTML = optsFilter;
+            if(inputKelas) inputKelas.innerHTML = optsForm;
+            if(filterKelasTable) filterKelasTable.innerHTML = optsFilter;
         } catch (error) {
-            console.error("Gagal memuat kelas:", error);
+            console.error("Gagal memuat kelas:", error.message);
         }
     }
 
-    // 2. FUNGSI AMBIL DATA SANTRI (Dari Tabel Santri)
+    // 2. FUNGSI AMBIL DATA SANTRI
     async function fetchSantri() {
         try {
-            tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Menarik data...</td></tr>';
+            if(tableBody) tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Menarik data...</td></tr>';
             
             const { data, error } = await supabase.from('santri').select('*').order('nama', { ascending: true });
             if (error) throw error;
@@ -58,22 +60,24 @@ document.addEventListener("DOMContentLoaded", () => {
             daftarSantri = data;
             renderTable(daftarSantri);
         } catch (error) {
-            console.error("Gagal memuat santri:", error);
-            tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Gagal menarik data. Periksa koneksi/kunci Supabase.</td></tr>`;
+            console.error("Gagal memuat santri:", error.message);
+            if(tableBody) tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Gagal menarik data. ${error.message}</td></tr>`;
         }
     }
 
     // Fungsi Render Tabel
     function renderTable(dataToRender) {
+        if(!tableBody) return;
         tableBody.innerHTML = '';
+        
         if(dataToRender.length === 0) {
             tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada data santri.</td></tr>';
             return;
         }
 
         dataToRender.forEach((s) => {
-            // Cocokkan kelas_id dengan nama_kelas dari tabel kelas
             let namaKelas = "Tidak diketahui";
+            // Pastikan ID dibandingkan dengan tipe data yang sama (angka)
             let kelasObj = daftarKelas.find(k => k.id == s.kelas_id);
             if(kelasObj) namaKelas = kelasObj.nama_kelas;
 
@@ -93,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Panggil fungsi ambil data saat halaman dimuat
+    // Jalankan pengambilan data
     fetchKelas().then(() => fetchSantri());
 
     // 3. PENCARIAN & FILTER
@@ -109,79 +113,88 @@ document.addEventListener("DOMContentLoaded", () => {
 
         renderTable(filtered);
     }
-    document.getElementById('searchSantri').addEventListener('input', filterData);
-    filterKelasTable.addEventListener('change', filterData);
+    
+    if(document.getElementById('searchSantri')) {
+        document.getElementById('searchSantri').addEventListener('input', filterData);
+    }
+    if(filterKelasTable) {
+        filterKelasTable.addEventListener('change', filterData);
+    }
 
     // 4. MODAL TAMBAH/EDIT
     const modal = document.getElementById('santriModal');
     const santriForm = document.getElementById('santriForm');
 
-    document.getElementById('btnTambahSantri').onclick = () => {
-        modal.style.display = "block";
-        document.getElementById('modalTitle').textContent = "Tambah Santri Baru";
-        document.getElementById('formMode').value = "add";
-        document.getElementById('inputNis').readOnly = false; // NIS bisa diketik
-        santriForm.reset();
+    const btnTambah = document.getElementById('btnTambahSantri');
+    if(btnTambah) {
+        btnTambah.onclick = () => {
+            modal.style.display = "block";
+            document.getElementById('modalTitle').textContent = "Tambah Santri Baru";
+            document.getElementById('formMode').value = "add";
+            document.getElementById('inputNis').readOnly = false;
+            santriForm.reset();
+        };
+    }
+
+    const closeBtn = document.getElementById('closeSantriModal');
+    if(closeBtn) {
+        closeBtn.onclick = () => modal.style.display = "none";
+    }
+    
+    window.onclick = (e) => { 
+        if (e.target == modal) modal.style.display = "none"; 
     };
 
-    document.getElementById('closeSantriModal').onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+    // 5. SIMPAN KE SUPABASE
+    if(santriForm) {
+        santriForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const mode = document.getElementById('formMode').value;
+            const nis = document.getElementById('inputNis').value;
+            const nama = document.getElementById('inputNama').value;
+            const kelas_id = document.getElementById('inputKelas').value;
+            const gender = document.getElementById('inputGender').value;
+            const no_hp = document.getElementById('inputNoHp').value;
 
-    // 5. SIMPAN KE SUPABASE (INSERT / UPDATE)
-    santriForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const mode = document.getElementById('formMode').value;
-        const nis = document.getElementById('inputNis').value;
-        const nama = document.getElementById('inputNama').value;
-        const kelas_id = document.getElementById('inputKelas').value;
-        const gender = document.getElementById('inputGender').value;
-        const no_hp = document.getElementById('inputNoHp').value;
+            const btnSubmit = document.getElementById('btnSubmitForm');
+            let originalText = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            btnSubmit.disabled = true;
 
-        const btnSubmit = document.getElementById('btnSubmitForm');
-        let originalText = btnSubmit.innerHTML;
-        btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-        btnSubmit.disabled = true;
+            try {
+                if (mode === "add") {
+                    const { error } = await supabase.from('santri').insert([
+                        { nis: nis, nama: nama, kelas_id: kelas_id, gender: gender, no_hp: no_hp, status: 'Aktif' }
+                    ]);
+                    if (error) throw error;
+                } else {
+                    const { error } = await supabase.from('santri').update({
+                        nama: nama, kelas_id: kelas_id, gender: gender, no_hp: no_hp
+                    }).eq('nis', nis);
+                    if (error) throw error;
+                }
 
-        try {
-            let errorObj = null;
-
-            if (mode === "add") {
-                // Insert Data Baru
-                const { error } = await supabase.from('santri').insert([
-                    { nis: nis, nama: nama, kelas_id: kelas_id, gender: gender, no_hp: no_hp, status: 'Aktif' }
-                ]);
-                errorObj = error;
-            } else {
-                // Update Data Lama berdasarkan NIS
-                const { error } = await supabase.from('santri').update({
-                    nama: nama, kelas_id: kelas_id, gender: gender, no_hp: no_hp
-                }).eq('nis', nis);
-                errorObj = error;
+                alert("Alhamdulillah, data berhasil disimpan!");
+                modal.style.display = "none";
+                fetchSantri();
+            } catch (err) {
+                console.error(err);
+                alert("Gagal: " + err.message);
+            } finally {
+                btnSubmit.innerHTML = originalText;
+                btnSubmit.disabled = false;
             }
+        };
+    }
 
-            if (errorObj) throw errorObj;
-
-            alert("Alhamdulillah, data berhasil disimpan di Supabase!");
-            modal.style.display = "none";
-            fetchSantri(); // Refresh tabel
-
-        } catch (err) {
-            console.error(err);
-            alert("Gagal menyimpan data: " + (err.message || "Pastikan NIS belum dipakai sebelumnya."));
-        } finally {
-            btnSubmit.innerHTML = originalText;
-            btnSubmit.disabled = false;
-        }
-    };
-
-    // 6. EDIT & DELETE (Diekspos ke HTML)
+    // 6. EDIT & DELETE (Global)
     window.editSantri = (nis) => {
         let s = daftarSantri.find(item => item.nis == nis);
         if(!s) return;
 
         document.getElementById('formMode').value = "edit";
         document.getElementById('inputNis').value = s.nis;
-        document.getElementById('inputNis').readOnly = true; // NIS gak boleh diubah saat edit
+        document.getElementById('inputNis').readOnly = true;
         document.getElementById('inputNama').value = s.nama;
         document.getElementById('inputKelas').value = s.kelas_id;
         document.getElementById('inputGender').value = s.gender;
@@ -192,17 +205,15 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     window.deleteSantri = async (nis) => {
-        if (confirm("Apakah Anda yakin ingin menghapus santri ini dari database?")) {
+        if (confirm("Apakah Anda yakin ingin menghapus santri ini?")) {
             try {
                 const { error } = await supabase.from('santri').delete().eq('nis', nis);
                 if (error) throw error;
-                
                 alert("Data berhasil dihapus.");
-                fetchSantri(); // Refresh tabel
+                fetchSantri();
             } catch (error) {
-                alert("Gagal menghapus data: " + error.message);
+                alert("Gagal menghapus: " + error.message);
             }
         }
     };
-
 });
