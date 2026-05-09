@@ -10,29 +10,47 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-layout">
 
     <div id="santriModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
             <span class="close-modal" id="closeSantriModal">&times;</span>
             <h3 class="modal-title" id="modalTitle">Tambah Santri Baru</h3>
             <form id="santriForm">
-                <input type="hidden" id="santriId">
+                <input type="hidden" id="formMode" value="add">
+                
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="font-size: 0.8rem; font-weight: 600;">NIS (Nomor Induk)</label>
+                    <input type="text" id="inputNis" placeholder="Contoh: 2026001" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                </div>
                 <div class="input-group" style="margin-bottom: 15px;">
                     <label style="font-size: 0.8rem; font-weight: 600;">Nama Lengkap</label>
                     <input type="text" id="inputNama" placeholder="Nama Santri..." required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
                 </div>
-                <div class="input-group" style="margin-bottom: 20px;">
+                <div class="input-group" style="margin-bottom: 15px;">
                     <label style="font-size: 0.8rem; font-weight: 600;">Pilih Kelas</label>
                     <select id="inputKelas" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                        <option value="Said Bin Zaid">Said Bin Zaid</option>
-                        <option value="Umar Bin Khattab">Umar Bin Khattab</option>
-                        <option value="Utsman Bin Affan">Utsman Bin Affan</option>
+                        <option value="">Memuat kelas...</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-save-all" style="width: 100%; margin-top: 0;">Simpan Data</button>
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="font-size: 0.8rem; font-weight: 600;">Jenis Kelamin</label>
+                    <select id="inputGender" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <option value="L">Laki-laki (L)</option>
+                        <option value="P">Perempuan (P)</option>
+                    </select>
+                </div>
+                <div class="input-group" style="margin-bottom: 20px;">
+                    <label style="font-size: 0.8rem; font-weight: 600;">No HP Ortu</label>
+                    <input type="text" id="inputNoHp" placeholder="0812xxxx" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                </div>
+                
+                <button type="submit" class="btn-save-all" id="btnSubmitForm" style="width: 100%; margin-top: 0;">Simpan Data</button>
             </form>
         </div>
     </div>
@@ -77,9 +95,6 @@
                 <div class="filter-group" style="flex: 1;">
                     <select id="filterKelasTable" class="filter-select" style="background: white;">
                         <option value="semua">Semua Kelas</option>
-                        <option value="Said Bin Zaid">Said Bin Zaid</option>
-                        <option value="Umar Bin Khattab">Umar Bin Khattab</option>
-                        <option value="Utsman Bin Affan">Utsman Bin Affan</option>
                     </select>
                 </div>
             </div>
@@ -89,14 +104,16 @@
                     <table class="santri-table">
                         <thead>
                             <tr>
-                                <th>No</th>
+                                <th>NIS</th>
                                 <th>Nama Santri</th>
                                 <th>Kelas</th>
+                                <th>L/P</th>
                                 <th style="text-align: center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="santriTableBody">
-                            </tbody>
+                            <tr><td colspan="5" style="text-align: center;">Memuat data dari Supabase...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
