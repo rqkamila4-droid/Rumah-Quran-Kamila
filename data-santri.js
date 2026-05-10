@@ -5,10 +5,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjc2Zzc3VrY3JrbWd1aGl6YmJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMjkxOTksImV4cCI6MjA5MzkwNTE5OX0.2rSwfgAhzyeSb_ru-6K9hDKSMtFbSK1vgiBpopqM9NY';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Simulasi Login Ustadz
     let currentUstadzId = localStorage.getItem('ustadz_id') || '00000000-0000-0000-0000-000000000000';
 
-    // Sidebar Toggle
     const sidebar = document.getElementById('sidebar');
     const menuToggle = document.getElementById('menuToggle');
     const closeSidebar = document.getElementById('closeSidebar');
@@ -18,7 +16,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(closeSidebar) closeSidebar.addEventListener('click', toggleSidebar);
     if(overlay) overlay.addEventListener('click', toggleSidebar);
 
-    // Variabel Global Data
     let daftarSantriBinaan = [];
     let daftarKelasBinaan = [];
     let daftarDapodikTersedia = [];
@@ -33,7 +30,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ==========================================
     async function fetchKelasBinaan() {
         try {
-            // SIMULASI: Data Kelas
             const data = [
                 { id: 1, nama_kelas: "Said Bin Zaid (Simulasi)", jadwal_hari: "Senin, Rabu", jam_mulai: "13:30", jam_selesai: "14:30" }
             ];
@@ -65,7 +61,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            // SIMULASI: Data Santri
             const data = [
                 { nis: "202601", nama: "Ahmad Hanif (Simulasi)", kelas_id: 1, gender: "L" },
                 { nis: "202602", nama: "Fatimah Az-Zahra (Simulasi)", kelas_id: 1, gender: "P" }
@@ -78,14 +73,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    // UPDATE: Penambahan Struktur Data Profil Dapodik
     async function fetchDapodikTersedia() {
         try {
-            dapodikListContainer.innerHTML = '<div style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Memuat data Dapodik...</div>';
+            dapodikListContainer.innerHTML = '<div style="text-align: center; padding: 20px;"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:10px; font-size:0.85rem;">Memuat Master Data...</p></div>';
             
+            // SIMULASI PROFIL LENGKAP
             const data = [
-                { nis: "9001", nama: "Budi Santoso", gender: "L" },
-                { nis: "9002", nama: "Citra Kirana", gender: "P" },
-                { nis: "9003", nama: "Dika Pratama", gender: "L" }
+                { nis: "9001", nama: "Budi Santoso", gender: "L", tgl_lahir: "12-05-2015", alamat: "Jl. Merdeka No 1", nama_ayah: "Rudi", nama_ibu: "Siti", no_telfon: "08123456" },
+                { nis: "9002", nama: "Citra Kirana", gender: "P", tgl_lahir: "01-08-2016", alamat: "Perum Asri Blok B", nama_ayah: "Andi", nama_ibu: "Maya", no_telfon: "08198765" },
+                { nis: "9003", nama: "Dika Pratama", gender: "L", tgl_lahir: "22-11-2014", alamat: "Jl. Pahlawan 10", nama_ayah: "Hasan", nama_ibu: "Dewi", no_telfon: "08561122" }
             ];
             
             daftarDapodikTersedia = data;
@@ -127,19 +124,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    // UPDATE: UI List Dapodik yang Rata Kiri & Menampilkan Profil Ortu
     function renderDapodikList(dataToRender) {
         dapodikListContainer.innerHTML = '';
         if(dataToRender.length === 0) {
-            dapodikListContainer.innerHTML = '<div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 10px;">Semua santri di Dapodik sudah masuk ke kelas.</div>';
+            dapodikListContainer.innerHTML = '<div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 20px;">Semua santri di Dapodik sudah masuk ke kelas.</div>';
             return;
         }
 
         dataToRender.forEach(s => {
             let item = `
-                <div style="display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee;">
-                    <input type="checkbox" class="dapodik-checkbox" value="${s.nis}" id="chk_${s.nis}" style="margin-right: 10px; transform: scale(1.2);">
-                    <label for="chk_${s.nis}" style="font-size: 0.85rem; cursor: pointer; flex: 1;">
-                        <strong>${s.nama}</strong> <span style="color: #999; font-size: 0.75rem;">(NIS: ${s.nis})</span>
+                <div class="dapodik-item-card">
+                    <input type="checkbox" class="dapodik-checkbox" value="${s.nis}" id="chk_${s.nis}" style="margin-top: 4px; margin-right: 15px; transform: scale(1.3); cursor: pointer;">
+                    <label for="chk_${s.nis}" style="cursor: pointer; flex: 1; margin: 0;">
+                        <div style="font-weight: 600; color: var(--text-main); font-size: 0.95rem;">${s.nama}</div>
+                        <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 2px;">
+                            NIS: ${s.nis} &bull; L/P: ${s.gender}
+                        </div>
+                        <div style="color: #95a5a6; font-size: 0.7rem; margin-top: 4px; border-top: 1px dashed #eee; padding-top: 4px;">
+                            <i class="fas fa-users" style="margin-right:4px;"></i> Ortu: ${s.nama_ayah} & ${s.nama_ibu} <br>
+                            <i class="fas fa-map-marker-alt" style="margin-right:4px;"></i> ${s.alamat}
+                        </div>
                     </label>
                 </div>
             `;
@@ -177,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // ==========================================
-    // 4. MODAL & LOGIKA BUAT KELAS BARU (Dengan Jadwal)
+    // 4. MODAL & LOGIKA BUAT KELAS BARU
     // ==========================================
     const kelasModal = document.getElementById('kelasModal');
     const btnBuatKelas = document.getElementById('btnBuatKelas');
@@ -187,7 +192,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnBuatKelas.onclick = () => { 
             kelasModal.style.display = "block"; 
             document.getElementById('inputNamaKelas').value = ''; 
-            document.getElementById('inputHariKelas').value = ''; 
+            // Hapus centang semua hari
+            document.querySelectorAll('.hari-chk').forEach(chk => chk.checked = false);
             document.getElementById('inputJamMulai').value = ''; 
             document.getElementById('inputJamSelesai').value = ''; 
         };
@@ -198,31 +204,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(btnSimpanKelas) {
         btnSimpanKelas.onclick = async () => {
             const namaKelas = document.getElementById('inputNamaKelas').value;
-            const hariKelas = document.getElementById('inputHariKelas').value;
+            
+            // Ambil semua hari yang dicentang
+            const hariChecked = Array.from(document.querySelectorAll('.hari-chk:checked')).map(cb => cb.value);
+            const stringHari = hariChecked.join(', '); // Hasilnya: "Senin, Rabu, Jumat"
+
             const jamMulai = document.getElementById('inputJamMulai').value;
             const jamSelesai = document.getElementById('inputJamSelesai').value;
             
             if(!namaKelas) { alert("Nama kelas tidak boleh kosong!"); return; }
+            if(hariChecked.length === 0) { alert("Pilih minimal 1 hari jadwal kelas!"); return; }
 
             let originalText = btnSimpanKelas.innerHTML;
             btnSimpanKelas.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
             btnSimpanKelas.disabled = true;
 
             try {
-                // LOGIKA ASLI SUPABASE (Hapus tanda '//' jika sudah siap)
-                /*
-                const { error } = await supabase.from('kelas').insert([
-                    { 
-                        nama_kelas: namaKelas, 
-                        jadwal_hari: hariKelas, 
-                        jam_mulai: jamMulai, 
-                        jam_selesai: jamSelesai,
-                        ustadz_id: currentUstadzId 
-                    }
-                ]);
-                if (error) throw error;
-                */
-
                 // SIMULASI BERHASIL
                 setTimeout(() => {
                     alert(`Alhamdulillah, Kelas "${namaKelas}" berhasil dibuat!`);
@@ -232,7 +229,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     daftarKelasBinaan.push({ 
                         id: idBaru, 
                         nama_kelas: namaKelas,
-                        jadwal_hari: hariKelas,
+                        jadwal_hari: stringHari,
                         jam_mulai: jamMulai,
                         jam_selesai: jamSelesai
                     });
@@ -253,7 +250,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }, 800);
 
             } catch (error) {
-                console.error("Gagal membuat kelas:", error.message);
                 alert("Gagal membuat kelas: " + error.message);
                 btnSimpanKelas.innerHTML = originalText;
                 btnSimpanKelas.disabled = false;
