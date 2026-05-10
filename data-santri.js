@@ -5,11 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjc2Zzc3VrY3JrbWd1aGl6YmJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMjkxOTksImV4cCI6MjA5MzkwNTE5OX0.2rSwfgAhzyeSb_ru-6K9hDKSMtFbSK1vgiBpopqM9NY';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // ==========================================
-    // SIMULASI LOGIN USTADZ (KARENA HALAMAN LOGIN ASLI BELUM AKTIF)
-    // ==========================================
-    // Nanti, ID ini akan didapat otomatis dari supabase.auth saat ustadz berhasil login.
-    // Karena saat ini database baru Anda KOSONG (belum ada tabel atau user), ini berguna untuk "membypass" agar halaman tidak error.
+    // Simulasi Login (Karena fitur auth & tabel asli belum siap dipakai secara penuh)
     let currentUstadzId = localStorage.getItem('ustadz_id') || '00000000-0000-0000-0000-000000000000';
 
     // Sidebar Toggle
@@ -22,26 +18,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(closeSidebar) closeSidebar.addEventListener('click', toggleSidebar);
     if(overlay) overlay.addEventListener('click', toggleSidebar);
 
-    // Variabel Global
+    // Variabel Global Data
     let daftarSantriBinaan = [];
     let daftarKelasBinaan = [];
-    let daftarDapodikTersedia = []; // Santri yang belum punya kelas_id
+    let daftarDapodikTersedia = [];
     
+    // Elemen DOM
     const tableBody = document.getElementById('santriTableBody');
     const filterKelasTable = document.getElementById('filterKelasTable');
     const selectKelasTarget = document.getElementById('selectKelasTarget');
     const dapodikListContainer = document.getElementById('dapodikListContainer');
 
-    // 1. FUNGSI AMBIL KELAS (HANYA MILIK USTADZ YANG LOGIN)
+    // ==========================================
+    // 1. FUNGSI AMBIL KELAS & SANTRI (BINAAN)
+    // ==========================================
     async function fetchKelasBinaan() {
         try {
-            // Logika Asli (jika sudah ada data di database):
-            // const { data, error } = await supabase.from('kelas').select('*').eq('ustadz_id', currentUstadzId);
-            
-            // SIMULASI SEMENTARA KARENA DATABASE BARU BELUM DIISI (Agar tabel tidak kosong/error)
+            // SIMULASI: Nanti baris ini diganti dengan "await supabase.from('kelas')...."
             const data = [
-                { id: 1, nama_kelas: "Said Bin Zaid (Simulasi)" },
-                { id: 2, nama_kelas: "Umar Bin Khattab (Simulasi)" }
+                { id: 1, nama_kelas: "Said Bin Zaid (Simulasi)" }
             ];
             
             daftarKelasBinaan = data;
@@ -57,69 +52,59 @@ document.addEventListener("DOMContentLoaded", async () => {
             if(filterKelasTable) filterKelasTable.innerHTML = optsFilter;
             if(selectKelasTarget) selectKelasTarget.innerHTML = optsTarget;
         } catch (error) {
-            console.error("Gagal memuat kelas binaan:", error.message);
+            console.error("Gagal memuat kelas:", error.message);
         }
     }
 
-    // 2. FUNGSI AMBIL SANTRI BINAAN (YANG KELASNYA MILIK USTADZ INI)
     async function fetchSantriBinaan() {
         try {
-            if(tableBody) tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Menarik data binaan Anda...</td></tr>';
+            if(tableBody) tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Menarik data binaan...</td></tr>';
             
             if (daftarKelasBinaan.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Anda belum memiliki kelas binaan.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Anda belum memiliki kelas. Buat kelas terlebih dahulu.</td></tr>';
                 return;
             }
 
-            const idsKelas = daftarKelasBinaan.map(k => k.id);
-
-            // Logika Asli:
-            // const { data, error } = await supabase.from('santri').select('*').in('kelas_id', idsKelas).order('nama', { ascending: true });
-            
-            // SIMULASI SEMENTARA:
+            // SIMULASI: Nanti diganti dengan "await supabase.from('santri')...."
             const data = [
                 { nis: "202601", nama: "Ahmad Hanif (Simulasi)", kelas_id: 1, gender: "L" },
-                { nis: "202602", nama: "Budi Santoso (Simulasi)", kelas_id: 2, gender: "L" }
+                { nis: "202602", nama: "Fatimah Az-Zahra (Simulasi)", kelas_id: 1, gender: "P" }
             ];
             
             daftarSantriBinaan = data;
             renderTable(daftarSantriBinaan);
         } catch (error) {
-            console.error("Gagal memuat santri binaan:", error.message);
-            if(tableBody) tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Gagal: ${error.message}</td></tr>`;
+            console.error("Gagal memuat santri:", error.message);
         }
     }
 
-    // 3. FUNGSI AMBIL SANTRI DAPODIK (BELUM PUNYA KELAS)
     async function fetchDapodikTersedia() {
         try {
-            dapodikListContainer.innerHTML = '<div style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Memuat data...</div>';
+            dapodikListContainer.innerHTML = '<div style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Memuat data Dapodik...</div>';
             
-            // Logika Asli: Mencari santri yang kelas_id nya masih kosong (null)
-            // const { data, error } = await supabase.from('santri').select('nis, nama, gender').is('kelas_id', null).order('nama', { ascending: true });
-            
-            // SIMULASI SEMENTARA:
+            // SIMULASI: Anak Dapodik yg belum punya kelas
             const data = [
-                { nis: "202690", nama: "Santri Baru A", gender: "L" },
-                { nis: "202691", nama: "Santri Baru B", gender: "P" },
-                { nis: "202692", nama: "Santri Baru C", gender: "L" }
+                { nis: "9001", nama: "Budi Santoso", gender: "L" },
+                { nis: "9002", nama: "Citra Kirana", gender: "P" },
+                { nis: "9003", nama: "Dika Pratama", gender: "L" }
             ];
             
             daftarDapodikTersedia = data;
             renderDapodikList(daftarDapodikTersedia);
         } catch (error) {
-            console.error("Gagal memuat data Dapodik:", error.message);
-            dapodikListContainer.innerHTML = `<div style="color:red; text-align:center;">Gagal memuat data Dapodik.</div>`;
+            dapodikListContainer.innerHTML = `<div style="color:red; text-align:center;">Gagal memuat Dapodik.</div>`;
         }
     }
 
-    // Fungsi Render Tabel Binaan Utama
+    // ==========================================
+    // 2. FUNGSI RENDER TABEL & LIST
+    // ==========================================
     function renderTable(dataToRender) {
         if(!tableBody) return;
         tableBody.innerHTML = '';
         
         if(dataToRender.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada santri di kelas Anda. Klik "Tarik Santri Baru".</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada santri. Klik "Tarik Santri".</td></tr>';
             return;
         }
 
@@ -143,7 +128,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // Fungsi Render Daftar Checkbox Dapodik
     function renderDapodikList(dataToRender) {
         dapodikListContainer.innerHTML = '';
         if(dataToRender.length === 0) {
@@ -164,11 +148,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // Jalankan Inisialisasi
+    // Eksekusi Awal Saat Halaman Dibuka
     await fetchKelasBinaan();
     fetchSantriBinaan();
 
-    // FILTER TABEL UTAMA
+    // ==========================================
+    // 3. FITUR PENCARIAN & FILTER
+    // ==========================================
     function filterDataUtama() {
         let keyword = document.getElementById('searchSantri').value.toLowerCase();
         let kelasId = filterKelasTable.value;
@@ -183,98 +169,114 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(document.getElementById('searchSantri')) document.getElementById('searchSantri').addEventListener('input', filterDataUtama);
     if(filterKelasTable) filterKelasTable.addEventListener('change', filterDataUtama);
 
-    // PENCARIAN DI MODAL DAPODIK
     const searchDapodik = document.getElementById('searchDapodik');
     if (searchDapodik) {
         searchDapodik.addEventListener('input', (e) => {
             let keyword = e.target.value.toLowerCase();
-            let filtered = daftarDapodikTersedia.filter(s => 
-                s.nama.toLowerCase().includes(keyword) || s.nis.toLowerCase().includes(keyword)
-            );
+            let filtered = daftarDapodikTersedia.filter(s => s.nama.toLowerCase().includes(keyword) || s.nis.toLowerCase().includes(keyword));
             renderDapodikList(filtered);
         });
     }
 
-    // MODAL TARIK SANTRI
-    const modal = document.getElementById('santriModal');
+    // ==========================================
+    // 4. MODAL & LOGIKA BUAT KELAS BARU
+    // ==========================================
+    const kelasModal = document.getElementById('kelasModal');
+    const btnBuatKelas = document.getElementById('btnBuatKelas');
+    const closeKelasModal = document.getElementById('closeKelasModal');
+
+    if(btnBuatKelas) btnBuatKelas.onclick = () => { kelasModal.style.display = "block"; document.getElementById('inputNamaKelas').value = ''; };
+    if(closeKelasModal) closeKelasModal.onclick = () => kelasModal.style.display = "none";
+
+    const btnSimpanKelas = document.getElementById('btnSimpanKelas');
+    if(btnSimpanKelas) {
+        btnSimpanKelas.onclick = async () => {
+            const namaKelas = document.getElementById('inputNamaKelas').value;
+            if(!namaKelas) { alert("Nama kelas tidak boleh kosong!"); return; }
+
+            let originalText = btnSimpanKelas.innerHTML;
+            btnSimpanKelas.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            btnSimpanKelas.disabled = true;
+
+            setTimeout(() => {
+                alert(`Alhamdulillah, Kelas "${namaKelas}" berhasil dibuat!`);
+                kelasModal.style.display = "none";
+                
+                // Tambahkan simulasi kelas baru
+                const idBaru = Date.now();
+                daftarKelasBinaan.push({ id: idBaru, nama_kelas: namaKelas });
+                
+                let optsFilter = '<option value="semua">Semua Kelas Binaan</option>';
+                let optsTarget = '';
+                daftarKelasBinaan.forEach(k => {
+                    optsFilter += `<option value="${k.id}">${k.nama_kelas}</option>`;
+                    optsTarget += `<option value="${k.id}">${k.nama_kelas}</option>`;
+                });
+                
+                if(filterKelasTable) filterKelasTable.innerHTML = optsFilter;
+                if(selectKelasTarget) selectKelasTarget.innerHTML = optsTarget;
+
+                btnSimpanKelas.innerHTML = originalText;
+                btnSimpanKelas.disabled = false;
+            }, 800);
+        };
+    }
+
+    // ==========================================
+    // 5. MODAL & LOGIKA TARIK SANTRI (DAPODIK)
+    // ==========================================
+    const santriModal = document.getElementById('santriModal');
     const btnTarikSantri = document.getElementById('btnTarikSantri');
-    const closeBtn = document.getElementById('closeSantriModal');
+    const closeSantriModal = document.getElementById('closeSantriModal');
 
     if(btnTarikSantri) {
         btnTarikSantri.onclick = () => {
-            modal.style.display = "block";
-            fetchDapodikTersedia(); // Tarik data Dapodik terbaru saat modal dibuka
+            if(daftarKelasBinaan.length === 0) {
+                alert("Harap buat kelas terlebih dahulu sebelum menarik santri!");
+                return;
+            }
+            santriModal.style.display = "block";
+            fetchDapodikTersedia(); 
         };
     }
-    if(closeBtn) closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+    if(closeSantriModal) closeSantriModal.onclick = () => santriModal.style.display = "none";
+    
+    // Tutup modal jika klik di luar box
+    window.onclick = (e) => { 
+        if (e.target == kelasModal) kelasModal.style.display = "none";
+        if (e.target == santriModal) santriModal.style.display = "none";
+    };
 
-    // PROSES PENYIMPANAN SANTRI DARI DAPODIK KE KELAS (UPDATE KELAS_ID)
     const btnSimpanTarikSantri = document.getElementById('btnSimpanTarikSantri');
     if (btnSimpanTarikSantri) {
         btnSimpanTarikSantri.onclick = async () => {
             const targetKelasId = document.getElementById('selectKelasTarget').value;
-            
-            // Ambil NIS mana saja yang dicentang
             const checkedBoxes = document.querySelectorAll('.dapodik-checkbox:checked');
             const nisTerpilih = Array.from(checkedBoxes).map(cb => cb.value);
 
-            if (nisTerpilih.length === 0) {
-                alert("Pilih minimal satu santri untuk ditarik.");
-                return;
-            }
-
-            if (!targetKelasId) {
-                alert("Anda tidak memiliki kelas target.");
-                return;
-            }
+            if (nisTerpilih.length === 0) { alert("Centang minimal satu santri!"); return; }
+            if (!targetKelasId) { alert("Pilih kelas target!"); return; }
 
             let originalText = btnSimpanTarikSantri.innerHTML;
             btnSimpanTarikSantri.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
             btnSimpanTarikSantri.disabled = true;
 
-            try {
-                // Logika Asli (Update massal kelas_id pada santri yang dipilih)
-                /* const { error } = await supabase
-                    .from('santri')
-                    .update({ kelas_id: parseInt(targetKelasId) })
-                    .in('nis', nisTerpilih);
-                
-                if (error) throw error;
-                */
-
-                // Simulasi Sukses:
-                setTimeout(() => {
-                    alert(`Alhamdulillah, ${nisTerpilih.length} santri berhasil dimasukkan ke kelas binaan Anda!`);
-                    modal.style.display = "none";
-                    
-                    // Render ulang data (Dalam kondisi real, panggil fetchSantriBinaan())
-                    btnSimpanTarikSantri.innerHTML = originalText;
-                    btnSimpanTarikSantri.disabled = false;
-                }, 800);
-
-            } catch (error) {
-                console.error("Gagal menarik santri:", error.message);
-                alert("Gagal menarik santri. Periksa koneksi.");
+            setTimeout(() => {
+                alert(`Alhamdulillah, ${nisTerpilih.length} santri berhasil ditarik ke kelas Anda!`);
+                santriModal.style.display = "none";
                 btnSimpanTarikSantri.innerHTML = originalText;
                 btnSimpanTarikSantri.disabled = false;
-            }
+            }, 800);
         };
     }
 
-    // FUNGSI MENGELUARKAN SANTRI DARI KELAS (Bukan hapus data, cuma set kelas_id jadi null)
+    // ==========================================
+    // 6. FUNGSI KELUARKAN SANTRI
+    // ==========================================
     window.keluarkanSantri = async (nis) => {
-        if (confirm("Keluarkan santri ini dari kelas Anda? Data santri tidak akan terhapus dari Dapodik utama.")) {
-            try {
-                // Logika Asli:
-                // const { error } = await supabase.from('santri').update({ kelas_id: null }).eq('nis', nis);
-                // if (error) throw error;
-
-                alert("Santri dikembalikan ke daftar Dapodik (Tanpa Kelas).");
-                fetchSantriBinaan(); // Refresh tabel
-            } catch (error) {
-                alert("Gagal mengeluarkan santri: " + error.message);
-            }
+        if (confirm("Yakin ingin mengeluarkan santri ini dari kelas? (Santri akan kembali ke daftar Dapodik utama)")) {
+            alert("Santri berhasil dikembalikan ke Dapodik.");
+            // Dalam kondisi nyata: panggil fetchSantriBinaan() untuk refresh
         }
     };
 
