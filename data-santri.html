@@ -15,71 +15,131 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* Desain Hari Bentuk Bulat (Seperti Referensi) */
+        /* --- UPDATE UTAMA: PEMUSATAN KOTAK MODAL (ANTI-GESER LANDSCAPE) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(3px);
+            /* Menghilangkan margin auto lama, gunakan CSS Pemusatan Murni */
+            -webkit-perspective: 1000px; perspective: 1000px;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            /* Posisi Absolut Pusat */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%) scale(0.9);
+            transform: translate(-50%, -50%) scale(0.9);
+            /* Hapus margin */
+            margin: 0 !important;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            /* Batasi tinggi maksimal agar konten bisa di-scroll di landscape iPad */
+            max-height: 90dvh; 
+            overflow-y: auto;
+            opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out, -webkit-transform 0.3s ease-out;
+            box-sizing: border-box;
+        }
+
+        /* Kelas untuk memicu animasi muncul (digunakan via JS) */
+        .modal[style*="display: block"] .modal-content,
+        .modal[style*="display: flex"] .modal-content {
+            -webkit-transform: translate(-50%, -50%) scale(1);
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        /* --- UPDATE: Input Jam Lebih Kecil & Rapi --- */
+        .time-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .time-input-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .time-input {
+            width: 100%;
+            height: 38px; /* Perkecil tinggi */
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.85rem; /* Perkecil font */
+            background: #f4f7f6;
+            color: var(--text-main);
+            box-sizing: border-box;
+            outline: none;
+            -webkit-appearance: none; /* Paksa Safari iPad */
+        }
+        .time-input:focus { border-color: var(--color-mint-dark); background: white; }
+        
+        /* label jam diperkecil */
+        .time-label {
+            font-size: 0.75rem !important;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Desain Hari Bentuk Bulat Kecil (Sesuai Referensi) */
         .day-pills {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
             margin-top: 5px;
             justify-content: flex-start;
         }
         .day-pill {
             display: inline-block;
-            width: 40px; height: 40px;
+            width: 35px; height: 35px; /* Perkecil ukuran */
             border-radius: 50%;
             background: transparent;
             border: 1px solid #7f8c8d;
             color: #7f8c8d;
             text-align: center;
-            line-height: 40px; 
-            font-size: 0.75rem;
+            line-height: 35px; 
+            font-size: 0.7rem; /* Perkecil font */
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .hari-chk { display: none; /* Sembunyikan kotak centang aslinya */ }
+        .hari-chk { display: none; }
         .hari-chk:checked + .day-pill {
             background: var(--color-mint-dark);
             color: white;
             border-color: var(--color-mint-dark);
-            box-shadow: 0 3px 8px rgba(153, 221, 204, 0.4);
         }
-        
-        /* Memperbaiki Input Jam */
-        .time-input {
-            width: 100%;
-            height: 42px; 
-            padding: 5px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            background: #f4f7f6; /* Warna latar sedikit gelap seperti referensi */
-            color: var(--text-main);
-            box-sizing: border-box;
-            outline: none;
-        }
-        .time-input:focus { border-color: var(--color-mint-dark); background: white; }
-        
-        /* Perbaikan Daftar Dapodik (Anti-Meledak di iPad) */
+
+        /* Perbaikan Daftar Dapodik rata kiri & Checkbox konsisten */
         .dapodik-item {
             display: flex;
-            align-items: center; /* Sejajarkan ke tengah secara vertikal */
+            align-items: flex-start;
+            text-align: left; /* Paksa teks ke kiri */
             padding: 12px 10px;
             border-bottom: 1px solid #eee;
-            gap: 15px; /* Jarak antara checkbox dan teks */
+            gap: 15px;
         }
         .dapodik-item input[type="checkbox"] {
-            width: 22px;
-            height: 22px;
-            flex-shrink: 0; /* Jangan biarkan checkbox membesar */
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 3px;
             accent-color: var(--color-mint-dark);
             cursor: pointer;
         }
-        .dapodik-info {
-            flex: 1;
-            text-align: left;
-        }
+        .dapodik-info { flex: 1; }
     </style>
 </head>
 <body class="admin-layout">
@@ -87,20 +147,21 @@
     <div id="kelasModal" class="modal">
         <div class="modal-content" style="width: 90%; max-width: 400px; padding: 25px;">
             <span class="close-modal" id="closeKelasModal">&times;</span>
-            <h3 class="modal-title" style="border:none; text-align:center; font-weight:700;">Buat Kelas Baru</h3>
+            <h3 class="modal-title" style="border:none; text-align:center; font-weight:700; margin-bottom: 15px;">Buat Kelas Baru</h3>
             
-            <div class="input-group" style="margin-bottom: 20px;">
+            <div class="input-group" style="margin-bottom: 15px;">
                 <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Nama Kelas</label>
-                <input type="text" id="inputNamaKelas" placeholder="Contoh: Al-Baqarah 1" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f4f7f6;">
+                <input type="text" id="inputNamaKelas" placeholder="Misal: Al-Baqarah 1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: #f4f7f6;">
             </div>
             
-            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                <div class="input-group" style="flex: 1;">
-                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Mulai</label>
+            <div class="time-input-container">
+                <div class="time-input-wrapper">
+                    <label class="time-label">Jam Mulai</label>
                     <input type="time" id="inputJamMulai" class="time-input">
                 </div>
-                <div class="input-group" style="flex: 1;">
-                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Selesai</label>
+                <div style="color: var(--text-muted); margin-top: 18px; font-weight: bold;">-</div>
+                <div class="time-input-wrapper">
+                    <label class="time-label">Jam Selesai</label>
                     <input type="time" id="inputJamSelesai" class="time-input">
                 </div>
             </div>
@@ -118,16 +179,16 @@
                 </div>
             </div>
             
-            <button class="btn-save-all" id="btnSimpanKelas" style="width: 100%; border-radius: 30px;">
+            <button class="btn-save-all" id="btnSimpanKelas" style="width: 100%; border-radius: 30px; margin:0;">
                 <i class="fas fa-plus-circle"></i> Buat Kelas Baru
             </button>
         </div>
     </div>
 
     <div id="santriModal" class="modal">
-        <div class="modal-content" style="max-height: 90vh; width: 95%; max-width: 500px; display: flex; flex-direction: column; padding: 0;">
+        <div class="modal-content" style="width: 95%; max-width: 500px; display: flex; flex-direction: column; padding: 0;">
             
-            <div style="padding: 20px 25px 10px 25px;">
+            <div style="padding: 20px 25px 10px 25px; flex-shrink: 0;">
                 <span class="close-modal" id="closeSantriModal" style="margin-top: -5px;">&times;</span>
                 <h3 class="modal-title">Tarik Santri ke Kelas</h3>
                 
@@ -144,11 +205,11 @@
                 </div>
             </div>
             
-            <div id="dapodikListContainer" style="overflow-y: auto; flex: 1; min-height: 200px; padding: 0 25px;">
-                <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem;">Memuat data Dapodik...</div>
+            <div id="dapodikListContainer" style="overflow-y: auto; flex: 1; min-height: 150px; padding: 0 25px; background: #fafafa; border-top: 1px solid #eee; border-bottom: 1px solid #eee; box-sizing: border-box;">
+                <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 20px;">Memuat data Dapodik...</div>
             </div>
             
-            <div style="padding: 15px 25px; background: white; border-top: 1px solid #eee; border-radius: 0 0 15px 15px;">
+            <div style="padding: 15px 25px; background: white; border-radius: 0 0 15px 15px; flex-shrink: 0;">
                 <button class="btn-save-all" id="btnSimpanTarikSantri" style="width: 100%; margin: 0; border-radius: 30px;">
                     <i class="fas fa-save"></i> Simpan ke Kelas Saya
                 </button>
