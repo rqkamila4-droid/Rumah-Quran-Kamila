@@ -21,10 +21,28 @@
         <div class="modal-content" style="width: 90%; max-width: 400px;">
             <span class="close-modal" id="closeKelasModal">&times;</span>
             <h3 class="modal-title">Buat Kelas Baru</h3>
-            <div class="input-group" style="margin-bottom: 15px;">
+            
+            <div class="input-group" style="margin-bottom: 12px;">
                 <label style="font-size: 0.8rem; font-weight: 600;">Nama Kelas</label>
                 <input type="text" id="inputNamaKelas" placeholder="Misal: Said Bin Zaid" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
             </div>
+            
+            <div class="input-group" style="margin-bottom: 12px;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Jadwal Hari</label>
+                <input type="text" id="inputHariKelas" placeholder="Misal: Senin, Rabu, Jumat" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <div class="input-group" style="flex: 1;">
+                    <label style="font-size: 0.8rem; font-weight: 600;">Jam Mulai</label>
+                    <input type="time" id="inputJamMulai" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;">
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label style="font-size: 0.8rem; font-weight: 600;">Jam Selesai</label>
+                    <input type="time" id="inputJamSelesai" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;">
+                </div>
+            </div>
+
             <button class="btn-save-all" id="btnSimpanKelas" style="width: 100%;">Simpan Kelas</button>
         </div>
     </div>
