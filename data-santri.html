@@ -17,6 +17,18 @@
 </head>
 <body class="admin-layout">
 
+    <div id="kelasModal" class="modal">
+        <div class="modal-content" style="width: 90%; max-width: 400px;">
+            <span class="close-modal" id="closeKelasModal">&times;</span>
+            <h3 class="modal-title">Buat Kelas Baru</h3>
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Nama Kelas</label>
+                <input type="text" id="inputNamaKelas" placeholder="Misal: Said Bin Zaid" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            </div>
+            <button class="btn-save-all" id="btnSimpanKelas" style="width: 100%;">Simpan Kelas</button>
+        </div>
+    </div>
+
     <div id="santriModal" class="modal">
         <div class="modal-content" style="max-height: 90vh; overflow-y: auto; width: 95%; max-width: 500px;">
             <span class="close-modal" id="closeSantriModal">&times;</span>
@@ -30,7 +42,7 @@
 
             <div class="input-group" style="margin-bottom: 15px;">
                 <label style="font-size: 0.8rem; font-weight: 600;">Pilih Santri dari Dapodik (Belum ada kelas):</label>
-                <div class="search-box" style="margin-bottom: 10px;">
+                <div class="search-box" style="margin-bottom: 10px; position: relative;">
                     <i class="fas fa-search" style="left: 15px; top: 50%; transform: translateY(-50%); position: absolute; color: var(--text-muted);"></i>
                     <input type="text" id="searchDapodik" placeholder="Cari NIS/Nama..." style="width: 100%; padding: 8px 10px 8px 35px; border: 1px solid #ddd; border-radius: 8px;">
                 </div>
@@ -68,11 +80,14 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-                <h2 class="page-title">Santri Binaan Saya</h2>
+                <h2 class="page-title">Santri Binaan</h2>
             </div>
-            <div class="topbar-right">
+            <div class="topbar-right" style="display: flex; gap: 10px;">
+                <button class="btn-save-sm" id="btnBuatKelas" style="background-color: var(--color-blue); color: var(--text-main);">
+                    <i class="fas fa-plus"></i> Kelas
+                </button>
                 <button class="btn-save-sm" id="btnTarikSantri" style="background-color: var(--color-mint-dark); color: white;">
-                    <i class="fas fa-download"></i> Tarik Santri Baru
+                    <i class="fas fa-download"></i> Santri
                 </button>
             </div>
         </header>
