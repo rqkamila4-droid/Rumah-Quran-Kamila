@@ -12,34 +12,90 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Desain Kotak Pilihan Hari */
+        .day-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 5px;
+        }
+        .day-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            background: #f8fbfb;
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .day-item input { transform: scale(1.1); cursor: pointer; }
+        
+        /* Memperbaiki Input Jam di iPad */
+        .time-input {
+            width: 100%;
+            height: 42px; /* Tinggi pasti agar angka tidak terpotong */
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: white;
+            color: var(--text-main);
+            box-sizing: border-box;
+        }
+        
+        /* Memaksa list Dapodik rata kiri */
+        .dapodik-item-card {
+            display: flex; 
+            align-items: flex-start; 
+            text-align: left; /* Paksa teks ke kiri */
+            padding: 12px; 
+            border: 1px solid #e1ece9; 
+            background: white; 
+            border-radius: 8px; 
+            margin-bottom: 8px;
+        }
+    </style>
 </head>
 <body class="admin-layout">
 
     <div id="kelasModal" class="modal">
-        <div class="modal-content" style="width: 90%; max-width: 400px;">
+        <div class="modal-content" style="width: 90%; max-width: 400px; padding: 25px;">
             <span class="close-modal" id="closeKelasModal">&times;</span>
             <h3 class="modal-title">Buat Kelas Baru</h3>
             
-            <div class="input-group" style="margin-bottom: 12px;">
-                <label style="font-size: 0.8rem; font-weight: 600;">Nama Kelas</label>
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Nama Kelas</label>
                 <input type="text" id="inputNamaKelas" placeholder="Misal: Said Bin Zaid" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
             </div>
             
-            <div class="input-group" style="margin-bottom: 12px;">
-                <label style="font-size: 0.8rem; font-weight: 600;">Jadwal Hari</label>
-                <input type="text" id="inputHariKelas" placeholder="Misal: Senin, Rabu, Jumat" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Jadwal Hari</label>
+                <div class="day-grid">
+                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Ahad"> Ahad</label>
+                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Senin"> Senin</label>
+                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Selasa"> Selasa</label>
+                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Rabu"> Rabu</label>
+                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Kamis"> Kamis</label>
+                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Jumat"> Jumat</label>
+                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Sabtu"> Sabtu</label>
+                </div>
             </div>
             
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <div style="display: flex; gap: 15px; margin-bottom: 25px;">
                 <div class="input-group" style="flex: 1;">
-                    <label style="font-size: 0.8rem; font-weight: 600;">Jam Mulai</label>
-                    <input type="time" id="inputJamMulai" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Jam Mulai</label>
+                    <input type="time" id="inputJamMulai" class="time-input">
                 </div>
                 <div class="input-group" style="flex: 1;">
-                    <label style="font-size: 0.8rem; font-weight: 600;">Jam Selesai</label>
-                    <input type="time" id="inputJamSelesai" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Jam Selesai</label>
+                    <input type="time" id="inputJamSelesai" class="time-input">
                 </div>
             </div>
 
@@ -65,7 +121,7 @@
                     <input type="text" id="searchDapodik" placeholder="Cari NIS/Nama..." style="width: 100%; padding: 8px 10px 8px 35px; border: 1px solid #ddd; border-radius: 8px;">
                 </div>
                 
-                <div id="dapodikListContainer" style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; padding: 10px; background: #fafafa;">
+                <div id="dapodikListContainer" style="max-height: 250px; overflow-y: auto; background: #f4f7f6; padding: 10px; border-radius: 8px; border: 1px solid #e1ece9;">
                     <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem;">Memuat data Dapodik...</div>
                 </div>
             </div>
