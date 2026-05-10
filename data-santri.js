@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjc2Zzc3VrY3JrbWd1aGl6YmJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMjkxOTksImV4cCI6MjA5MzkwNTE5OX0.2rSwfgAhzyeSb_ru-6K9hDKSMtFbSK1vgiBpopqM9NY';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Simulasi Login (Karena fitur auth & tabel asli belum siap dipakai secara penuh)
+    // Simulasi Login Ustadz
     let currentUstadzId = localStorage.getItem('ustadz_id') || '00000000-0000-0000-0000-000000000000';
 
     // Sidebar Toggle
@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     let daftarKelasBinaan = [];
     let daftarDapodikTersedia = [];
     
-    // Elemen DOM
     const tableBody = document.getElementById('santriTableBody');
     const filterKelasTable = document.getElementById('filterKelasTable');
     const selectKelasTarget = document.getElementById('selectKelasTarget');
@@ -34,9 +33,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ==========================================
     async function fetchKelasBinaan() {
         try {
-            // SIMULASI: Nanti baris ini diganti dengan "await supabase.from('kelas')...."
+            // SIMULASI: Data Kelas
             const data = [
-                { id: 1, nama_kelas: "Said Bin Zaid (Simulasi)" }
+                { id: 1, nama_kelas: "Said Bin Zaid (Simulasi)", jadwal_hari: "Senin, Rabu", jam_mulai: "13:30", jam_selesai: "14:30" }
             ];
             
             daftarKelasBinaan = data;
@@ -45,8 +44,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             let optsTarget = '';
             
             data.forEach(k => {
+                let infoJadwal = k.jadwal_hari ? ` (${k.jadwal_hari})` : '';
                 optsFilter += `<option value="${k.id}">${k.nama_kelas}</option>`;
-                optsTarget += `<option value="${k.id}">${k.nama_kelas}</option>`;
+                optsTarget += `<option value="${k.id}">${k.nama_kelas}${infoJadwal}</option>`;
             });
             
             if(filterKelasTable) filterKelasTable.innerHTML = optsFilter;
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            // SIMULASI: Nanti diganti dengan "await supabase.from('santri')...."
+            // SIMULASI: Data Santri
             const data = [
                 { nis: "202601", nama: "Ahmad Hanif (Simulasi)", kelas_id: 1, gender: "L" },
                 { nis: "202602", nama: "Fatimah Az-Zahra (Simulasi)", kelas_id: 1, gender: "P" }
@@ -82,7 +82,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             dapodikListContainer.innerHTML = '<div style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Memuat data Dapodik...</div>';
             
-            // SIMULASI: Anak Dapodik yg belum punya kelas
             const data = [
                 { nis: "9001", nama: "Budi Santoso", gender: "L" },
                 { nis: "9002", nama: "Citra Kirana", gender: "P" },
@@ -148,7 +147,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // Eksekusi Awal Saat Halaman Dibuka
     await fetchKelasBinaan();
     fetchSantriBinaan();
 
@@ -179,46 +177,87 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // ==========================================
-    // 4. MODAL & LOGIKA BUAT KELAS BARU
+    // 4. MODAL & LOGIKA BUAT KELAS BARU (Dengan Jadwal)
     // ==========================================
     const kelasModal = document.getElementById('kelasModal');
     const btnBuatKelas = document.getElementById('btnBuatKelas');
     const closeKelasModal = document.getElementById('closeKelasModal');
 
-    if(btnBuatKelas) btnBuatKelas.onclick = () => { kelasModal.style.display = "block"; document.getElementById('inputNamaKelas').value = ''; };
+    if(btnBuatKelas) {
+        btnBuatKelas.onclick = () => { 
+            kelasModal.style.display = "block"; 
+            document.getElementById('inputNamaKelas').value = ''; 
+            document.getElementById('inputHariKelas').value = ''; 
+            document.getElementById('inputJamMulai').value = ''; 
+            document.getElementById('inputJamSelesai').value = ''; 
+        };
+    }
     if(closeKelasModal) closeKelasModal.onclick = () => kelasModal.style.display = "none";
 
     const btnSimpanKelas = document.getElementById('btnSimpanKelas');
     if(btnSimpanKelas) {
         btnSimpanKelas.onclick = async () => {
             const namaKelas = document.getElementById('inputNamaKelas').value;
+            const hariKelas = document.getElementById('inputHariKelas').value;
+            const jamMulai = document.getElementById('inputJamMulai').value;
+            const jamSelesai = document.getElementById('inputJamSelesai').value;
+            
             if(!namaKelas) { alert("Nama kelas tidak boleh kosong!"); return; }
 
             let originalText = btnSimpanKelas.innerHTML;
             btnSimpanKelas.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
             btnSimpanKelas.disabled = true;
 
-            setTimeout(() => {
-                alert(`Alhamdulillah, Kelas "${namaKelas}" berhasil dibuat!`);
-                kelasModal.style.display = "none";
-                
-                // Tambahkan simulasi kelas baru
-                const idBaru = Date.now();
-                daftarKelasBinaan.push({ id: idBaru, nama_kelas: namaKelas });
-                
-                let optsFilter = '<option value="semua">Semua Kelas Binaan</option>';
-                let optsTarget = '';
-                daftarKelasBinaan.forEach(k => {
-                    optsFilter += `<option value="${k.id}">${k.nama_kelas}</option>`;
-                    optsTarget += `<option value="${k.id}">${k.nama_kelas}</option>`;
-                });
-                
-                if(filterKelasTable) filterKelasTable.innerHTML = optsFilter;
-                if(selectKelasTarget) selectKelasTarget.innerHTML = optsTarget;
+            try {
+                // LOGIKA ASLI SUPABASE (Hapus tanda '//' jika sudah siap)
+                /*
+                const { error } = await supabase.from('kelas').insert([
+                    { 
+                        nama_kelas: namaKelas, 
+                        jadwal_hari: hariKelas, 
+                        jam_mulai: jamMulai, 
+                        jam_selesai: jamSelesai,
+                        ustadz_id: currentUstadzId 
+                    }
+                ]);
+                if (error) throw error;
+                */
 
+                // SIMULASI BERHASIL
+                setTimeout(() => {
+                    alert(`Alhamdulillah, Kelas "${namaKelas}" berhasil dibuat!`);
+                    kelasModal.style.display = "none";
+                    
+                    const idBaru = Date.now();
+                    daftarKelasBinaan.push({ 
+                        id: idBaru, 
+                        nama_kelas: namaKelas,
+                        jadwal_hari: hariKelas,
+                        jam_mulai: jamMulai,
+                        jam_selesai: jamSelesai
+                    });
+                    
+                    let optsFilter = '<option value="semua">Semua Kelas Binaan</option>';
+                    let optsTarget = '';
+                    daftarKelasBinaan.forEach(k => {
+                        let infoJadwal = k.jadwal_hari ? ` (${k.jadwal_hari})` : '';
+                        optsFilter += `<option value="${k.id}">${k.nama_kelas}</option>`;
+                        optsTarget += `<option value="${k.id}">${k.nama_kelas}${infoJadwal}</option>`;
+                    });
+                    
+                    if(filterKelasTable) filterKelasTable.innerHTML = optsFilter;
+                    if(selectKelasTarget) selectKelasTarget.innerHTML = optsTarget;
+
+                    btnSimpanKelas.innerHTML = originalText;
+                    btnSimpanKelas.disabled = false;
+                }, 800);
+
+            } catch (error) {
+                console.error("Gagal membuat kelas:", error.message);
+                alert("Gagal membuat kelas: " + error.message);
                 btnSimpanKelas.innerHTML = originalText;
                 btnSimpanKelas.disabled = false;
-            }, 800);
+            }
         };
     }
 
@@ -241,7 +280,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     if(closeSantriModal) closeSantriModal.onclick = () => santriModal.style.display = "none";
     
-    // Tutup modal jika klik di luar box
     window.onclick = (e) => { 
         if (e.target == kelasModal) kelasModal.style.display = "none";
         if (e.target == santriModal) santriModal.style.display = "none";
@@ -276,7 +314,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.keluarkanSantri = async (nis) => {
         if (confirm("Yakin ingin mengeluarkan santri ini dari kelas? (Santri akan kembali ke daftar Dapodik utama)")) {
             alert("Santri berhasil dikembalikan ke Dapodik.");
-            // Dalam kondisi nyata: panggil fetchSantriBinaan() untuk refresh
         }
     };
 
