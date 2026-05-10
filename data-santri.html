@@ -15,51 +15,70 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* Desain Kotak Pilihan Hari */
-        .day-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 5px;
-        }
-        .day-item {
+        /* Desain Hari Bentuk Bulat (Seperti Referensi) */
+        .day-pills {
             display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            background: #f8fbfb;
-            padding: 6px 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            cursor: pointer;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+            justify-content: flex-start;
         }
-        .day-item input { transform: scale(1.1); cursor: pointer; }
+        .day-pill {
+            display: inline-block;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid #7f8c8d;
+            color: #7f8c8d;
+            text-align: center;
+            line-height: 40px; 
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .hari-chk { display: none; /* Sembunyikan kotak centang aslinya */ }
+        .hari-chk:checked + .day-pill {
+            background: var(--color-mint-dark);
+            color: white;
+            border-color: var(--color-mint-dark);
+            box-shadow: 0 3px 8px rgba(153, 221, 204, 0.4);
+        }
         
-        /* Memperbaiki Input Jam di iPad */
+        /* Memperbaiki Input Jam */
         .time-input {
             width: 100%;
-            height: 42px; /* Tinggi pasti agar angka tidak terpotong */
-            padding: 5px 10px;
+            height: 42px; 
+            padding: 5px 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-family: inherit;
             font-size: 0.95rem;
-            background: white;
+            background: #f4f7f6; /* Warna latar sedikit gelap seperti referensi */
             color: var(--text-main);
             box-sizing: border-box;
+            outline: none;
         }
+        .time-input:focus { border-color: var(--color-mint-dark); background: white; }
         
-        /* Memaksa list Dapodik rata kiri */
-        .dapodik-item-card {
-            display: flex; 
-            align-items: flex-start; 
-            text-align: left; /* Paksa teks ke kiri */
-            padding: 12px; 
-            border: 1px solid #e1ece9; 
-            background: white; 
-            border-radius: 8px; 
-            margin-bottom: 8px;
+        /* Perbaikan Daftar Dapodik (Anti-Meledak di iPad) */
+        .dapodik-item {
+            display: flex;
+            align-items: center; /* Sejajarkan ke tengah secara vertikal */
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
+            gap: 15px; /* Jarak antara checkbox dan teks */
+        }
+        .dapodik-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0; /* Jangan biarkan checkbox membesar */
+            accent-color: var(--color-mint-dark);
+            cursor: pointer;
+        }
+        .dapodik-info {
+            flex: 1;
+            text-align: left;
         }
     </style>
 </head>
@@ -68,67 +87,72 @@
     <div id="kelasModal" class="modal">
         <div class="modal-content" style="width: 90%; max-width: 400px; padding: 25px;">
             <span class="close-modal" id="closeKelasModal">&times;</span>
-            <h3 class="modal-title">Buat Kelas Baru</h3>
+            <h3 class="modal-title" style="border:none; text-align:center; font-weight:700;">Buat Kelas Baru</h3>
             
-            <div class="input-group" style="margin-bottom: 15px;">
-                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Nama Kelas</label>
-                <input type="text" id="inputNamaKelas" placeholder="Misal: Said Bin Zaid" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <div class="input-group" style="margin-bottom: 20px;">
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Nama Kelas</label>
+                <input type="text" id="inputNamaKelas" placeholder="Contoh: Al-Baqarah 1" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f4f7f6;">
             </div>
             
-            <div class="input-group" style="margin-bottom: 15px;">
-                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Jadwal Hari</label>
-                <div class="day-grid">
-                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Ahad"> Ahad</label>
-                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Senin"> Senin</label>
-                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Selasa"> Selasa</label>
-                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Rabu"> Rabu</label>
-                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Kamis"> Kamis</label>
-                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Jumat"> Jumat</label>
-                    <label class="day-item"><input type="checkbox" class="hari-chk" value="Sabtu"> Sabtu</label>
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 15px; margin-bottom: 25px;">
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
                 <div class="input-group" style="flex: 1;">
-                    <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Jam Mulai</label>
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Mulai</label>
                     <input type="time" id="inputJamMulai" class="time-input">
                 </div>
                 <div class="input-group" style="flex: 1;">
-                    <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Jam Selesai</label>
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Selesai</label>
                     <input type="time" id="inputJamSelesai" class="time-input">
                 </div>
             </div>
 
-            <button class="btn-save-all" id="btnSimpanKelas" style="width: 100%;">Simpan Kelas</button>
+            <div class="input-group" style="margin-bottom: 25px;">
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Hari Belajar</label>
+                <div class="day-pills">
+                    <input type="checkbox" id="hari_sen" class="hari-chk" value="Senin"><label for="hari_sen" class="day-pill">Sen</label>
+                    <input type="checkbox" id="hari_sel" class="hari-chk" value="Selasa"><label for="hari_sel" class="day-pill">Sel</label>
+                    <input type="checkbox" id="hari_rab" class="hari-chk" value="Rabu"><label for="hari_rab" class="day-pill">Rab</label>
+                    <input type="checkbox" id="hari_kam" class="hari-chk" value="Kamis"><label for="hari_kam" class="day-pill">Kam</label>
+                    <input type="checkbox" id="hari_jum" class="hari-chk" value="Jumat"><label for="hari_jum" class="day-pill">Jum</label>
+                    <input type="checkbox" id="hari_sab" class="hari-chk" value="Sabtu"><label for="hari_sab" class="day-pill">Sab</label>
+                    <input type="checkbox" id="hari_ahd" class="hari-chk" value="Ahad"><label for="hari_ahd" class="day-pill">Ahd</label>
+                </div>
+            </div>
+            
+            <button class="btn-save-all" id="btnSimpanKelas" style="width: 100%; border-radius: 30px;">
+                <i class="fas fa-plus-circle"></i> Buat Kelas Baru
+            </button>
         </div>
     </div>
 
     <div id="santriModal" class="modal">
-        <div class="modal-content" style="max-height: 90vh; overflow-y: auto; width: 95%; max-width: 500px;">
-            <span class="close-modal" id="closeSantriModal">&times;</span>
-            <h3 class="modal-title" id="modalTitle">Tarik Santri ke Kelas Anda</h3>
+        <div class="modal-content" style="max-height: 90vh; width: 95%; max-width: 500px; display: flex; flex-direction: column; padding: 0;">
             
-            <div class="input-group" style="margin-bottom: 15px;">
-                <label style="font-size: 0.8rem; font-weight: 600;">Masukkan ke Kelas:</label>
-                <select id="selectKelasTarget" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                    </select>
-            </div>
+            <div style="padding: 20px 25px 10px 25px;">
+                <span class="close-modal" id="closeSantriModal" style="margin-top: -5px;">&times;</span>
+                <h3 class="modal-title">Tarik Santri ke Kelas</h3>
+                
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="font-size: 0.8rem; font-weight: 600;">Masukkan ke Kelas:</label>
+                    <select id="selectKelasTarget" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: #f4f7f6;">
+                        </select>
+                </div>
 
-            <div class="input-group" style="margin-bottom: 15px;">
-                <label style="font-size: 0.8rem; font-weight: 600;">Pilih Santri dari Dapodik (Belum ada kelas):</label>
+                <label style="font-size: 0.8rem; font-weight: 600;">Pilih Santri dari Dapodik:</label>
                 <div class="search-box" style="margin-bottom: 10px; position: relative;">
                     <i class="fas fa-search" style="left: 15px; top: 50%; transform: translateY(-50%); position: absolute; color: var(--text-muted);"></i>
-                    <input type="text" id="searchDapodik" placeholder="Cari NIS/Nama..." style="width: 100%; padding: 8px 10px 8px 35px; border: 1px solid #ddd; border-radius: 8px;">
-                </div>
-                
-                <div id="dapodikListContainer" style="max-height: 250px; overflow-y: auto; background: #f4f7f6; padding: 10px; border-radius: 8px; border: 1px solid #e1ece9;">
-                    <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem;">Memuat data Dapodik...</div>
+                    <input type="text" id="searchDapodik" placeholder="Cari NIS/Nama..." style="width: 100%; padding: 10px 10px 10px 40px; border: 1px solid #ddd; border-radius: 8px;">
                 </div>
             </div>
             
-            <button class="btn-save-all" id="btnSimpanTarikSantri" style="width: 100%; margin-top: 10px;">
-                <i class="fas fa-save"></i> Simpan ke Kelas Saya
-            </button>
+            <div id="dapodikListContainer" style="overflow-y: auto; flex: 1; min-height: 200px; padding: 0 25px;">
+                <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem;">Memuat data Dapodik...</div>
+            </div>
+            
+            <div style="padding: 15px 25px; background: white; border-top: 1px solid #eee; border-radius: 0 0 15px 15px;">
+                <button class="btn-save-all" id="btnSimpanTarikSantri" style="width: 100%; margin: 0; border-radius: 30px;">
+                    <i class="fas fa-save"></i> Simpan ke Kelas Saya
+                </button>
+            </div>
         </div>
     </div>
 
