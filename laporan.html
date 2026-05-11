@@ -57,15 +57,32 @@
         .btn-edit-laporan { background: #f39c12; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600;}
         .btn-rotasi { background: #34495e; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600;}
 
-        /* KOP Surat */
-        .kop-surat { display: flex; align-items: center; border-bottom: 3px solid #1a252f; padding-bottom: 10px; margin-bottom: 20px; margin-top: 10px; gap: 20px; }
+        /* --- REVISI: KOP Surat Rata Tengah Sempurna & Logo Melayang --- */
+        .kop-surat { 
+            position: relative; /* Membuat area ini jadi patokan logo melayang */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; /* Memaksa teks rata tengah 100% */
+            border-bottom: 3px solid #1a252f; 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+            margin-top: 10px; 
+            min-height: 3.5cm; /* Menjaga tinggi agar tulisan tidak menabrak garis bawah */
+        }
+        
         .kop-logo { 
-            height: 3.2cm; /* Tinggi logo proposional untuk F4 */
+            position: absolute; /* Logo dibuat melayang (tidak mendorong teks) */
+            left: 10px; /* Jarak dari kiri */
+            top: 0;
+            height: 3.2cm; 
             width: auto; 
             object-fit: contain; 
-            margin-right: 0;
         }
-        .kop-text { flex: 1; text-align: center; }
+        
+        .kop-text { 
+            text-align: center; 
+            z-index: 2; /* Memastikan teks ada di atas kalau kertasnya kekecilan */
+        }
         .kop-text h2 { margin: 0; color: #1a252f; font-size: 1.6rem; font-weight: 800; letter-spacing: 1px; }
         .kop-text p { margin: 2px 0; font-size: 0.9rem; color: #333; }
         .kop-text i { font-size: 0.8rem; color: #555; }
@@ -74,7 +91,7 @@
         .excel-table th, .excel-table td { border: 1px solid #000; padding: 10px 6px; }
         .excel-table th { background-color: #f2f2f2; font-weight: 700; }
         
-        .judul-laporan { text-align: center; text-decoration: underline; font-weight: 800; font-size: 1.2rem; margin-bottom: 20px; }
+        .judul-laporan { text-align: center; text-decoration: underline; font-weight: 800; font-size: 1.2rem; margin-bottom: 20px; margin-top: 10px; }
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.95rem; margin-bottom: 20px; }
         .info-row { display: flex; margin-bottom: 5px; }
         .info-label { width: 130px; font-weight: 600; }
@@ -98,14 +115,15 @@
         [contenteditable="true"]:focus { background-color: #fff9db; border: 1px dashed #f1c40f; outline: none; }
         .exporting .no-export { display: none !important; }
 
-        /* --- UPDATE: Pembersihan CSS Logo Sidebar (Sudah Transparan & Kotak) --- */
+        /* --- REVISI: Logo Sidebar Menjadi Lingkaran Putih --- */
         .sidebar-brand .brand-logo {
-            width: 60px; /* Ukuran kotak di Sidebar */
-            height: 60px;
-            object-fit: contain; /* Jaga proporsi asli di dalam kotak */
-            padding: 0; /* Hapus padding agar bersih */
-            border-radius: 0; /* Hapus border radius jika ingin logo utuh tampil */
-            background: transparent; /* Pastikan latarnya transparan */
+            width: 55px; 
+            height: 55px; 
+            object-fit: contain; 
+            border-radius: 50%; /* Memaksa kotak menjadi bulat sempurna */
+            background-color: #ffffff; /* Memastikan background menyatu dengan warna asli gambar */
+            padding: 6px; /* Jarak antara gambar logo dan garis tepi lingkaran */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* Sedikit bayangan agar terlihat elegan */
         }
     </style>
 </head>
@@ -113,7 +131,7 @@
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <img src="logorqkamila.png?v=4" alt="Logo" class="brand-logo" onerror="this.src='https://ui-avatars.com/api/?name=RQ&background=2b394a&color=fff'">
+            <img src="logorqkamila.png?v=4" alt="Logo" class="brand-logo" onerror="this.src='https://ui-avatars.com/api/?name=RQ&background=ffffff&color=2b394a'">
             <span class="brand-text">RQ Kamila</span>
             <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
         </div>
