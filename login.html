@@ -3,49 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#99DDCC">
-    <title>Login Ustadz - Rumah Quran Kamila</title>
+    <meta name="theme-color" content="#2b394a">
+    <title>Masuk - RQ Kamila</title>
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts: Poppins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <!-- CSS Link (Menggunakan file yang sama) -->
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="login-body">
-    <div class="login-container">
-        <!-- Logo -->
-        <img src="kamila.png" alt="Logo RQ Kamila" class="login-logo">
-        
-        <h2 class="login-title">Masuk Akun</h2>
-        <p class="login-subtitle">Silakan masuk untuk mengakses Dashboard Ustadz</p>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #2b394a; /* Warna biru gelap RQ Kamila */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
 
-        <!-- Form Login -->
-        <form id="loginForm" class="login-form">
+        .login-card {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .login-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a252f;
+            margin: 0 0 5px 0;
+        }
+
+        .login-subtitle {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid #e1e5eb;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            background: #fafafa;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #2ca58d; /* Warna mint */
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(44, 165, 141, 0.1);
+        }
+
+        .input-group i {
+            position: absolute;
+            bottom: 14px;
+            left: 15px;
+            color: #95a5a6;
+        }
+
+        .btn-login {
+            width: 100%;
+            background: #2ca58d;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            background: #218c76;
+            transform: translateY(-2px);
+        }
+
+        .error-msg {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <img src="logorqkamila.png?v=5" alt="Logo RQ Kamila" class="login-logo" onerror="this.src='https://ui-avatars.com/api/?name=RQ&background=2b394a&color=fff'">
+        
+        <h1 class="login-title">RQ Kamila</h1>
+        <p class="login-subtitle">Sistem Informasi Akademik Santri</p>
+
+        <form id="loginForm">
             <div class="input-group">
-                <label for="email">Email / Username</label>
-                <input type="text" id="email" placeholder="Masukkan email ustadz" required>
+                <label>Alamat Email</label>
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" placeholder="ustadz@rqkamila.com" required>
             </div>
             
             <div class="input-group">
-                <label for="password">Kata Sandi</label>
-                <input type="password" id="password" placeholder="Masukkan kata sandi" required>
+                <label>Kata Sandi</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Masukkan kata sandi..." required>
             </div>
 
-            <div class="form-actions">
-                <a href="#" class="forgot-password">Lupa sandi?</a>
-            </div>
+            <div id="pesanError" class="error-msg">Email atau kata sandi salah.</div>
 
-            <button type="submit" class="btn-login">Masuk</button>
+            <button type="submit" class="btn-login" id="btnLogin">Masuk ke Dashboard</button>
         </form>
     </div>
 
-    <!-- Script khusus halaman login -->
     <script src="login.js"></script>
 </body>
 </html>
