@@ -5,43 +5,54 @@ document.addEventListener("DOMContentLoaded", () => {
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjc2Zzc3VrY3JrbWd1aGl6YmJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMjkxOTksImV4cCI6MjA5MzkwNTE5OX0.2rSwfgAhzyeSb_ru-6K9hDKSMtFbSK1vgiBpopqM9NY';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // Cek apakah sebelumnya ustadz sudah login?
+    if (localStorage.getItem('ustadz_username')) {
+        window.location.href = 'dashboard.html';
+    }
+
     const loginForm = document.getElementById('loginForm');
     const btnLogin = document.getElementById('btnLogin');
     const pesanError = document.getElementById('pesanError');
 
     loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Mencegah halaman refresh otomatis
+        e.preventDefault(); 
+        pesanError.style.display = 'none'; 
         
-        pesanError.style.display = 'none';
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        // Ambil data Username
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
 
-        // Ubah teks tombol jadi loading
         let originalText = btnLogin.innerHTML;
         btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memeriksa data...';
         btnLogin.disabled = true;
 
         try {
-            // PROSES LOGIN KE SUPABASE
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
+            // LOGIKA DARI APLIKASI SEBELAH:
+            // Cek ke dalam tabel "profil_users" (atau "users") apakah ada username & password yang cocok
+            const { data, error } = await supabase
+                .from('profil_users') // Ganti dengan nama tabel akun ustadz Anda di Supabase
+                .select('*')
+                .eq('username', username)
+                .eq('password', password)
+                .single();
 
-            if (error) {
-                throw error; // Lempar ke blok catch jika salah sandi
+            if (error || !data) {
+                // Jika tidak ada data yang cocok
+                throw new Error("Username atau Password salah! Periksa kembali.");
             }
 
             // JIKA SUKSES
-            // Simpan ID User ke penyimpanan HP/iPad untuk dipakai di halaman lain
-            localStorage.setItem('ustadz_id', data.user.id);
+            // Simpan identitas ustadz ke penyimpanan HP
+            localStorage.setItem('ustadz_id', data.id);
+            localStorage.setItem('ustadz_username', data.username);
+            localStorage.setItem('nama_ustadz', data.nama_lengkap);
             
-            // Arahkan otomatis ke Dashboard
+            // Arahkan ke Dashboard
             window.location.href = 'dashboard.html';
 
         } catch (error) {
-            // JIKA GAGAL (Sandi salah / email tidak ada)
-            pesanError.innerText = "Gagal masuk: Email atau kata sandi salah.";
+            // JIKA GAGAL MASUK
+            pesanError.innerText = "Username atau kata sandi salah. Silakan coba lagi.";
             pesanError.style.display = 'block';
             
             btnLogin.innerHTML = originalText;
@@ -49,14 +60,4 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Cek apakah Ustadz sebenarnya sudah login sebelumnya?
-    // Jika sudah login, jangan tampilkan halaman login lagi, langsung usir ke Dashboard.
-    async function cekSesiAktif() {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-            window.location.href = 'dashboard.html';
-        }
-    }
-    
-    cekSesiAktif();
 });
