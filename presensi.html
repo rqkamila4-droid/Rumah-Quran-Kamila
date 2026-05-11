@@ -24,10 +24,10 @@
         
         <ul class="sidebar-menu">
             <li><a href="dashboard.html"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
-            <li><a href="#"><i class="fas fa-user-graduate"></i> <span>Data Santri</span></a></li>
+            <li><a href="data-santri.html"><i class="fas fa-user-graduate"></i> <span>Data Santri</span></a></li>
             <li class="active"><a href="presensi.html"><i class="fas fa-clipboard-list"></i> <span>Input Harian</span></a></li>
-            <li><a href="#"><i class="fas fa-chart-pie"></i> <span>Laporan</span></a></li>
-            <li><a href="#"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
+            <li><a href="laporan.html"><i class="fas fa-chart-pie"></i> <span>Laporan</span></a></li>
+            <li><a href="pengaturan.html"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
         </ul>
         
         <div class="sidebar-bottom">
@@ -41,7 +41,10 @@
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
                 <h2 class="page-title">Input Harian Kelas</h2>
             </div>
-            <div class="topbar-right">
+            <div class="topbar-right" style="display: flex; align-items: center; gap: 15px;">
+                <button class="btn-save-sm" onclick="document.getElementById('modalAturLibur').style.display='block'" style="background-color: #e74c3c; color: white; border-radius: 20px; font-weight: 600;">
+                    <i class="fas fa-calendar-times"></i> Atur Libur
+                </button>
                 <div class="profile-info">
                     <span class="profile-name">Ustadz Fulan</span>
                     <div class="profile-pic">UF</div>
@@ -99,5 +102,90 @@
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <script src="presensi.js"></script>
+
+    <style>
+        .modal-udzur { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .modal-udzur-content { background-color: #fff; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 420px; border-radius: 16px; padding: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.2); overflow: hidden; font-family: 'Poppins', sans-serif; }
+        .modal-udzur-header { background: #fffcfc; border-bottom: 1px solid #f0f0f0; padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-udzur-header h3 { margin: 0; color: #e74c3c; font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .modal-udzur-close { font-size: 1.5rem; color: #bbb; cursor: pointer; line-height: 1; transition: 0.2s; }
+        .modal-udzur-close:hover { color: #333; }
+        .modal-udzur-body { padding: 25px; }
+        
+        .udzur-group { margin-bottom: 20px; }
+        .udzur-label { display: block; font-size: 0.85rem; font-weight: 600; color: #34495e; margin-bottom: 8px; }
+        .udzur-input { width: 100%; padding: 12px 15px; border: 1px solid #e1e5eb; border-radius: 8px; font-family: inherit; font-size: 0.9rem; box-sizing: border-box; background: #fafafa; color: #333; transition: 0.2s; }
+        .udzur-input:focus { outline: none; border-color: #e74c3c; background: #fff; box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1); }
+        
+        .udzur-toggle { display: flex; background: #f1f2f6; border-radius: 8px; padding: 5px; gap: 5px; }
+        .udzur-toggle label { flex: 1; text-align: center; padding: 10px; font-size: 0.85rem; font-weight: 600; color: #7f8c8d; cursor: pointer; border-radius: 6px; transition: 0.3s all ease; }
+        .udzur-toggle input { display: none; }
+        .udzur-toggle input:checked + label { background: white; color: #e74c3c; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+        
+        .btn-simpan-udzur { width: 100%; background: #e74c3c; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .btn-simpan-udzur:hover { background: #c0392b; transform: translateY(-1px); }
+    </style>
+
+    <div id="modalAturLibur" class="modal-udzur">
+        <div class="modal-udzur-content">
+            <div class="modal-udzur-header">
+                <h3><i class="fas fa-calendar-times"></i> Atur Libur / Udzur</h3>
+                <span class="modal-udzur-close" onclick="document.getElementById('modalAturLibur').style.display='none'">&times;</span>
+            </div>
+            
+            <div class="modal-udzur-body">
+                <div class="udzur-group">
+                    <label class="udzur-label">Tanggal Libur</label>
+                    <input type="date" id="udzurTanggal" class="udzur-input">
+                </div>
+                
+                <div class="udzur-group">
+                    <label class="udzur-label">Alasan</label>
+                    <select id="udzurAlasan" class="udzur-input">
+                        <option value="Ustadz Sakit">Ustadz Sakit</option>
+                        <option value="Ustadz Izin">Ustadz Izin (Ada Keperluan)</option>
+                        <option value="Libur Nasional">Libur Nasional</option>
+                    </select>
+                </div>
+                
+                <div class="udzur-group">
+                    <label class="udzur-label">Cakupan Libur</label>
+                    <div class="udzur-toggle">
+                        <input type="radio" name="udzur_cakupan" id="udzur_semua" value="semua" checked 
+                               onchange="document.getElementById('udzurPilihanKelas').style.display='none'">
+                        <label for="udzur_semua">Semua Kelas</label>
+                        
+                        <input type="radio" name="udzur_cakupan" id="udzur_pilih" value="pilih"
+                               onchange="document.getElementById('udzurPilihanKelas').style.display='block'">
+                        <label for="udzur_pilih">Pilih Kelas</label>
+                    </div>
+                </div>
+                
+                <div id="udzurPilihanKelas" style="display: none; background: #fafafa; border: 1px solid #e1e5eb; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                    <label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 8px; color: #34495e;">
+                        <input type="checkbox" value="Said Bin Zaid" style="margin-right: 8px; transform: scale(1.1);"> Said Bin Zaid
+                    </label>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 500; color: #34495e;">
+                        <input type="checkbox" value="Abu Bakr" style="margin-right: 8px; transform: scale(1.1);"> Abu Bakr
+                    </label>
+                </div>
+                
+                <button class="btn-simpan-udzur" onclick="simpanLibur()">Simpan Status Libur</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('udzurTanggal').value = new Date().toISOString().split('T')[0];
+        function simpanLibur() {
+            let btn = document.querySelector('.btn-simpan-udzur');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            setTimeout(() => {
+                alert("Status libur berhasil disimpan. Sistem tidak akan menghitung hari ini sebagai target kehadiran.");
+                document.getElementById('modalAturLibur').style.display = 'none';
+                btn.innerHTML = 'Simpan Status Libur';
+            }, 800);
+        }
+    </script>
 </body>
 </html>
