@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2b394a">
+    <title>Pengaturan - RQ Kamila</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .settings-container { display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 800px; margin: 0 auto; }
+        @media (min-width: 768px) { .settings-container { grid-template-columns: 1fr 1fr; } }
+        
+        .setting-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .setting-header { display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #f4f7f6; padding-bottom: 15px; margin-bottom: 20px; }
+        .setting-header i { font-size: 1.5rem; color: var(--color-mint-dark); }
+        .setting-header h3 { margin: 0; color: var(--text-main); font-size: 1.1rem; }
+        
+        .setting-desc { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5; }
+        
+        .btn-danger { background-color: #e74c3c; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-danger:hover { background-color: #c0392b; }
+        
+        /* Modifikasi Input agar lebih elegan */
+        .setting-input { width: 100%; padding: 12px; border: 1px solid #e1ece9; border-radius: 8px; background: #f8fbfb; font-family: inherit; font-size: 0.9rem; color: var(--text-main); box-sizing: border-box; }
+        .setting-input:focus { outline: none; border-color: var(--color-mint-dark); background: white; }
+    </style>
+</head>
+<body class="admin-layout">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="logorqkamila.png?v=4" alt="Logo" class="brand-logo" onerror="this.src='https://ui-avatars.com/api/?name=RQ&background=ffffff&color=2b394a'" style="border-radius: 50%; background-color: #ffffff; padding: 6px;">
+            <span class="brand-text">RQ Kamila</span>
+            <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="dashboard.html"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+            <li><a href="data-santri.html"><i class="fas fa-user-graduate"></i> <span>Data Santri</span></a></li>
+            <li><a href="presensi.html"><i class="fas fa-clipboard-list"></i> <span>Input Harian</span></a></li>
+            <li><a href="laporan.html"><i class="fas fa-chart-pie"></i> <span>Laporan</span></a></li>
+            <li class="active"><a href="pengaturan.html"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <h2 class="page-title">Pengaturan Sistem</h2>
+            </div>
+        </header>
+
+        <div class="dashboard-wrapper">
+            <div class="settings-container">
+                
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>Profil Ustadz</h3>
+                    </div>
+                    <form id="formProfil">
+                        <div class="input-group" style="margin-bottom: 15px;">
+                            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Nama Lengkap</label>
+                            <input type="text" id="inputNamaUstadz" class="setting-input" value="Reyndi Alafasy">
+                        </div>
+                        <div class="input-group" style="margin-bottom: 15px;">
+                            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Email (Untuk Login)</label>
+                            <input type="email" id="inputEmailUstadz" class="setting-input" value="ustadz@rqkamila.com" readonly style="background: #eee; cursor: not-allowed;" title="Email tidak bisa diubah">
+                        </div>
+                        <div class="input-group" style="margin-bottom: 20px;">
+                            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">No. WhatsApp</label>
+                            <input type="text" id="inputWaUstadz" class="setting-input" placeholder="Contoh: 08123456789">
+                        </div>
+                        <button type="submit" class="btn-save-all" id="btnSimpanProfil" style="width: 100%; margin: 0; border-radius: 8px;"><i class="fas fa-save"></i> Simpan Profil</button>
+                    </form>
+                </div>
+
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>Pengaturan Akademik</h3>
+                    </div>
+                    <p class="setting-desc">Tentukan jumlah hari efektif kegiatan belajar mengajar dalam 1 bulan. Angka ini digunakan untuk menghitung persentase kehadiran santri di Dashboard.</p>
+                    
+                    <form id="formAkademik">
+                        <div class="input-group" style="margin-bottom: 25px;">
+                            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Jumlah Hari Efektif / Bulan</label>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                                <input type="number" id="inputHariEfektif" class="setting-input" value="24" min="1" max="31" style="width: 100px; text-align: center; font-weight: bold; font-size: 1.1rem;">
+                                <span style="font-weight: 600; color: var(--text-muted);">Hari</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-save-all" id="btnSimpanAkademik" style="width: 100%; margin: 0; border-radius: 8px;"><i class="fas fa-check-circle"></i> Simpan Pengaturan</button>
+                    </form>
+                </div>
+
+                <div class="setting-card" style="grid-column: 1 / -1;">
+                    <div class="setting-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Keamanan & Sesi</h3>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 15px; max-width: 300px;">
+                        <button class="btn-save-all" id="btnGantiPassword" style="width: 100%; margin: 0; border-radius: 8px; background: #34495e; color: white;">
+                            <i class="fas fa-key"></i> Ganti Password
+                        </button>
+                        
+                        <hr style="border: 0; border-top: 1px solid #eee; margin: 5px 0;">
+                        
+                        <p class="setting-desc" style="margin-bottom: 0;">Akhiri sesi Anda di perangkat ini untuk menjaga keamanan data santri.</p>
+                        <button class="btn-danger" id="btnLogoutAsli">
+                            <i class="fas fa-sign-out-alt"></i> Keluar Aplikasi (Logout)
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <script src="pengaturan.js"></script>
+</body>
+</html>
