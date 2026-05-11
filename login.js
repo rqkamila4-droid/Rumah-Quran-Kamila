@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // === KONFIGURASI SUPABASE BARU ===
+    // KONFIGURASI SUPABASE
     const SUPABASE_URL = 'https://ucsfssukcrkmguhizbbj.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjc2Zzc3VrY3JrbWd1aGl6YmJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMjkxOTksImV4cCI6MjA5MzkwNTE5OX0.2rSwfgAhzyeSb_ru-6K9hDKSMtFbSK1vgiBpopqM9NY';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Cek apakah sebelumnya ustadz sudah login?
+    // Kunci Otomatis: Jika sudah login, langsung usir ke Dashboard
     if (localStorage.getItem('ustadz_username')) {
         window.location.href = 'dashboard.html';
     }
@@ -18,41 +18,37 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault(); 
         pesanError.style.display = 'none'; 
         
-        // Ambil data Username
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
+        const userValue = document.getElementById('username').value.trim();
+        const passValue = document.getElementById('password').value.trim();
 
         let originalText = btnLogin.innerHTML;
         btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memeriksa data...';
         btnLogin.disabled = true;
 
         try {
-            // LOGIKA DARI APLIKASI SEBELAH:
-            // Cek ke dalam tabel "profil_users" (atau "users") apakah ada username & password yang cocok
+            // PROSES PENCOCOKAN DATA KE TABEL SUPABASE
             const { data, error } = await supabase
-                .from('profil_users') // Ganti dengan nama tabel akun ustadz Anda di Supabase
+                .from('profil_users')
                 .select('*')
-                .eq('username', username)
-                .eq('password', password)
-                .single();
+                .eq('username', userValue)
+                .eq('password', passValue)
+                .single(); 
 
             if (error || !data) {
-                // Jika tidak ada data yang cocok
-                throw new Error("Username atau Password salah! Periksa kembali.");
+                throw new Error("Username atau sandi salah.");
             }
 
-            // JIKA SUKSES
-            // Simpan identitas ustadz ke penyimpanan HP
+            // JIKA SUKSES! 
             localStorage.setItem('ustadz_id', data.id);
             localStorage.setItem('ustadz_username', data.username);
             localStorage.setItem('nama_ustadz', data.nama_lengkap);
             
-            // Arahkan ke Dashboard
+            // ARAHKAN KE DASHBOARD
             window.location.href = 'dashboard.html';
 
         } catch (error) {
             // JIKA GAGAL MASUK
-            pesanError.innerText = "Username atau kata sandi salah. Silakan coba lagi.";
+            pesanError.innerText = "Username atau Password salah! Periksa kembali.";
             pesanError.style.display = 'block';
             
             btnLogin.innerHTML = originalText;
