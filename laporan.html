@@ -15,62 +15,93 @@
     <link rel="stylesheet" href="style.css">
     
     <style>
-        /* Desain Tab Menu */
+        /* Desain Tab & Layout Utama */
         .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; background: #e1ece9; color: var(--text-muted); font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        .tab-btn.active { background: var(--color-mint-dark); color: white; box-shadow: 0 4px 10px rgba(153, 221, 204, 0.4); }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: #e1ece9; color: var(--text-muted); font-weight: 600; border-radius: 8px; cursor: pointer; }
+        .tab-btn.active { background: var(--color-mint-dark); color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* KOP Surat Design */
-        .kop-surat { display: flex; align-items: center; border-bottom: 3px solid #1a252f; padding-bottom: 15px; margin-bottom: 20px; }
-        .kop-logo { width: 80px; height: 80px; margin-right: 20px; object-fit: contain; }
+        /* --- SETTING KERTAS F4 (Lebih Lebar) --- */
+        .kertas-print { 
+            background: white; 
+            width: 215mm; /* Lebar F4 */
+            min-height: 330mm; /* Tinggi F4 */
+            padding: 25mm 20mm; 
+            margin: 0 auto 30px auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            color: black;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Tombol Edit Melayang di pojok kertas */
+        .btn-edit-laporan {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+        .btn-edit-laporan:hover { background: #e67e22; }
+
+        /* KOP Surat */
+        .kop-surat { display: flex; align-items: center; border-bottom: 3px solid #1a252f; padding-bottom: 15px; margin-bottom: 25px; }
+        .kop-logo { width: 85px; height: 85px; margin-right: 20px; object-fit: contain; }
         .kop-text { flex: 1; text-align: center; }
-        .kop-text h2 { margin: 0; color: #1a252f; font-size: 1.5rem; font-weight: 700; letter-spacing: 1px; }
-        .kop-text p { margin: 2px 0; font-size: 0.85rem; color: #333; }
+        .kop-text h2 { margin: 0; color: #1a252f; font-size: 1.6rem; font-weight: 800; letter-spacing: 1px; }
+        .kop-text p { margin: 2px 0; font-size: 0.9rem; color: #333; }
         .kop-text i { font-size: 0.8rem; color: #555; }
 
-        /* Kertas Laporan (Bisa di-print) */
-        .kertas-print { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); color: black; margin-bottom: 20px; }
+        /* Tabel Rekap (Gambar 1) - Spasi lebih lega */
+        .excel-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: center; margin-top: 15px; }
+        .excel-table th, .excel-table td { border: 1px solid #000; padding: 10px 6px; }
+        .excel-table th { background-color: #f2f2f2; font-weight: 700; }
         
-        /* Tabel Kelas (Style Excel) */
-        .excel-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: center; }
-        .excel-table th, .excel-table td { border: 1px solid #333; padding: 6px 4px; }
-        .excel-table th { background-color: #f4f4f4; font-weight: 600; }
-        
-        /* Desain Laporan Individu */
-        .judul-laporan { text-align: center; text-decoration: underline; font-weight: 700; margin-bottom: 20px; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem; margin-bottom: 20px; }
-        .info-row { display: flex; }
-        .info-label { width: 120px; font-weight: 600; }
-        .info-colon { width: 20px; }
-        .info-value { flex: 1; }
+        /* Laporan Individu (Gambar 2) */
+        .judul-laporan { text-align: center; text-decoration: underline; font-weight: 800; font-size: 1.2rem; margin-bottom: 25px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.95rem; margin-bottom: 25px; }
+        .info-row { display: flex; margin-bottom: 5px; }
+        .info-label { width: 130px; font-weight: 600; }
+        .info-value { flex: 1; border-bottom: 1px dotted #ccc; }
 
-        /* Section Headings */
-        .section-title { background: #e2e8f0; padding: 8px 15px; font-weight: 600; font-size: 0.9rem; margin-top: 20px; margin-bottom: 10px; }
-        
-        /* Absensi Kotak (H/I/S/A) */
-        .absen-box-container { display: flex; gap: 15px; justify-content: space-between; margin-bottom: 15px;}
-        .absen-box { flex: 1; border: 1px solid #333; text-align: center; padding: 10px; border-radius: 5px; }
-        .absen-title { font-weight: 600; font-size: 0.85rem; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 5px; }
-        .absen-angka { font-size: 1.2rem; font-weight: 700; color: #e74c3c; }
+        /* Absensi Kotak di Atas */
+        .absen-section { margin-bottom: 25px; }
+        .absen-box-container { display: flex; gap: 20px; justify-content: center; }
+        .absen-box { width: 80px; border: 2px solid #000; text-align: center; padding: 8px; border-radius: 4px; }
+        .absen-title { font-weight: 700; font-size: 0.9rem; border-bottom: 1px solid #000; margin-bottom: 5px; }
+        .absen-angka { font-size: 1.3rem; font-weight: 800; }
 
-        /* Tabel Individu */
-        .indv-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 15px;}
-        .indv-table th, .indv-table td { border: 1px solid #333; padding: 8px 12px; }
-        .indv-table th { background: #f4f4f4; text-align: left;}
+        /* Tabel Materi */
+        .section-title { background: #f0f4f8; padding: 10px 15px; font-weight: 700; font-size: 0.95rem; margin: 20px 0 10px 0; border-left: 5px solid var(--color-mint-dark); }
+        .indv-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .indv-table th, .indv-table td { border: 1px solid #000; padding: 12px 15px; }
+        .indv-table th { background: #f8fafc; text-align: left; }
 
         /* Tanda Tangan */
-        .ttd-container { display: flex; justify-content: space-between; margin-top: 40px; font-size: 0.85rem; text-align: center; }
+        .ttd-container { display: flex; justify-content: space-between; margin-top: 50px; font-size: 0.95rem; text-align: center; }
         .ttd-box { width: 30%; }
-        .ttd-space { height: 80px; }
+        .ttd-space { height: 85px; }
+
+        /* Mode Edit Visual */
+        [contenteditable="true"] { background-color: #fff9db; border: 1px dashed #f1c40f; padding: 2px; }
+
+        /* Sembunyikan tombol saat export */
+        .no-export { display: block; }
+        .exporting .no-export { display: none !important; }
     </style>
 </head>
 <body class="admin-layout">
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <img src="logorqkamila.png" alt="Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/40'">
+            <img src="logorqkamila.png" alt="Logo" class="brand-logo">
             <span class="brand-text">RQ Kamila</span>
             <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
         </div>
@@ -81,23 +112,20 @@
             <li class="active"><a href="laporan.html"><i class="fas fa-chart-pie"></i> <span>Laporan</span></a></li>
             <li><a href="#"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
         </ul>
-        <div class="sidebar-bottom">
-            <a href="login.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
-        </div>
     </aside>
 
     <main class="main-content">
         <header class="topbar">
             <div class="topbar-left">
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-                <h2 class="page-title">Cetak Laporan</h2>
+                <h2 class="page-title">Cetak Laporan F4</h2>
             </div>
             <div class="topbar-right" style="display: flex; gap: 10px;">
                 <button class="btn-save-sm" id="btnCetakDoc" style="background-color: #2980b9; color: white;">
-                    <i class="fas fa-file-word"></i> Cetak (.Doc)
+                    <i class="fas fa-file-word"></i> Cetak Doc
                 </button>
                 <button class="btn-save-sm" id="btnKirimWA" style="background-color: #27ae60; color: white;">
-                    <i class="fab fa-whatsapp"></i> Kirim WA (.Jpg)
+                    <i class="fab fa-whatsapp"></i> Kirim WA
                 </button>
             </div>
         </header>
@@ -106,42 +134,43 @@
             
             <div class="card" style="margin-bottom: 20px;">
                 <div class="tab-container">
-                    <button class="tab-btn active" onclick="switchTab('kelas')">Laporan Kelas (Rekap)</button>
-                    <button class="tab-btn" onclick="switchTab('individu')">Laporan Individu (ASTS)</button>
+                    <button class="tab-btn active" onclick="switchTab('kelas')">Rekap Kelas (F4)</button>
+                    <button class="tab-btn" onclick="switchTab('individu')">Laporan Bulanan (F4)</button>
                 </div>
                 
                 <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <select class="filter-select" id="pilihKelas" style="flex: 1; min-width: 150px; background: #f4f7f6;">
+                    <select class="filter-select" id="pilihKelas" style="flex: 1; background: #f4f7f6;">
                         <option value="1">Said Bin Zaid</option>
                     </select>
-                    <select class="filter-select" id="pilihBulan" style="flex: 1; min-width: 150px; background: #f4f7f6;">
+                    <select class="filter-select" id="pilihBulan" style="flex: 1; background: #f4f7f6;">
                         <option value="Mei">Bulan Mei 2026</option>
                     </select>
-                    <select class="filter-select" id="pilihSantri" style="flex: 1; min-width: 150px; background: #f4f7f6; display: none;">
+                    <select class="filter-select" id="pilihSantri" style="flex: 1; background: #f4f7f6; display: none;">
                         <option value="202601">Ahmad Hanif</option>
-                        <option value="202602">Fatimah Az-Zahra</option>
                     </select>
                 </div>
             </div>
 
             <div id="tabKelas" class="tab-content active">
-                <div class="kertas-print" id="areaCetakKelas" style="overflow-x: auto;">
-                    <div style="text-align: center; font-weight: bold; margin-bottom: 20px;">
+                <div class="kertas-print" id="areaCetakKelas">
+                    <button class="btn-edit-laporan no-export" onclick="toggleEdit('areaCetakKelas')"><i class="fas fa-edit"></i> Edit Data</button>
+                    
+                    <div style="text-align: center; font-weight: 800; font-size: 1.1rem; margin-bottom: 25px;">
                         LAPORAN REKAPITULASI KELAS<br>RUMAH QUR'AN KAMILA
                     </div>
                     
-                    <div style="font-size: 0.85rem; margin-bottom: 15px; line-height: 1.6;">
-                        <div style="display: flex;"><div style="width: 120px;">Nama kelas</div><div>: Said Bin Zaid</div></div>
-                        <div style="display: flex;"><div style="width: 120px;">Ustadz Pengampu</div><div>: Ustadz Reyndi Alafasy</div></div>
-                        <div style="display: flex;"><div style="width: 120px;">Periode</div><div>: Mei 2026</div></div>
-                        <div style="display: flex;"><div style="width: 120px;">Jumlah Santri</div><div>: 2 Anak</div></div>
+                    <div style="font-size: 1rem; margin-bottom: 20px; line-height: 1.8;">
+                        <div style="display: flex;"><div style="width: 140px;">Nama kelas</div><div contenteditable="true">: Abu Bakr</div></div>
+                        <div style="display: flex;"><div style="width: 140px;">Ustadz Pengampu</div><div contenteditable="true">: Reyndi Alafasy</div></div>
+                        <div style="display: flex;"><div style="width: 140px;">Periode</div><div contenteditable="true">: Mei</div></div>
+                        <div style="display: flex;"><div style="width: 140px;">Jumlah Santri</div><div contenteditable="true">: 12</div></div>
                     </div>
 
                     <table class="excel-table">
                         <thead>
                             <tr>
                                 <th rowspan="2">No</th>
-                                <th rowspan="2">Nama Santri</th>
+                                <th rowspan="2" style="width: 150px;">Nama Santri</th>
                                 <th colspan="3">Presensi</th>
                                 <th colspan="2">Tahfidz</th>
                                 <th colspan="3">Tahsin</th>
@@ -152,42 +181,33 @@
                             <tr>
                                 <th>H</th><th>I/S</th><th>A</th>
                                 <th>Surat</th><th>Ayat</th>
-                                <th>Kategori</th><th>Surat/jilid</th><th>Ayat/hal</th>
-                                <th>Lanjut</th><th>Ulang</th>
+                                <th>Kat</th><th>Jilid</th><th>Hal</th>
+                                <th>Ljt</th><th>Ulg</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody contenteditable="true">
                             <tr>
-                                <td>1</td><td style="text-align:left;">Ahmad Hanif</td>
+                                <td>1</td><td style="text-align:left;">Fatahillah</td>
                                 <td>15</td><td>4</td><td>2</td>
-                                <td>'Abasa</td><td>15</td>
-                                <td>Ummi</td><td>Jilid 6</td><td>28</td>
-                                <td>18x</td><td>3x</td>
-                                <td>Doa Wudhu</td><td style="text-align:left;">Banyak main sendiri</td>
-                            </tr>
-                            <tr>
-                                <td>2</td><td style="text-align:left;">Fatimah Az-Zahra</td>
-                                <td>21</td><td>0</td><td>0</td>
-                                <td>Ali Imran</td><td>69</td>
-                                <td>Al-Qur'an</td><td>At-Taubah</td><td>20</td>
-                                <td>19x</td><td>2x</td>
-                                <td>Tajwid</td><td style="text-align:left;">Akhlak Bagus, tingkatkan murajaah</td>
+                                <td>'Abasa</td><td>15</td><td>Ummi</td><td>6</td><td>28</td>
+                                <td>18x</td><td>3x</td><td>Wudhu</td><td>Main sendiri</td>
                             </tr>
                         </tbody>
                     </table>
                     
-                    <div style="text-align: right; margin-top: 30px; font-size: 0.85rem;">
-                        Banjarnegara, 10 Mei 2026<br>Pengampu<br><br><br><br>
-                        <strong>Reyndi Alafasy</strong>
+                    <div style="text-align: right; margin-top: 40px; font-size: 1rem;">
+                        Purbalingga, 10 Mei 2026<br>Pengampu<br><br><br><br>
+                        <strong contenteditable="true">Reyndi Alafasy</strong>
                     </div>
                 </div>
             </div>
 
             <div id="tabIndividu" class="tab-content">
                 <div class="kertas-print" id="areaCetakIndividu">
+                    <button class="btn-edit-laporan no-export" onclick="toggleEdit('areaCetakIndividu')"><i class="fas fa-edit"></i> Edit Laporan</button>
                     
                     <div class="kop-surat">
-                        <img src="logorqkamila.png" alt="Logo RQ" class="kop-logo" onerror="this.src='https://via.placeholder.com/80'">
+                        <img src="logorqkamila.png" class="kop-logo">
                         <div class="kop-text">
                             <h2>RUMAH QUR'AN KAMILA</h2>
                             <p>Pusat Pendidikan & Tahfidz Al-Qur'an Anak dan Remaja</p>
@@ -195,68 +215,45 @@
                         </div>
                     </div>
 
-                    <div class="judul-laporan">LAPORAN HASIL EVALUASI (ASTS)</div>
+                    <div class="judul-laporan">LAPORAN PERKEMBANGAN SANTRI BULANAN</div>
 
-                    <div class="info-grid">
+                    <div class="info-grid" contenteditable="true">
                         <div>
-                            <div class="info-row"><div class="info-label">Nama Santri</div><div class="info-colon">:</div><div class="info-value" style="font-weight:bold;">AHMAD HANIF</div></div>
-                            <div class="info-row"><div class="info-label">NIS</div><div class="info-colon">:</div><div class="info-value">202601</div></div>
-                            <div class="info-row"><div class="info-label">TTL</div><div class="info-colon">:</div><div class="info-value">Banjarnegara, 12-05-2015</div></div>
+                            <div class="info-row"><div class="info-label">Nama Santri</div><div class="info-value">: ARSYA BINTANG</div></div>
+                            <div class="info-row"><div class="info-label">NIS</div><div class="info-value">: 01129111</div></div>
                         </div>
                         <div>
-                            <div class="info-row"><div class="info-label">Kelas</div><div class="info-colon">:</div><div class="info-value">SAID BIN ZAID</div></div>
-                            <div class="info-row"><div class="info-label">Semester</div><div class="info-colon">:</div><div class="info-value">Genap</div></div>
-                            <div class="info-row"><div class="info-label">Tahun Ajaran</div><div class="info-colon">:</div><div class="info-value">2025/2026</div></div>
+                            <div class="info-row"><div class="info-label">Kelas</div><div class="info-value">: SAID BIN ZAID</div></div>
+                            <div class="info-row"><div class="info-label">Bulan</div><div class="info-value">: MEI 2026</div></div>
                         </div>
                     </div>
 
-                    <div class="section-title">A. KEDISIPLINAN & KEHADIRAN (Periode Mei)</div>
-                    <div class="absen-box-container">
-                        <div class="absen-box"><div class="absen-title">Hadir (H)</div><div class="absen-angka" style="color:#27ae60;">15</div>Hari</div>
-                        <div class="absen-box"><div class="absen-title">Izin (I)</div><div class="absen-angka" style="color:#f39c12;">2</div>Hari</div>
-                        <div class="absen-box"><div class="absen-title">Sakit (S)</div><div class="absen-angka" style="color:#3498db;">2</div>Hari</div>
-                        <div class="absen-box"><div class="absen-title">Alpha (A)</div><div class="absen-angka">2</div>Hari</div>
+                    <div class="section-title">A. KEDISIPLINAN & KEHADIRAN</div>
+                    <div class="absen-box-container" contenteditable="true">
+                        <div class="absen-box"><div class="absen-title">H</div><div class="absen-angka">21</div></div>
+                        <div class="absen-box"><div class="absen-title">I</div><div class="absen-angka">0</div></div>
+                        <div class="absen-box"><div class="absen-title">S</div><div class="absen-angka">2</div></div>
+                        <div class="absen-box"><div class="absen-title">A</div><div class="absen-angka">0</div></div>
                     </div>
 
-                    <div class="section-title">B. PENCAPAIAN MATERI (Update Terakhir)</div>
-                    <table class="indv-table">
+                    <div class="section-title">B. PENCAPAIAN MATERI</div>
+                    <table class="indv-table" contenteditable="true">
                         <thead><tr><th style="width: 30%;">Bidang</th><th>Capaian / Target Terakhir</th></tr></thead>
                         <tbody>
-                            <tr><td><strong>Tahfidz Al-Qur'an</strong></td><td>Surat 'Abasa Ayat 1 - 15</td></tr>
-                            <tr><td><strong>Tahsin / Qira'ah</strong></td><td>UMMI Jilid 6 Hal 28</td></tr>
-                            <tr><td><strong>Darsah (Materi)</strong></td><td>Hafalan Doa Wudhu</td></tr>
+                            <tr><td><strong>Tahfidz Al-Qur'an</strong></td><td>Surat At-Tariq Ayat 1 - 9</td></tr>
+                            <tr><td><strong>Tahsin / Qira'ah</strong></td><td>IQRO Jilid 3 Hal 28</td></tr>
                         </tbody>
                     </table>
 
-                    <div class="section-title">C. HASIL UJIAN / EVALUASI</div>
-                    <table class="indv-table">
-                        <thead><tr><th>Kategori</th><th>Materi / Target Ujian</th><th>Nilai / Predikat</th></tr></thead>
-                        <tbody>
-                            <tr><td colspan="3" style="text-align: center; color: #777; font-style: italic;">Belum ada data nilai ujian untuk periode ini.</td></tr>
-                        </tbody>
-                    </table>
-
-                    <div class="section-title">D. CATATAN USTADZ / WALI KELAS</div>
-                    <div style="border: 1px solid #333; padding: 15px; min-height: 60px; font-style: italic; font-size: 0.85rem;">
-                        "Ananda Hanif perlu lebih fokus saat setoran. Kurangi banyak bermain sendiri di kelas. Terus semangat!"
+                    <div class="section-title">C. CATATAN USTADZ / WALI KELAS</div>
+                    <div style="border: 1px solid #000; padding: 15px; min-height: 80px;" contenteditable="true">
+                        "Ananda telah mengikuti kegiatan belajar dengan baik. Tingkatkan hafalan di rumah."
                     </div>
 
                     <div class="ttd-container">
-                        <div class="ttd-box">
-                            Mengetahui,<br>Orang Tua / Wali Santri
-                            <div class="ttd-space"></div>
-                            .......................................
-                        </div>
-                        <div class="ttd-box">
-                            <br>Kepala Rumah Qur'an
-                            <div class="ttd-space"></div>
-                            .......................................
-                        </div>
-                        <div class="ttd-box">
-                            Banjarnegara, 10 Mei 2026<br>Ustadz / Wali Kelas
-                            <div class="ttd-space"></div>
-                            <strong>Reyndi Alafasy</strong>
-                        </div>
+                        <div class="ttd-box">Orang Tua / Wali Santri<div class="ttd-space"></div>..........................</div>
+                        <div class="ttd-box">Kepala Rumah Qur'an<div class="ttd-space"></div>..........................</div>
+                        <div class="ttd-box">Purbalingga, 10 Mei 2026<br>Ustadz / Wali Kelas<div class="ttd-space"></div><strong contenteditable="true">Reyndi Alafasy</strong></div>
                     </div>
                 </div>
             </div>
