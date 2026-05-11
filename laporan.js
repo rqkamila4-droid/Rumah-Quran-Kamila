@@ -21,18 +21,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // FUNGSI TOGGLE EDIT (ContentEditable)
+    // FITUR: TOGLE KETIK (Edit Mode)
     window.toggleEdit = (containerId) => {
         const container = document.getElementById(containerId);
-        const isEditing = container.getAttribute('data-editing') === 'true';
-        
-        if (isEditing) {
-            container.setAttribute('data-editing', 'false');
-            alert("Mode Edit Dimatikan. Data siap dicetak.");
-        } else {
-            container.setAttribute('data-editing', 'true');
-            alert("Mode Edit Aktif. Silakan klik teks mana saja untuk merubah isi laporan.");
-        }
+        alert("Mode Ketik Aktif! Silakan klik pada tulisan/angka di dalam kertas laporan untuk mengubah isinya sebelum di-download.");
+    };
+
+    // FITUR BARU: ROTASI KERTAS (Portrait/Landscape)
+    window.rotasiKertas = (containerId) => {
+        const kertas = document.getElementById(containerId);
+        kertas.classList.toggle('landscape');
     };
 
     // KIRIM WA (JPG HD)
@@ -40,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const activeTab = document.querySelector('.tab-content.active');
         const area = activeTab.querySelector('.kertas-print');
         
-        // Tambahkan class khusus untuk menyembunyikan tombol edit saat difoto
+        // Sembunyikan wadah abu-abu dan tombol saat difoto
         activeTab.classList.add('exporting');
 
         html2canvas(area, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
@@ -51,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
             link.click();
             
             activeTab.classList.remove('exporting');
-            alert("Gambar JPG Tersimpan. Silakan lampirkan ke WhatsApp Wali Santri.");
+            alert("Gambar laporan tersimpan di perangkat. Anda akan diarahkan ke WhatsApp untuk melampirkan gambar tersebut.");
             window.open("https://wa.me/", "_blank");
         });
     };
