@@ -8,10 +8,12 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* GAYA KHUSUS DASHBOARD KOMPLEKS */
         .search-bar { display: flex; align-items: center; background: #f4f7f6; padding: 8px 15px; border-radius: 20px; width: 250px; }
         .search-bar input { border: none; background: transparent; width: 100%; font-family: 'Poppins'; font-size: 0.85rem; margin-left: 10px; outline: none; }
         
@@ -29,12 +31,6 @@
         
         .section-title { font-size: 1.1rem; font-weight: 700; color: #2c3e50; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         
-        /* Bar Chart Placeholder */
-        .chart-container { height: 200px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 20px; border-left: 1px solid #eee; border-bottom: 1px solid #eee; margin-top: 20px; }
-        .bar { width: 40px; background: #88dec3; border-radius: 4px 4px 0 0; text-align: center; position: relative; }
-        .bar span { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: #7f8c8d; white-space: nowrap; }
-        
-        /* List Santri Teraktif */
         .santri-list { display: flex; flex-direction: column; gap: 15px; }
         .santri-item { display: flex; align-items: center; gap: 15px; }
         .s-ava { width: 40px; height: 40px; background: #e1f0fa; color: #34495e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
@@ -43,7 +39,6 @@
         .s-badge { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; font-size: 0.75rem; font-weight: 600; color: #27ae60; }
         .s-badge span { background: #e4f7ed; padding: 2px 8px; border-radius: 10px; margin-bottom: 3px; font-weight: 500; color: #2ca58d;}
         
-        /* Timeline Riwayat */
         .timeline { position: relative; padding-left: 20px; margin-top: 10px; }
         .timeline::before { content: ''; position: absolute; left: 4px; top: 0; height: 100%; width: 2px; background: #eee; }
         .tl-item { position: relative; margin-bottom: 20px; }
@@ -52,10 +47,10 @@
         .tl-title { font-weight: 700; font-size: 0.95rem; color: #2c3e50; margin: 2px 0; }
         .tl-desc { font-size: 0.8rem; color: #95a5a6; }
         
-        /* Donut Chart Placeholder */
-        .donut-chart { width: 150px; height: 150px; border-radius: 50%; background: conic-gradient(#88dec3 0% 70%, #d1d8e0 70% 85%, #ff7675 85% 100%); margin: 0 auto 20px auto; position: relative; display: flex; justify-content: center; align-items: center; }
-        .donut-chart::after { content: ''; width: 110px; height: 110px; background: white; border-radius: 50%; position: absolute; }
-        .legend { display: flex; justify-content: center; gap: 15px; font-size: 0.8rem; font-weight: 500; color: #7f8c8d; }
+        /* Area Grafik Interaktif */
+        .chart-wrapper { position: relative; height: 250px; width: 100%; }
+        .donut-wrapper { position: relative; height: 180px; width: 100%; margin: 0 auto; display: flex; justify-content: center;}
+        .legend { display: flex; justify-content: center; gap: 15px; font-size: 0.8rem; font-weight: 500; color: #7f8c8d; margin-top: 20px;}
         .dot { display: inline-block; width: 12px; height: 6px; border-radius: 3px; margin-right: 5px; }
     </style>
 </head>
@@ -63,7 +58,7 @@
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <img src="logorqkamila.png" alt="Logo" class="brand-logo" onerror="this.src='https://ui-avatars.com/api/?name=RQ&background=ffffff&color=2b394a'">
+            <img src="logorqkamila.png?v=6" alt="Logo" class="brand-logo" onerror="this.src='https://ui-avatars.com/api/?name=RQ&background=ffffff&color=2b394a'">
             <span class="brand-text">RQ Kamila</span>
             <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
         </div>
@@ -86,14 +81,10 @@
             <div class="topbar-left" style="display: flex; align-items: center; gap: 15px;">
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
                 <h2 class="page-title" style="margin: 0;">Dashboard</h2>
-                
-                <div class="search-bar" style="display: none;"> <i class="fas fa-search" style="color: #95a5a6;"></i>
-                    <input type="text" placeholder="Cari santri...">
-                </div>
             </div>
             <div class="topbar-right">
                 <div class="profile-info">
-                    <span class="profile-name">Ustadz Fulan</span>
+                    <span class="profile-name">Memuat...</span>
                     <div class="profile-pic" style="background: #88dec3; color: white;">UF</div>
                 </div>
             </div>
@@ -137,10 +128,8 @@
                         </div>
                     </div>
                     
-                    <div class="chart-container">
-                        <div class="bar" style="height: 90%;"><span>Dasar<br>(Jilid 1-3)</span></div>
-                        <div class="bar" style="height: 70%;"><span>Menengah<br>(Jilid 4-6)</span></div>
-                        <div class="bar" style="height: 50%;"><span>Lanjutan<br>(Tilawah)</span></div>
+                    <div class="chart-wrapper">
+                        <canvas id="barChartSantri"></canvas>
                     </div>
                 </div>
 
@@ -172,15 +161,6 @@
                             </div>
                             <div class="s-badge"><span>Kelas 2</span> 5x Hadir</div>
                         </div>
-                        <div class="santri-item">
-                            <div class="s-ava">Z</div>
-                            <div class="s-info">
-                                <h4>Zaidan Ali</h4>
-                                <p><i class="fas fa-book-reader" style="color:#88dec3;"></i> Tilawah - Al-Baqarah</p>
-                                <p><i class="fas fa-quran" style="color:#88dec3;"></i> Juz 29 - Al-Jin: 5</p>
-                            </div>
-                            <div class="s-badge"><span>Kelas 3</span> 4x Hadir</div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -200,18 +180,15 @@
                             <div class="tl-title">Evaluasi Tahfidz</div>
                             <div class="tl-desc">Ahmad Hanif (Al-Mulk: 15)</div>
                         </div>
-                        <div class="tl-item">
-                            <div class="tl-time">17:15</div>
-                            <div class="tl-title">Evaluasi Tahsin</div>
-                            <div class="tl-desc">Fatimah (Jilid 4 - Hal 21)</div>
-                        </div>
                     </div>
                 </div>
 
-                <div class="card" style="background: white; border-radius: 16px; padding: 25px; text-align: center;">
-                    <div class="section-title" style="justify-content: center;">Persentase Kehadiran Harian</div>
+                <div class="card" style="background: white; border-radius: 16px; padding: 25px;">
+                    <div class="section-title" style="justify-content: center;">Persentase Kehadiran</div>
                     
-                    <div class="donut-chart"></div>
+                    <div class="donut-wrapper">
+                        <canvas id="donutChartAbsen"></canvas>
+                    </div>
                     
                     <div class="legend">
                         <div><span class="dot" style="background: #88dec3;"></span>Hadir</div>
