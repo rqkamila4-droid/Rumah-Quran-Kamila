@@ -4,200 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#2b394a">
-    <title>Dashboard - RQ Kamila</title>
+    <title>Dashboard Ustadz - RQ Kamila</title>
     
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <link rel="stylesheet" href="style.css">
-
-    <style>
-        .search-bar { display: flex; align-items: center; background: #f4f7f6; padding: 8px 15px; border-radius: 20px; width: 250px; }
-        .search-bar input { border: none; background: transparent; width: 100%; font-family: 'Poppins'; font-size: 0.85rem; margin-left: 10px; outline: none; }
-        
-        .grid-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
-        .card-stat { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: relative; }
-        .card-stat.outline { border: 2px solid #88dec3; box-shadow: none; }
-        
-        .stat-val { font-size: 2rem; font-weight: 700; color: #2c3e50; margin: 10px 0 0 0; display: flex; align-items: baseline; gap: 5px; }
-        .stat-val span { font-size: 0.9rem; font-weight: 500; color: #7f8c8d; }
-        .stat-label { font-size: 0.85rem; color: #7f8c8d; font-weight: 500; }
-        .stat-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
-        
-        .grid-middle { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
-        @media (max-width: 900px) { .grid-middle { grid-template-columns: 1fr; } }
-        
-        .section-title { font-size: 1.1rem; font-weight: 700; color: #2c3e50; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .santri-list { display: flex; flex-direction: column; gap: 15px; }
-        .santri-item { display: flex; align-items: center; gap: 15px; }
-        .s-ava { width: 40px; height: 40px; background: #e1f0fa; color: #34495e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
-        .s-info h4 { margin: 0; font-size: 0.9rem; color: #2c3e50; }
-        .s-info p { margin: 0; font-size: 0.75rem; color: #7f8c8d; }
-        .s-badge { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; font-size: 0.75rem; font-weight: 600; color: #27ae60; }
-        .s-badge span { background: #e4f7ed; padding: 2px 8px; border-radius: 10px; margin-bottom: 3px; font-weight: 500; color: #2ca58d;}
-        
-        .timeline { position: relative; padding-left: 20px; margin-top: 10px; }
-        .timeline::before { content: ''; position: absolute; left: 4px; top: 0; height: 100%; width: 2px; background: #eee; }
-        .tl-item { position: relative; margin-bottom: 20px; }
-        .tl-item::before { content: ''; position: absolute; left: -21px; top: 3px; width: 10px; height: 10px; background: #88dec3; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 2px #88dec3; }
-        .tl-time { font-size: 0.8rem; font-weight: 600; color: #7f8c8d; }
-        .tl-title { font-weight: 700; font-size: 0.95rem; color: #2c3e50; margin: 2px 0; }
-        .tl-desc { font-size: 0.8rem; color: #95a5a6; }
-        
-        /* Area Grafik Interaktif */
-        .chart-wrapper { position: relative; height: 250px; width: 100%; }
-        .donut-wrapper { position: relative; height: 180px; width: 100%; margin: 0 auto; display: flex; justify-content: center;}
-        .legend { display: flex; justify-content: center; gap: 15px; font-size: 0.8rem; font-weight: 500; color: #7f8c8d; margin-top: 20px;}
-        .dot { display: inline-block; width: 12px; height: 6px; border-radius: 3px; margin-right: 5px; }
-    </style>
 </head>
 <body class="admin-layout">
 
+    <div id="murojaahModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeMurojaahModal">&times;</span>
+            <h3 class="modal-title">Daftar Santri Mengulang (Tahsin)</h3>
+            <ul class="modal-list" id="murojaahList">
+                </ul>
+        </div>
+    </div>
+
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <img src="logorqkamila.png?v=6" alt="Logo" class="brand-logo" onerror="this.src='https://ui-avatars.com/api/?name=RQ&background=ffffff&color=2b394a'">
+            <img src="logorqkamila.png" alt="Logo" class="brand-logo">
             <span class="brand-text">RQ Kamila</span>
             <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
         </div>
         
         <ul class="sidebar-menu">
-            <li class="active"><a href="dashboard.html"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
-            <li><a href="data-santri.html"><i class="fas fa-user-graduate"></i> <span>Data Santri</span></a></li>
-            <li><a href="presensi.html"><i class="fas fa-clipboard-list"></i> <span>Input Harian</span></a></li>
-            <li><a href="laporan.html"><i class="fas fa-chart-pie"></i> <span>Laporan</span></a></li>
-            <li><a href="pengaturan.html" style="position: relative; z-index: 10;"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
+            <li class="active"><a href="#"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+            <li><a href="#"><i class="fas fa-user-graduate"></i> <span>Data Santri</span></a></li>
+            <li><a href="#"><i class="fas fa-clipboard-user"></i> <span>Presensi</span></a></li>
+            <li><a href="#"><i class="fas fa-book-quran"></i> <span>Tahfidz</span></a></li>
+            <li><a href="#"><i class="fas fa-microphone-lines"></i> <span>Tahsin</span></a></li>
+            <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> <span>Darsah</span></a></li>
+            <li><a href="#"><i class="fas fa-chart-pie"></i> <span>Laporan</span></a></li>
         </ul>
         
         <div class="sidebar-bottom">
-            <a href="login.html" class="logout-btn" onclick="localStorage.clear();"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
+            <a href="login.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
         </div>
     </aside>
 
     <main class="main-content">
         <header class="topbar">
-            <div class="topbar-left" style="display: flex; align-items: center; gap: 15px;">
+            <div class="topbar-left">
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-                <h2 class="page-title" style="margin: 0;">Dashboard</h2>
+                <h2 class="page-title">Dashboard</h2>
             </div>
             <div class="topbar-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari santri...">
+                </div>
                 <div class="profile-info">
-                    <span class="profile-name">Memuat...</span>
-                    <div class="profile-pic" style="background: #88dec3; color: white;">UF</div>
+                    <span class="profile-name">Ustadz Fulan</span>
+                    <div class="profile-pic">UF</div>
                 </div>
             </div>
         </header>
 
         <div class="dashboard-wrapper">
             
-            <div class="grid-top">
-                <div class="card-stat outline">
-                    <div class="stat-label" style="text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;">Jadwal Hari Ini</div>
-                    <div style="display: inline-block; background: #f0f0f0; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; color: #7f8c8d; margin-top: 5px;">SEMUA SELESAI</div>
-                    <div class="stat-val" style="color: #2ca58d;">TIDAK ADA</div>
-                    <div style="background: #e4f7ed; color: #2ca58d; display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-top: 10px;"><i class="fas fa-users"></i> 0 Santri</div>
+            <div class="summary-cards">
+                <div class="card summary-card schedule-highlight-card">
+                    <p class="highlight-title">JADWAL HARI INI</p>
+                    <div class="status-badge" id="nextClassStatus">AKAN DATANG</div>
+                    <h2 class="highlight-time" id="nextClassTime">13:30 - 14:30</h2>
+                    <h3 class="highlight-class" id="nextClassName">SAID BIN ZAID</h3>
+                    <div class="student-count-pill">
+                        <i class="fas fa-user-graduate"></i> <span id="nextClassCount">11</span> Santri
+                    </div>
                 </div>
-                
-                <div class="card-stat">
-                    <div class="stat-label">Total Santri Diampu</div>
-                    <div class="stat-val">24 <span>Anak</span></div>
-                    <div class="stat-icon" style="background: #e1f0fa; color: #3498db;"><i class="fas fa-users"></i></div>
+
+                <div class="card summary-card">
+                    <div class="card-info">
+                        <p>Total Santri Diampu</p>
+                        <h3>24 <span>Anak</span></h3>
+                    </div>
+                    <div class="card-icon blue-bg"><i class="fas fa-users"></i></div>
                 </div>
-                
-                <div class="card-stat">
-                    <div class="stat-label">Hadir Hari Ini</div>
-                    <div class="stat-val">20 <span>Anak</span></div>
-                    <div class="stat-icon" style="background: #e4f7ed; color: #27ae60;"><i class="fas fa-user-check"></i></div>
+
+                <div class="card summary-card">
+                    <div class="card-info">
+                        <p>Hadir Hari Ini</p>
+                        <h3>20 <span>Anak</span></h3>
+                    </div>
+                    <div class="card-icon mint-bg"><i class="fas fa-user-check"></i></div>
                 </div>
-                
-                <div class="card-stat">
-                    <div class="stat-label">Status Mengulang</div>
-                    <div class="stat-val">5 <span>Anak</span></div>
-                    <div class="stat-icon" style="background: #fceae9; color: #e74c3c;"><i class="fas fa-undo"></i></div>
+
+                <div class="card summary-card interactive-card" id="btnMurojaah">
+                    <div class="card-info">
+                        <p>Status Mengulang</p>
+                        <h3>5 <span>Anak</span></h3>
+                    </div>
+                    <div class="card-icon pink-bg"><i class="fas fa-rotate-left"></i></div>
+                    <div class="click-hint">Klik untuk melihat</div>
                 </div>
             </div>
 
-            <div class="grid-middle">
-                <div class="card" style="background: white; border-radius: 16px; padding: 25px;">
-                    <div class="section-title">
-                        Sebaran Kemampuan Santri
-                        <div style="display: flex; gap: 10px;">
-                            <select style="padding: 5px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.8rem;"><option>Semua Kelas</option></select>
-                        </div>
-                    </div>
-                    
-                    <div class="chart-wrapper">
-                        <canvas id="barChartSantri"></canvas>
-                    </div>
-                </div>
-
-                <div class="card" style="background: white; border-radius: 16px; padding: 25px;">
-                    <div class="section-title">
-                        Santri Teraktif
-                        <div style="background: #f4f7f6; border-radius: 8px; padding: 3px; font-size: 0.75rem;">
-                            <span style="padding: 4px 10px; background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">Pekan</span>
-                            <span style="padding: 4px 10px; color: #7f8c8d;">Bulan</span>
-                        </div>
-                    </div>
-
-                    <div class="santri-list">
-                        <div class="santri-item">
-                            <div class="s-ava">A</div>
-                            <div class="s-info">
-                                <h4>Ahmad Hanif</h4>
-                                <p><i class="fas fa-book-reader" style="color:#88dec3;"></i> Jilid 4 - Hal 21</p>
-                                <p><i class="fas fa-quran" style="color:#88dec3;"></i> Juz 30 - Al-Mulk: 15</p>
+            <div class="content-grid">
+                
+                <div class="card chart-card">
+                    <div class="card-header chart-header-custom">
+                        <h4>Sebaran Kemampuan Santri</h4>
+                        <div class="chart-controls">
+                            <select id="classFilter" class="filter-select">
+                                <option value="semua">Semua Kelas</option>
+                                <option value="kelas1">Kelas 1</option>
+                                <option value="kelas2">Kelas 2</option>
+                                <option value="kelas3">Kelas 3</option>
+                            </select>
+                            <div class="toggle-group">
+                                <button class="toggle-btn" id="btnTahsin">Tahsin</button>
+                                <button class="toggle-btn active" id="btnTahfidz">Tahfidz</button>
                             </div>
-                            <div class="s-badge"><span>Kelas 1</span> 5x Hadir</div>
                         </div>
-                        <div class="santri-item">
-                            <div class="s-ava">F</div>
-                            <div class="s-info">
-                                <h4>Fatimah Az</h4>
-                                <p><i class="fas fa-book-reader" style="color:#88dec3;"></i> Jilid 5 - Hal 10</p>
-                                <p><i class="fas fa-quran" style="color:#88dec3;"></i> Juz 30 - Al-A'la: 5</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card active-students-card">
+                    <div class="card-header chart-header-custom">
+                        <h4>Santri Teraktif</h4>
+                        <div class="toggle-group small-toggle">
+                            <button class="toggle-btn active" id="btnActiveWeek">Pekan</button>
+                            <button class="toggle-btn" id="btnActiveMonth">Bulan</button>
+                        </div>
+                    </div>
+                    <div class="active-list" id="activeStudentsList">
+                        </div>
+                </div>
+
+                <div class="card timeline-card">
+                    <div class="card-header">
+                        <h4>Riwayat Aktivitas Hari Ini</h4>
+                    </div>
+                    <div class="timeline-container">
+                        <div class="timeline-item">
+                            <div class="timeline-time">15:35</div>
+                            <div class="timeline-content">
+                                <h5>Input Presensi</h5>
+                                <p>Kelas Said Bin Zaid (11 Santri)</p>
                             </div>
-                            <div class="s-badge"><span>Kelas 2</span> 5x Hadir</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">16:00</div>
+                            <div class="timeline-content">
+                                <h5>Evaluasi Tahfidz</h5>
+                                <p>Ahmad Hanif (Al-Mulk: 15)</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">16:15</div>
+                            <div class="timeline-content">
+                                <h5>Evaluasi Tahsin</h5>
+                                <p>Fatimah (Jilid 4 - Hal 21)</p>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="card pie-card">
+                    <div class="card-header">
+                        <h4>Persentase Kehadiran Harian</h4>
+                    </div>
+                    <div class="pie-container">
+                        <canvas id="donutChart"></canvas>
+                    </div>
+                </div>
+
             </div>
-
-            <div class="grid-middle">
-                <div class="card" style="background: white; border-radius: 16px; padding: 25px;">
-                    <div class="section-title">Riwayat Aktivitas Hari Ini</div>
-                    
-                    <div class="timeline">
-                        <div class="tl-item">
-                            <div class="tl-time">15:35</div>
-                            <div class="tl-title">Input Presensi</div>
-                            <div class="tl-desc">Kelas Said Bin Zaid (11 Santri)</div>
-                        </div>
-                        <div class="tl-item">
-                            <div class="tl-time">16:00</div>
-                            <div class="tl-title">Evaluasi Tahfidz</div>
-                            <div class="tl-desc">Ahmad Hanif (Al-Mulk: 15)</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" style="background: white; border-radius: 16px; padding: 25px;">
-                    <div class="section-title" style="justify-content: center;">Persentase Kehadiran</div>
-                    
-                    <div class="donut-wrapper">
-                        <canvas id="donutChartAbsen"></canvas>
-                    </div>
-                    
-                    <div class="legend">
-                        <div><span class="dot" style="background: #88dec3;"></span>Hadir</div>
-                        <div><span class="dot" style="background: #d1d8e0;"></span>Izin</div>
-                        <div><span class="dot" style="background: #ff7675;"></span>Sakit/Alpha</div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
 
